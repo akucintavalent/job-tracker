@@ -1,15 +1,9 @@
 import { DataSource } from 'typeorm';
+import { getDataSourceOptions } from '../database.config';
 
-export const AppDataSource = new DataSource({
-  type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'job_tracker_user',
-  password: 'job_tracker_password',
-  database: 'job_tracker_db',
-  entities: [],
-  synchronize: true,
-});
+console.log(getDataSourceOptions());
+
+export const AppDataSource = new DataSource(getDataSourceOptions());
 
 AppDataSource.initialize()
   .then(() => console.log('AppDataSource initialized'))
