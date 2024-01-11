@@ -24,7 +24,7 @@ export class User {
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    console.log('hashPassword');
+    console.debug('hashing password...');
     this.password = await bcrypt.hash(this.password, 10);
   }
 }
