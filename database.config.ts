@@ -1,5 +1,6 @@
 import { DataSourceOptions } from 'typeorm';
 import { config } from 'dotenv';
+import { User } from './src/users/user.entity';
 
 if (process.env.NODE_ENV !== 'test') {
   config();
@@ -12,7 +13,7 @@ export const getDataSourceOptions = (): DataSourceOptions =>
     ? {
         type: 'sqlite',
         database: process.env.DB_NAME,
-        entities: [],
+        entities: [User],
         synchronize: true,
       }
     : {
@@ -22,7 +23,7 @@ export const getDataSourceOptions = (): DataSourceOptions =>
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        entities: [],
+        entities: [User],
         synchronize: true,
       };
 
