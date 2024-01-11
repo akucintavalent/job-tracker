@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 @Unique(['username', 'email'])
@@ -25,6 +26,6 @@ export class User {
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    // TODO
+    this.password = await bcrypt.hash(this.password, 10);
   }
 }
