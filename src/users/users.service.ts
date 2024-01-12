@@ -4,6 +4,7 @@ import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserAlreadyExistsException } from './exceptions/user-exists.exception';
+import { FindUserDto } from './dtos/find-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -27,7 +28,7 @@ export class UsersService {
     username: string;
   }): Promise<void> {
     const existingUsers = await this.usersRepository.find({
-      where: [{ email: email }, { username: username }],
+      where: [{ email }, { username }],
     });
 
     if (existingUsers.some((entity: User) => entity.email === email))
@@ -39,5 +40,9 @@ export class UsersService {
       throw new UserAlreadyExistsException(
         `'${username}' username is alredy in use. User cannot be created.`,
       );
+  }
+
+  async findOne(where: FindUserDto): Promise<User> {
+    return this.usersRepository.findOneByOrFail(where);
   }
 }

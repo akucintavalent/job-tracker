@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { FindUserDto } from './dtos/find-user.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -17,5 +18,16 @@ export class UsersController {
   })
   createUser(@Body() body: CreateUserDto) {
     return this.usersService.create(body);
+  }
+
+  @Get('/find')
+  findUserByUsername(@Query() query: FindUserDto) {
+    console.log(query);
+    return this.usersService.findOne(query);
+  }
+
+  @Get('/:id')
+  findUserById(@Param('id') id: string) {
+    return this.usersService.findOne({ id });
   }
 }
