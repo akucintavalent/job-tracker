@@ -11,6 +11,10 @@ export class UsersController {
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({ status: 200, description: 'User record', type: CreateUserDto })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error or user is already exists',
+  })
   createUser(@Body() body: CreateUserDto) {
     return this.usersService.create(body);
   }
