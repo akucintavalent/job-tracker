@@ -6,6 +6,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UserAlreadyExistsException } from './exceptions/user-exists.exception';
 import { FindUserDto } from './dtos/find-user.dto';
 import { FindUsersDto } from './dtos/find-users.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -49,5 +50,13 @@ export class UsersService {
 
   findBy(where: FindUsersDto): Promise<User[]> {
     return this.usersRepository.findBy(where);
+  }
+
+  async update(id: string, dto: UpdateUserDto): Promise<User> {
+    const user = await this.findOneBy({ id });
+
+    Object.assign(user, dto);
+
+    return this.usersRepository.save(user);
   }
 }
