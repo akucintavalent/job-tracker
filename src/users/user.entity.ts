@@ -6,6 +6,12 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Exclude } from 'class-transformer';
+
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}
 
 @Entity('users')
 export class User {
@@ -18,8 +24,16 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Exclude({ toPlainOnly: true })
   @Column()
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: 'user' | 'admin';
 
   @BeforeInsert()
   @BeforeUpdate()
