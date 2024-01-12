@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserAlreadyExistsException } from './exceptions/user-exists.exception';
 import { FindUserDto } from './dtos/find-user.dto';
+import { FindUsersDto } from './dtos/find-users.dto';
 
 @Injectable()
 export class UsersService {
@@ -42,7 +43,11 @@ export class UsersService {
       );
   }
 
-  async findOne(where: FindUserDto): Promise<User> {
-    return this.usersRepository.findOneByOrFail(where);
+  findOneBy(where: FindUserDto): Promise<User> {
+    return this.usersRepository.findOneBy(where);
+  }
+
+  findBy(where: FindUsersDto): Promise<User[]> {
+    return this.usersRepository.findBy(where);
   }
 }
