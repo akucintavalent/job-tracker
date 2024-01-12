@@ -5,7 +5,8 @@ content-type: application/json
 {
   "email": "email5@lalal.com",
   "password": "password",
-  "username": "username7"
+  "username": "username7",
+  "role": "admin"
 }
 
 ### Get a user by id
@@ -28,3 +29,6 @@ content-type: application/json
   "email": "bogdan2@gmail.com",
   "role": "admin"
 }
+
+### Remove a user
+DELETE http://localhost:3000/users/abf1e158-aec3-450b-8e71-ddfbc90bb5d4
