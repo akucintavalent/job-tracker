@@ -1,8 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { UserExeption } from './exteptions/user.exteption';
 
 @Injectable()
 export class UsersService {
@@ -24,12 +25,12 @@ export class UsersService {
     });
 
     if (existingUsers.some((entity) => entity.email === dto.email))
-      throw new BadRequestException(
+      throw new UserExeption(
         dto.email + ' email is alredy in use. User cannot be created.',
       );
 
     if (existingUsers.some((entity) => entity.username === dto.username))
-      throw new BadRequestException(
+      throw new UserExeption(
         dto.username + ' username is alredy in use. User cannot be created.',
       );
   }
