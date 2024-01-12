@@ -1,11 +1,22 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { FindUserDto } from './dtos/find-user.dto';
+import { FindUsersDto } from './dtos/find-users.dto';
 
 @ApiTags('users')
 @Controller('users')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -20,14 +31,13 @@ export class UsersController {
     return this.usersService.create(body);
   }
 
-  @Get('/find')
-  findUserByUsername(@Query() query: FindUserDto) {
-    console.log(query);
-    return this.usersService.findOne(query);
+  @Get()
+  findUsers(@Query() query: FindUsersDto) {
+    return this.usersService.findBy(query);
   }
 
   @Get('/:id')
-  findUserById(@Param('id') id: string) {
-    return this.usersService.findOne({ id });
+  findUserById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.findOneBy({ id });
   }
 }
