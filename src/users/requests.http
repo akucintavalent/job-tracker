@@ -20,3 +20,11 @@ GET http://localhost:3000/users?role=admin
 ### Find all users with given email
 GET http://localhost:3000/users?email=email5@lalal.com
 
+### Update a user
+PATCH http://localhost:3000/users/27d8b451-5002-4171-81d5-efc108be4e9a
+content-type: application/json
+
+{
+  "email": "bogdan2@gmail.com",
+  "role": "admin"
+}
