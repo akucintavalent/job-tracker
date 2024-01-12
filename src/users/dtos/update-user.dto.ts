@@ -1,23 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsString, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  Matches,
+} from 'class-validator';
 import { UserRole, UserRoleType } from '../enums/user-role.enum';
 
 export class UpdateUserDto {
   @ApiProperty({ type: 'string', format: 'email' })
+  @IsOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
   @ApiProperty()
+  @IsOptional()
   @IsString()
-  password: string;
+  password?: string;
 
   @ApiProperty()
   @Matches(/^[a-zA-Z0-9_]{4,16}$/, {
     message: 'Username is not valid.',
   })
+  @IsOptional()
   @IsString()
-  username: string;
+  username?: string;
 
+  @IsOptional()
   @IsEnum(UserRole)
-  role: UserRoleType;
+  role?: UserRoleType;
 }

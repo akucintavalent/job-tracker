@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseInterceptors,
@@ -13,6 +14,7 @@ import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { FindUsersDto } from './dtos/find-users.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -39,5 +41,13 @@ export class UsersController {
   @Get('/:id')
   findUserById(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.findOneBy({ id });
+  }
+
+  @Patch('/:id')
+  updateUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateUserDto,
+  ) {
+    return this.usersService.update(id, body);
   }
 }
