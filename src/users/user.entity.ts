@@ -7,11 +7,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
-
-export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
-}
+import { UserRole, UserRoleType } from './enums/user-role.enum';
 
 @Entity('users')
 export class User {
@@ -33,7 +29,7 @@ export class User {
     enum: UserRole,
     default: UserRole.USER,
   })
-  role: 'user' | 'admin';
+  role: UserRoleType;
 
   @BeforeInsert()
   @BeforeUpdate()
