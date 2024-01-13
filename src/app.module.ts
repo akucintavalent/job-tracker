@@ -7,6 +7,7 @@ import { HealthCheckModule } from './health-check/health-check.module';
 import { UsersModule } from './users/users.module';
 import { APP_PIPE } from '@nestjs/core';
 import { getDataSourceOptions } from '../database.config';
+import { BoardsModule } from './boards/boards.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { getDataSourceOptions } from '../database.config';
     }),
     HealthCheckModule,
     UsersModule,
+    BoardsModule,
   ],
   controllers: [AppController],
   providers: [
