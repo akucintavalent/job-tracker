@@ -5,5 +5,30 @@ content-type: application/json
 {
   "email": "email5@lalal.com",
   "password": "password",
-  "username": "username7"
+  "username": "username7",
+  "role": "admin"
 }
+
+### Get a user by id
+GET http://localhost:3000/users/27d8b451-5002-4171-81d5-efc108be4e9a
+
+### Get all users by parameters given through query
+GET http://localhost:3000/users?username=username7
+
+### Find all users with role admin
+GET http://localhost:3000/users?role=admin
+
+### Find all users with given email
+GET http://localhost:3000/users?email=email5@lalal.com
+
+### Update a user
+PATCH http://localhost:3000/users/27d8b451-5002-4171-81d5-efc108be4e9a
+content-type: application/json
+
+{
+  "email": "bogdan2@gmail.com",
+  "role": "admin"
+}
+
+### Remove a user
+DELETE http://localhost:3000/users/abf1e158-aec3-450b-8e71-ddfbc90bb5d4
