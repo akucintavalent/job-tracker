@@ -10,9 +10,10 @@ import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { UserRole, UserRoleType } from './enums/user-role.enum';
 import { Board } from '../boards/entities/board.entity';
+import { BaseEntity } from '../entities/base.entity';
 
 @Entity('users')
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

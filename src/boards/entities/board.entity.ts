@@ -6,9 +6,10 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { BaseEntity } from '../../entities/base.entity';
 
 @Entity('boards')
-export class Board {
+export class Board extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
