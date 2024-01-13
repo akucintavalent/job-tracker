@@ -16,9 +16,7 @@ export class UsersService {
 
   async create(dto: CreateUserDto): Promise<User> {
     await this.valiateIfUserExists(dto);
-
     const user = await this.usersRepository.create(dto);
-
     return this.usersRepository.save(user);
   }
 
@@ -45,7 +43,15 @@ export class UsersService {
   }
 
   findOneBy(where: FindUserDto): Promise<User> {
-    return this.usersRepository.findOneBy(where);
+    const user = this.usersRepository.findOneBy(where);
+
+    if (!user) {
+      throw new NotFoundException(
+        `User with properties '${JSON.stringify(where)}' not found.`,
+      );
+    }
+
+    return user;
   }
 
   findBy(where: FindUsersDto): Promise<User[]> {
@@ -54,23 +60,12 @@ export class UsersService {
 
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     const user = await this.findOneBy({ id });
-
-    if (!user) {
-      throw new NotFoundException(`User with id '${id}' not found.`);
-    }
-
     Object.assign(user, dto);
-
     return this.usersRepository.save(user);
   }
 
   async remove(id: string): Promise<User> {
     const user = await this.findOneBy({ id });
-
-    if (!user) {
-      throw new NotFoundException(`User with id '${id}' not found.`);
-    }
-
     return this.usersRepository.remove(user);
   }
 }
