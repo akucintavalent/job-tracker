@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -83,5 +84,19 @@ export class BoardsController {
     @Body() body: UpdateBoardDto,
   ) {
     return await this.boardService.update(id, body);
+  }
+
+  @Delete('/:id')
+  @ApiOperation({ summary: 'Delete board' })
+  @ApiResponse({
+    status: 200,
+    description: 'Board deleted',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  deleteBoard(@Param('id', ParseUUIDPipe) id: string) {
+    return this.boardService.remove(id);
   }
 }

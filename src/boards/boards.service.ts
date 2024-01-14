@@ -42,11 +42,21 @@ export class BoardsService {
   }
 
   async update(id: string, dto: UpdateBoardDto) {
+    const entity = await this.findById(id);
+    Object.assign(entity, dto);
+    return await this.boardRepository.save(entity);
+  }
+
+  async remove(id: string): Promise<Board> {
+    const entity = await this.findById(id);
+    return this.boardRepository.remove(entity);
+  }
+
+  private async findById(id: string) {
     const entity = await this.boardRepository.findOneBy({ id });
     if (!entity) {
       throw new BadRequestException("Board doesn't exists");
     }
-    Object.assign(entity, dto);
-    return await this.boardRepository.save(entity);
+    return entity;
   }
 }
