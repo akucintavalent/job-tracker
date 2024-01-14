@@ -37,6 +37,10 @@ export class BoardsService {
     });
   }
 
+  findOne(id: string): Promise<Board> {
+    return this.boardRepository.findOneBy({ id });
+  }
+
   async update(id: string, dto: UpdateBoardDto) {
     const entity = await this.boardRepository.findOneBy({ id });
     if (!entity) {

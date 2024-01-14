@@ -51,6 +51,20 @@ export class BoardsController {
     return this.boardService.findBy(query);
   }
 
+  @Get('/:id')
+  @ApiOperation({ summary: 'Fetch board' })
+  @ApiResponse({
+    status: 200,
+    description: 'Board record',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  findBoard(@Param('id', ParseUUIDPipe) id: string) {
+    return this.boardService.findOne(id);
+  }
+
   @Patch('/:id')
   @ApiResponse({
     status: 200,
