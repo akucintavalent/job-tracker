@@ -31,24 +31,23 @@ export class BoardsController {
   })
   @ApiResponse({
     status: 400,
-    description: 'UserId is invalid or User not found',
+    description: 'User not found',
   })
   async createBoard(@Body() boadDto: CreateBoardDto) {
     return await this.boardService.create(boadDto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Fetch all users' })
+  @ApiOperation({ summary: 'Fetch all boards' })
   @ApiResponse({
     status: 200,
-    description: 'User records',
-    //type: Board[], // TDOO: findUsers() returns Entity model instead of DTO
+    description: 'Board records',
   })
   @ApiResponse({
     status: 400,
     description: 'Validation error',
   })
-  findUsers(@Query() query: FindBoardDto) {
+  findBoards(@Query() query: FindBoardDto) {
     return this.boardService.findBy(query);
   }
 
@@ -65,7 +64,7 @@ export class BoardsController {
     status: 400,
     description: 'Board not found',
   })
-  async updateUser(
+  async updateBoard(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateBoardDto,
   ) {
