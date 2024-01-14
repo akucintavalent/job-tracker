@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { BoardsService } from './boards.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
 
@@ -48,6 +48,9 @@ export class BoardsController {
     status: 400,
     description: 'Validation error',
   })
+  @ApiQuery({ name: 'id', description: 'Board id', required: false })
+  @ApiQuery({ name: 'userId', description: 'User id', required: false })
+  @ApiQuery({ name: 'name', description: 'Board name', required: false })
   findBoards(@Query() query: FindBoardDto) {
     return this.boardService.findBy(query);
   }
