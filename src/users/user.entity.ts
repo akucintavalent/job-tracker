@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToOne } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { UserRole, UserRoleType } from './enums/user-role.enum';
@@ -24,8 +24,8 @@ export class User extends BaseEntity {
   })
   role: UserRoleType;
 
-  @OneToOne(() => Board, (board) => board.user)
-  board: Board;
+  @OneToMany(() => Board, (board) => board.user)
+  board: Board[];
 
   @BeforeInsert()
   @BeforeUpdate()
