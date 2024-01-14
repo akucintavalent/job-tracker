@@ -20,6 +20,7 @@ export const getDataSourceOptions = (): DataSourceOptions => ({
   migrations: ['dist/src/migrations/*.js'],
   migrationsRun: false,
   synchronize: false,
+  logging: ['query', 'warn', 'error'],
 });
 
 export default getDataSourceOptions;
