@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { BoardsService } from './boards.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FindBoardDto } from './dtos/find-board.dto';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -23,6 +24,21 @@ export class BoardsController {
     description: 'UserId is invalid or User not found',
   })
   async createBoard(@Body() boadDto: CreateBoardDto) {
-    await this.boardService.create(boadDto);
+    return await this.boardService.create(boadDto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Fetch all users' })
+  @ApiResponse({
+    status: 200,
+    description: 'User records',
+    //type: Board[], // TDOO: findUsers() returns Entity model instead of DTO
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  findUsers(@Query() query: FindBoardDto) {
+    return this.boardService.findBy(query);
   }
 }

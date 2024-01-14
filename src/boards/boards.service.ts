@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { User } from 'src/users/user.entity';
+import { FindBoardDto } from './dtos/find-board.dto';
 
 @Injectable()
 export class BoardsService {
@@ -14,7 +15,7 @@ export class BoardsService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(dto: CreateBoardDto){
+  async create(dto: CreateBoardDto): Promise<Board> {
     if (!(await this.userRepository.existsBy({ id: dto.userId }))) {
       throw new BadRequestException("User doesn't exists");
     }
@@ -24,6 +25,14 @@ export class BoardsService {
       user: { id: dto.userId },
     });
 
-    await this.boardRepository.save(entity);
+    return await this.boardRepository.save(entity);
+  }
+
+  findBy(query: FindBoardDto): Promise<Board[]> {
+    return this.boardRepository.findBy({
+      id: query.id,
+      name: query.name,
+      user: { id: query.userId },
+    });
   }
 }
