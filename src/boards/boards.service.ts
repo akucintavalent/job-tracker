@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { User } from 'src/users/user.entity';
 import { FindBoardDto } from './dtos/find-board.dto';
+import { UpdateBoardDto } from './dtos/update-board.dto';
 
 @Injectable()
 export class BoardsService {
@@ -34,5 +35,14 @@ export class BoardsService {
       name: query.name,
       user: { id: query.userId },
     });
+  }
+
+  async update(id: string, dto: UpdateBoardDto) {
+    const entity = await this.boardRepository.findOneBy({ id });
+    if (!entity) {
+      throw new BadRequestException("Board doesn't exists");
+    }
+    Object.assign(entity, dto);
+    return await this.boardRepository.save(entity);
   }
 }

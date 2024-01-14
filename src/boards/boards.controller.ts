@@ -1,8 +1,18 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { BoardsService } from './boards.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FindBoardDto } from './dtos/find-board.dto';
+import { UpdateBoardDto } from './dtos/update-board.dto';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -40,5 +50,25 @@ export class BoardsController {
   })
   findUsers(@Query() query: FindBoardDto) {
     return this.boardService.findBy(query);
+  }
+
+  @Patch('/:id')
+  @ApiResponse({
+    status: 200,
+    description: 'Board updated',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Board not found',
+  })
+  async updateUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateBoardDto,
+  ) {
+    return await this.boardService.update(id, body);
   }
 }
