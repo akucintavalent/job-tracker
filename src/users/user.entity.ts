@@ -1,19 +1,12 @@
-import {
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { UserRole, UserRoleType } from './enums/user-role.enum';
+import { Board } from '../boards/entities/board.entity';
+import { BaseEntity } from '../entities/base.entity';
 
 @Entity('users')
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class User extends BaseEntity {
   @Column({ unique: true })
   username: string;
 
@@ -30,6 +23,9 @@ export class User {
     default: UserRole.USER,
   })
   role: UserRoleType;
+
+  @OneToMany(() => Board, (board) => board.user)
+  board: Board[];
 
   @BeforeInsert()
   @BeforeUpdate()
