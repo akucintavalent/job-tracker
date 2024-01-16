@@ -12,18 +12,32 @@ export class BoardColumnsService {
     @InjectRepository(BoardColumn)
     private readonly boardColumnRepository: Repository<BoardColumn>,
     @InjectRepository(Board)
-    private readonly boardRepository1: Repository<Board>,
+    private readonly boardRepository: Repository<Board>,
   ) {}
 
   async create(dto: CreateBoardColumnDto): Promise<BoardColumn> {
-    if (!(await this.boardRepository1.existsBy({ id: dto.boardId }))) {
+    if (!(await this.boardRepository.existsBy({ id: dto.boardId }))) {
       throw new BadRequestException("Board doesn't exists");
+    }
+
+    // take:1 operator throws an eror "column distinctAlias.BoardColumn_id does not exist"
+    const dbColumns = await this.boardColumnRepository.find({
+      select: { order: true, name: true },
+      where: { board: { id: dto.boardId } },
+      order: { order: 'DESC' },
+    });
+    const order = dbColumns != null ? dbColumns[0].order + 1 : 0;
+
+    if (dbColumns != null && dbColumns.find((x) => x.name === dto.name)) {
+      throw new BadRequestException(
+        `Column with '${dto.name}' name is alredy exists`,
+      );
     }
 
     const entity = this.boardColumnRepository.create({
       name: dto.name,
       board: { id: dto.boardId },
-      order: 1, // TODO: make logic to reorder columns
+      order: order,
     });
 
     return await this.boardColumnRepository.save(entity);
