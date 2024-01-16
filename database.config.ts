@@ -2,6 +2,7 @@ import { DataSourceOptions } from 'typeorm';
 import { config } from 'dotenv';
 import { User } from './src/users/user.entity';
 import { Board } from './src/boards/entities/board.entity';
+import { BoardColumn } from './src/board-columns/entities/board-column.entity';
 
 if (process.env.NODE_ENV !== 'test') {
   config();
@@ -16,7 +17,7 @@ export const getDataSourceOptions = (): DataSourceOptions => ({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [User, Board],
+  entities: [User, Board, BoardColumn],
   migrations: ['dist/src/migrations/*.js'],
   migrationsRun: false,
   synchronize: false,
