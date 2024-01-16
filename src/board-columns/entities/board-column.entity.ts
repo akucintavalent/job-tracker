@@ -2,7 +2,7 @@ import { Board } from '../../boards/entities/board.entity';
 import { BaseEntity } from '../../entities/base.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-@Entity('board-columns')
+@Entity('board_columns')
 export class BoardColumn extends BaseEntity {
   @Column()
   name: string;
