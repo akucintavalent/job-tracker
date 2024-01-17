@@ -15,12 +15,12 @@ export class UsersService {
   ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
-    await this.valiateIfUserExists(dto);
+    await this.validateIfUserExists(dto);
     const user = await this.usersRepository.create(dto);
     return this.usersRepository.save(user);
   }
 
-  private async valiateIfUserExists({
+  private async validateIfUserExists({
     email,
     username,
   }: {
