@@ -42,8 +42,8 @@ export class UsersService {
       );
   }
 
-  findOneBy(where: FindUserDto): Promise<User> {
-    const user = this.usersRepository.findOneBy(where);
+  async findOneBy(where: FindUserDto): Promise<User> {
+    const user = await this.usersRepository.findOneBy(where);
 
     if (!user) {
       throw new NotFoundException(
