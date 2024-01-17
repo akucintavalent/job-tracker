@@ -6,7 +6,7 @@ content-type: application/json
   "email": "email5@lalal.com",
   "password": "password",
   "username": "username7",
-  "role": "admin"
+  "role": "user"
 }
 
 ### Get a user by id
@@ -22,7 +22,7 @@ GET http://localhost:3000/users?role=admin
 GET http://localhost:3000/users?email=email5@lalal.com
 
 ### Update a user
-PATCH http://localhost:3000/users/27d8b451-5002-4171-81d5-efc108be4e9a
+PATCH http://localhost:3000/users/d7a64605-9155-475c-8fda-d9d119f24f01
 content-type: application/json
 
 {
@@ -31,4 +31,4 @@ content-type: application/json
 }
 
 ### Remove a user
-DELETE http://localhost:3000/users/abf1e158-aec3-450b-8e71-ddfbc90bb5d4
+DELETE http://localhost:3000/users/d7a64605-9155-475c-8fda-d9d119f24f02

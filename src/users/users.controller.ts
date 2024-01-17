@@ -73,6 +73,13 @@ export class UsersController {
   }
 
   @Patch('/:id')
+  @ApiOperation({ summary: 'Update user' })
+  @ApiResponse({
+    status: 200,
+    description: 'User record',
+    type: UserDto,
+  })
+  @ApiNotFoundResponse({ description: 'User not found' })
   updateUser(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateUserDto,
@@ -81,6 +88,13 @@ export class UsersController {
   }
 
   @Delete('/:id')
+  @ApiOperation({ summary: 'Delete user' })
+  @ApiResponse({
+    status: 200,
+    description: "Deleted user's data",
+    type: UserDto,
+  })
+  @ApiNotFoundResponse({ description: 'User not found' })
   deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.remove(id);
   }
