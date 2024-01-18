@@ -29,7 +29,7 @@ export class BoardColumnsController {
   @ApiOperation({ summary: 'Creates a new column for a board' })
   @ApiResponse({
     status: 200,
-    description: 'Board created',
+    description: 'Column created',
   })
   @ApiResponse({
     status: 400,
@@ -37,7 +37,7 @@ export class BoardColumnsController {
   })
   @ApiResponse({
     status: 400,
-    description: 'User not found',
+    description: 'Board not found',
   })
   async createBoard(@Body() boadDto: CreateBoardColumnDto) {
     return await this.boardColumnService.create(boadDto);
