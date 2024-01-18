@@ -7,9 +7,16 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { BoardColumnsService } from './board-columns.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateBoardColumnDto } from './dtos/create-board-column.dto';
 import { UpdateBoardColumnDto } from './dtos/update-board-column.dto';
 
@@ -48,6 +55,28 @@ export class BoardColumnsController {
   })
   findColumns(@Param('id', ParseUUIDPipe) id: string) {
     return this.boardColumnService.findColumns(id);
+  }
+
+  @Put('/:id/rearange')
+  @ApiParam({ name: 'id', description: 'Board id' })
+  @ApiBody({
+    description: 'List all Column IDs for this Board in the desired order',
+    type: [String],
+  })
+  @ApiOperation({ summary: `Rearange all columns for this Board` })
+  @ApiResponse({
+    status: 200,
+    description: 'Columns rearanged',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  async rearange(
+    @Param('id', ParseUUIDPipe) boardId: string,
+    @Body() columnIds: string[],
+  ) {
+    await this.boardColumnService.rearangeColumns(boardId, columnIds);
   }
 
   @Patch('/:id')
