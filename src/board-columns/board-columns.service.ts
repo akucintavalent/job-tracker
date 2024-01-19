@@ -66,14 +66,14 @@ export class BoardColumnsService {
     return await this.boardColumnRepository.upsert(dbColumns, ['id']);
   }
 
-  async update(id: string, dto: UpdateBoardColumnDto) {
-    const entity = await this.findById(id);
+  async update(columnId: string, dto: UpdateBoardColumnDto) {
+    const entity = await this.findById(columnId);
     Object.assign(entity, dto);
     return await this.boardColumnRepository.save(entity);
   }
 
-  async remove(id: string): Promise<BoardColumn> {
-    const entity = await this.findById(id);
+  async remove(columnId: string): Promise<BoardColumn> {
+    const entity = await this.findById(columnId);
     return this.boardColumnRepository.remove(entity);
   }
 

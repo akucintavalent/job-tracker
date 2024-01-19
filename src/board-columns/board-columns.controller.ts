@@ -44,6 +44,7 @@ export class BoardColumnsController {
   }
 
   @Get('/:id')
+  @ApiParam({ name: 'id', description: 'Board id' })
   @ApiOperation({ summary: `Fetch all board's column` })
   @ApiResponse({
     status: 200,
@@ -53,8 +54,8 @@ export class BoardColumnsController {
     status: 400,
     description: 'Validation error',
   })
-  findColumns(@Param('id', ParseUUIDPipe) id: string) {
-    return this.boardColumnService.findColumns(id);
+  findColumns(@Param('id', ParseUUIDPipe) boardId: string) {
+    return this.boardColumnService.findColumns(boardId);
   }
 
   @Put('/:id/rearange')
@@ -80,6 +81,7 @@ export class BoardColumnsController {
   }
 
   @Patch('/:id')
+  @ApiParam({ name: 'id', description: 'Column id' })
   @ApiOperation({ summary: `Update column` })
   @ApiResponse({
     status: 200,
@@ -94,13 +96,14 @@ export class BoardColumnsController {
     description: 'Column not found',
   })
   async updateBoard(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseUUIDPipe) columnId: string,
     @Body() body: UpdateBoardColumnDto,
   ) {
-    return await this.boardColumnService.update(id, body);
+    return await this.boardColumnService.update(columnId, body);
   }
 
   @Delete('/:id')
+  @ApiParam({ name: 'id', description: 'Column id' })
   @ApiOperation({ summary: 'Delete column' })
   @ApiResponse({
     status: 200,
@@ -110,7 +113,7 @@ export class BoardColumnsController {
     status: 400,
     description: 'Validation error',
   })
-  deleteBoard(@Param('id', ParseUUIDPipe) id: string) {
-    return this.boardColumnService.remove(id);
+  deleteBoard(@Param('id', ParseUUIDPipe) columnId: string) {
+    return this.boardColumnService.remove(columnId);
   }
 }
