@@ -11,7 +11,13 @@ import {
 } from '@nestjs/common';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { BoardsService } from './boards.service';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
 
@@ -56,6 +62,7 @@ export class BoardsController {
   }
 
   @Get('/:id')
+  @ApiParam({ name: 'id', description: 'Board id' })
   @ApiOperation({ summary: 'Fetch board' })
   @ApiResponse({
     status: 200,
@@ -70,6 +77,7 @@ export class BoardsController {
   }
 
   @Patch('/:id')
+  @ApiParam({ name: 'id', description: 'Board id' })
   @ApiResponse({
     status: 200,
     description: 'Board updated',
@@ -90,6 +98,7 @@ export class BoardsController {
   }
 
   @Delete('/:id')
+  @ApiParam({ name: 'id', description: 'Board id' })
   @ApiOperation({ summary: 'Delete board' })
   @ApiResponse({
     status: 200,
