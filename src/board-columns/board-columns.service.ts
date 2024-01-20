@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { BoardColumn } from './entities/board-column.entity';
 import { Repository } from 'typeorm/repository/Repository';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,10 +30,10 @@ export class BoardColumnsService {
       where: { board: { id: dto.boardId } },
       order: { order: 'DESC' },
     });
-    const order = dbColumns != null ? dbColumns[0].order + 1 : 0;
+    const order = !dbColumns ? dbColumns[0].order + 1 : 0;
 
-    if (dbColumns != null && dbColumns.find((x) => x.name === dto.name)) {
-      throw new BadRequestException(
+    if (!dbColumns && dbColumns.find((x) => x.name === dto.name)) {
+      throw new ConflictException(
         `Column with '${dto.name}' name is alredy exists`,
       );
     }
@@ -86,7 +90,7 @@ export class BoardColumnsService {
   }
 
   private validateRearange(columnsIds: string[], dbColumnsIds: string[]) {
-    if (!columnsIds)
+    if (!columnsIds.length)
       throw new BadRequestException('List of Column Ids is empty');
     if (this.hasDuplicates(columnsIds))
       throw new BadRequestException('List has duplicated Id.');
