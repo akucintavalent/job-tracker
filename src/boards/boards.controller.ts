@@ -11,13 +11,7 @@ import {
 } from '@nestjs/common';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { BoardsService } from './boards.service';
-import {
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
 
@@ -90,10 +84,7 @@ export class BoardsController {
     status: 400,
     description: 'Board not found',
   })
-  async updateBoard(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateBoardDto,
-  ) {
+  async updateBoard(@Param('id', ParseUUIDPipe) id: string, @Body() body: UpdateBoardDto) {
     return await this.boardService.update(id, body);
   }
 
