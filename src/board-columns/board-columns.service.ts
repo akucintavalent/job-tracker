@@ -14,18 +14,18 @@ import { CreateBoardColumnDto } from './dtos/create-board-column.dto';
 export class BoardColumnsService {
   constructor(
     @InjectRepository(BoardColumn)
-    private readonly boardColumnRepository: Repository<BoardColumn>,
+    private readonly boardColumnsRepository: Repository<BoardColumn>,
     @InjectRepository(Board)
-    private readonly boardRepository: Repository<Board>,
+    private readonly boardsRepository: Repository<Board>,
   ) {}
 
   async create(dto: CreateBoardColumnDto): Promise<BoardColumn> {
-    if (!(await this.boardRepository.existsBy({ id: dto.boardId }))) {
+    if (!(await this.boardsRepository.existsBy({ id: dto.boardId }))) {
       throw new BadRequestException("Board doesn't exists");
     }
 
     // take:1 operator throws an eror "column distinctAlias.BoardColumn_id does not exist"
-    const dbColumns = await this.boardColumnRepository.find({
+    const dbColumns = await this.boardColumnsRepository.find({
       select: { order: true, name: true },
       where: { board: { id: dto.boardId } },
       order: { order: 'DESC' },
@@ -38,25 +38,25 @@ export class BoardColumnsService {
       );
     }
 
-    const entity = this.boardColumnRepository.create({
+    const entity = this.boardColumnsRepository.create({
       name: dto.name,
       board: { id: dto.boardId },
       order: order,
     });
 
-    return await this.boardColumnRepository.save(entity);
+    return await this.boardColumnsRepository.save(entity);
   }
 
   findColumns(boardId: string): Promise<BoardColumn[]> {
-    return this.boardColumnRepository.findBy({ board: { id: boardId } });
+    return this.boardColumnsRepository.findBy({ board: { id: boardId } });
   }
 
   async rearangeColumns(boardId: string, columnsIds: string[]) {
-    if (!(await this.boardRepository.existsBy({ id: boardId }))) {
+    if (!(await this.boardsRepository.existsBy({ id: boardId }))) {
       throw new BadRequestException("Board doesn't exists");
     }
 
-    const dbColumns = await this.boardColumnRepository.findBy({
+    const dbColumns = await this.boardColumnsRepository.findBy({
       board: { id: boardId },
     });
 
@@ -67,22 +67,22 @@ export class BoardColumnsService {
       dbColumns.find((x) => x.id === columnsIds[i]).order = i;
     }
 
-    return await this.boardColumnRepository.upsert(dbColumns, ['id']);
+    return await this.boardColumnsRepository.upsert(dbColumns, ['id']);
   }
 
   async update(columnId: string, dto: UpdateBoardColumnDto) {
     const entity = await this.findById(columnId);
     Object.assign(entity, dto);
-    return await this.boardColumnRepository.save(entity);
+    return await this.boardColumnsRepository.save(entity);
   }
 
   async remove(columnId: string): Promise<BoardColumn> {
     const entity = await this.findById(columnId);
-    return this.boardColumnRepository.remove(entity);
+    return this.boardColumnsRepository.remove(entity);
   }
 
   private async findById(id: string) {
-    const entity = await this.boardColumnRepository.findOneBy({ id });
+    const entity = await this.boardColumnsRepository.findOneBy({ id });
     if (!entity) {
       throw new BadRequestException("Columns doesn't exists");
     }

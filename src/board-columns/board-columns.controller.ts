@@ -23,7 +23,7 @@ import { UpdateBoardColumnDto } from './dtos/update-board-column.dto';
 @ApiTags('board-columns')
 @Controller('board-columns')
 export class BoardColumnsController {
-  constructor(private readonly boardColumnService: BoardColumnsService) {}
+  constructor(private readonly boardColumnsService: BoardColumnsService) {}
 
   @Post()
   @ApiOperation({ summary: 'Creates a new column for a board' })
@@ -39,8 +39,8 @@ export class BoardColumnsController {
     status: 400,
     description: 'Board not found',
   })
-  async createBoard(@Body() boadDto: CreateBoardColumnDto) {
-    return await this.boardColumnService.create(boadDto);
+  async createBoard(@Body() boardDto: CreateBoardColumnDto) {
+    return await this.boardColumnsService.create(boardDto);
   }
 
   @Get('/:id')
@@ -55,7 +55,7 @@ export class BoardColumnsController {
     description: 'Validation error',
   })
   findColumns(@Param('id', ParseUUIDPipe) boardId: string) {
-    return this.boardColumnService.findColumns(boardId);
+    return this.boardColumnsService.findColumns(boardId);
   }
 
   @Put('/:id/rearange')
@@ -77,7 +77,7 @@ export class BoardColumnsController {
     @Param('id', ParseUUIDPipe) boardId: string,
     @Body() columnIds: string[],
   ) {
-    await this.boardColumnService.rearangeColumns(boardId, columnIds);
+    await this.boardColumnsService.rearangeColumns(boardId, columnIds);
   }
 
   @Patch('/:id')
@@ -99,7 +99,7 @@ export class BoardColumnsController {
     @Param('id', ParseUUIDPipe) columnId: string,
     @Body() body: UpdateBoardColumnDto,
   ) {
-    return await this.boardColumnService.update(columnId, body);
+    return await this.boardColumnsService.update(columnId, body);
   }
 
   @Delete('/:id')
@@ -114,6 +114,6 @@ export class BoardColumnsController {
     description: 'Validation error',
   })
   deleteBoard(@Param('id', ParseUUIDPipe) columnId: string) {
-    return this.boardColumnService.remove(columnId);
+    return this.boardColumnsService.remove(columnId);
   }
 }

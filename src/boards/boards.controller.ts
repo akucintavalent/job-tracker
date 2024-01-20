@@ -40,8 +40,8 @@ export class BoardsController {
     status: 400,
     description: 'User not found',
   })
-  async createBoard(@Body() boadDto: CreateBoardDto) {
-    return await this.boardService.create(boadDto);
+  async createBoard(@Body() boardDto: CreateBoardDto) {
+    return await this.boardService.create(boardDto);
   }
 
   @Get()
