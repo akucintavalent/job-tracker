@@ -6,7 +6,7 @@ import {
 import { BoardColumn } from './entities/board-column.entity';
 import { Repository } from 'typeorm/repository/Repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Board } from 'src/boards/entities/board.entity';
+import { Board } from '../boards/entities/board.entity';
 import { UpdateBoardColumnDto } from './dtos/update-board-column.dto';
 import { CreateBoardColumnDto } from './dtos/create-board-column.dto';
 

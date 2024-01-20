@@ -3,7 +3,7 @@ import { Board } from './entities/board.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dtos/create-board.dto';
-import { User } from 'src/users/user.entity';
+import { User } from '../users/user.entity';
 import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
 
