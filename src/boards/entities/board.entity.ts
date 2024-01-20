@@ -1,6 +1,7 @@
 import { User } from '../../users/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../entities/base.entity';
+import { BoardColumn } from '../../board-columns/entities/board-column.entity';
 
 @Entity('boards')
 export class Board extends BaseEntity {
@@ -10,4 +11,7 @@ export class Board extends BaseEntity {
 
   @Column()
   name: string;
+
+  @OneToMany(() => BoardColumn, (column) => column.board)
+  columns: BoardColumn[];
 }

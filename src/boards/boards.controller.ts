@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { BoardsService } from './boards.service';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
 
@@ -34,8 +34,8 @@ export class BoardsController {
     status: 400,
     description: 'User not found',
   })
-  async createBoard(@Body() boadDto: CreateBoardDto) {
-    return await this.boardService.create(boadDto);
+  async createBoard(@Body() boardDto: CreateBoardDto) {
+    return await this.boardService.create(boardDto);
   }
 
   @Get()
@@ -56,6 +56,7 @@ export class BoardsController {
   }
 
   @Get('/:id')
+  @ApiParam({ name: 'id', description: 'Board id' })
   @ApiOperation({ summary: 'Fetch board' })
   @ApiResponse({
     status: 200,
@@ -70,6 +71,7 @@ export class BoardsController {
   }
 
   @Patch('/:id')
+  @ApiParam({ name: 'id', description: 'Board id' })
   @ApiResponse({
     status: 200,
     description: 'Board updated',
@@ -82,14 +84,12 @@ export class BoardsController {
     status: 400,
     description: 'Board not found',
   })
-  async updateBoard(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateBoardDto,
-  ) {
+  async updateBoard(@Param('id', ParseUUIDPipe) id: string, @Body() body: UpdateBoardDto) {
     return await this.boardService.update(id, body);
   }
 
   @Delete('/:id')
+  @ApiParam({ name: 'id', description: 'Board id' })
   @ApiOperation({ summary: 'Delete board' })
   @ApiResponse({
     status: 200,
