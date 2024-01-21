@@ -3,7 +3,8 @@ import { JobApplication } from './entities/job-application.entity';
 import { BoardColumn } from '../board-columns/entities/board-column.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBoardColumnDto } from './dtos/create-job-application.dto';
+import { CreateJobApplicationDto } from './dtos/create-job-application.dto';
+import { UpdateJobApplicationDto } from './dtos/update-job-application.dto';
 
 @Injectable()
 export class JobApplicationsService {
@@ -18,7 +19,7 @@ export class JobApplicationsService {
     return this.jobApplicationsRepository.findBy({ column: { id: columndId } });
   }
 
-  async create(dto: CreateBoardColumnDto) {
+  async create(dto: CreateJobApplicationDto) {
     if (!(await this.boardColumnsRepository.existsBy({ id: dto.columnId }))) {
       throw new BadRequestException("Board Column doesn't exists");
     }
@@ -31,5 +32,27 @@ export class JobApplicationsService {
     });
 
     return await this.jobApplicationsRepository.save(entity);
+  }
+
+  async update(id: string, dto: UpdateJobApplicationDto) {
+    const entity = await this.jobApplicationsRepository.findOne({
+      where: { id },
+      relations: { column: true },
+    });
+
+    if (entity == null)
+      throw new BadRequestException(`Job Application with '${id}' id doesn't exists`);
+
+    // Updates the column_id field
+    if (dto.columnId && entity.column.id !== dto.columnId) {
+      if (!(await this.boardColumnsRepository.existsBy({ id: dto.columnId }))) {
+        throw new BadRequestException(`Board Column with '${dto.columnId}' id doesn't exists`);
+      }
+      entity.column.id = dto.columnId;
+    }
+    // Updates the rest fields
+    Object.assign(entity, dto);
+
+    return this.jobApplicationsRepository.save(entity);
   }
 }

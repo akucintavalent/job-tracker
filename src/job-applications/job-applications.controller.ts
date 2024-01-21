@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { JobApplicationsService } from './job-applications.service';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateBoardColumnDto } from './dtos/create-job-application.dto';
+import { CreateJobApplicationDto } from './dtos/create-job-application.dto';
+import { UpdateJobApplicationDto } from './dtos/update-job-application.dto';
 
 @ApiTags('job-applications')
 @Controller('job-applications')
@@ -22,7 +23,18 @@ export class JobApplicationsController {
   @ApiResponse({ status: 200, description: 'Job Application created' })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'Board Column not found' })
-  create(@Body() dto: CreateBoardColumnDto) {
+  create(@Body() dto: CreateJobApplicationDto) {
     return this.jobApplicationsService.create(dto);
+  }
+
+  @Put('/:id')
+  @ApiParam({ name: 'id', description: 'Job Application id' })
+  @ApiOperation({ summary: 'Updates a new Job Application' })
+  @ApiResponse({ status: 200, description: 'Job Application updated' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 400, description: 'Job Application not found' })
+  @ApiResponse({ status: 400, description: 'Board Column not found' })
+  update(@Param('id', ParseUUIDPipe) jobId: string, @Body() dto: UpdateJobApplicationDto) {
+    return this.jobApplicationsService.update(jobId, dto);
   }
 }
