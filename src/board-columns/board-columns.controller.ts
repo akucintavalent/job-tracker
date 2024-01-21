@@ -24,6 +24,7 @@ export class BoardColumnsController {
   @ApiResponse({ status: 200, description: 'Column created' })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'Board not found' })
+  @ApiResponse({ status: 409, description: 'Board Column with that name already exists' })
   async createBoard(@Body() boardDto: CreateBoardColumnDto) {
     return await this.boardColumnsService.create(boardDto);
   }
