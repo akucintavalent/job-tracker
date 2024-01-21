@@ -15,11 +15,11 @@ export class JobApplicationsService {
     private readonly boardColumnsRepository: Repository<BoardColumn>,
   ) {}
 
-  findBy(columndId: string) {
+  findBy(columndId: string): Promise<JobApplication[]> {
     return this.jobApplicationsRepository.findBy({ column: { id: columndId } });
   }
 
-  async create(dto: CreateJobApplicationDto) {
+  async create(dto: CreateJobApplicationDto): Promise<JobApplication> {
     if (!(await this.boardColumnsRepository.existsBy({ id: dto.columnId }))) {
       throw new BadRequestException("Board Column doesn't exists");
     }
@@ -34,7 +34,7 @@ export class JobApplicationsService {
     return await this.jobApplicationsRepository.save(entity);
   }
 
-  async update(id: string, dto: UpdateJobApplicationDto) {
+  async update(id: string, dto: UpdateJobApplicationDto): Promise<JobApplication> {
     const entity = await this.findOne(id);
 
     // Updates the column_id field
