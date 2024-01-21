@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { JobApplicationsService } from './job-applications.service';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateJobApplicationDto } from './dtos/create-job-application.dto';
@@ -36,5 +36,15 @@ export class JobApplicationsController {
   @ApiResponse({ status: 400, description: 'Board Column not found' })
   update(@Param('id', ParseUUIDPipe) jobId: string, @Body() dto: UpdateJobApplicationDto) {
     return this.jobApplicationsService.update(jobId, dto);
+  }
+
+  @Delete('/:id')
+  @ApiParam({ name: 'id', description: 'Job Application id' })
+  @ApiOperation({ summary: 'Deletes a new Job Application' })
+  @ApiResponse({ status: 200, description: 'Job Application deleted' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 400, description: 'Job Application not found' })
+  delete(@Param('id', ParseUUIDPipe) jobId: string) {
+    return this.jobApplicationsService.delete(jobId);
   }
 }

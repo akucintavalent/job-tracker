@@ -35,13 +35,7 @@ export class JobApplicationsService {
   }
 
   async update(id: string, dto: UpdateJobApplicationDto) {
-    const entity = await this.jobApplicationsRepository.findOne({
-      where: { id },
-      relations: { column: true },
-    });
-
-    if (entity == null)
-      throw new BadRequestException(`Job Application with '${id}' id doesn't exists`);
+    const entity = await this.findOne(id);
 
     // Updates the column_id field
     if (dto.columnId && entity.column.id !== dto.columnId) {
@@ -54,5 +48,21 @@ export class JobApplicationsService {
     Object.assign(entity, dto);
 
     return this.jobApplicationsRepository.save(entity);
+  }
+
+  async delete(id: string) {
+    const entity = await this.findOne(id);
+    return this.jobApplicationsRepository.delete(entity);
+  }
+
+  private async findOne(id: string): Promise<JobApplication> {
+    const entity = await this.jobApplicationsRepository.findOne({
+      where: { id },
+      relations: { column: true },
+    });
+
+    if (entity == null)
+      throw new BadRequestException(`Job Application with '${id}' id doesn't exists`);
+    return entity;
   }
 }
