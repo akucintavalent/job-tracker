@@ -22,32 +22,17 @@ export class BoardsController {
 
   @Post()
   @ApiOperation({ summary: 'Creates a new board for user' })
-  @ApiResponse({
-    status: 200,
-    description: 'Board created',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Validation error',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'User not found',
-  })
+  @ApiResponse({ status: 200, description: 'Board created' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 400, description: 'User not found' })
   async createBoard(@Body() boardDto: CreateBoardDto) {
     return await this.boardService.create(boardDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Fetch all boards' })
-  @ApiResponse({
-    status: 200,
-    description: 'Board records',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Validation error',
-  })
+  @ApiResponse({ status: 200, description: 'Board records' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiQuery({ name: 'id', description: 'Board id', required: false })
   @ApiQuery({ name: 'userId', description: 'User id', required: false })
   @ApiQuery({ name: 'name', description: 'Board name', required: false })
@@ -58,32 +43,17 @@ export class BoardsController {
   @Get('/:id')
   @ApiParam({ name: 'id', description: 'Board id' })
   @ApiOperation({ summary: 'Fetch board' })
-  @ApiResponse({
-    status: 200,
-    description: 'Board record',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Validation error',
-  })
+  @ApiResponse({ status: 200, description: 'Board record' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
   findBoard(@Param('id', ParseUUIDPipe) id: string) {
     return this.boardService.findOne(id);
   }
 
   @Patch('/:id')
   @ApiParam({ name: 'id', description: 'Board id' })
-  @ApiResponse({
-    status: 200,
-    description: 'Board updated',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Validation error',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Board not found',
-  })
+  @ApiResponse({ status: 200, description: 'Board updated' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 400, description: 'Board not found' })
   async updateBoard(@Param('id', ParseUUIDPipe) id: string, @Body() body: UpdateBoardDto) {
     return await this.boardService.update(id, body);
   }
@@ -91,14 +61,8 @@ export class BoardsController {
   @Delete('/:id')
   @ApiParam({ name: 'id', description: 'Board id' })
   @ApiOperation({ summary: 'Delete board' })
-  @ApiResponse({
-    status: 200,
-    description: 'Board deleted',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Validation error',
-  })
+  @ApiResponse({ status: 200, description: 'Board deleted' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
   deleteBoard(@Param('id', ParseUUIDPipe) id: string) {
     return this.boardService.remove(id);
   }
