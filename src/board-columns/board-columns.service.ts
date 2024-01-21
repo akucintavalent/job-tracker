@@ -42,7 +42,10 @@ export class BoardColumnsService {
   }
 
   findColumns(boardId: string): Promise<BoardColumn[]> {
-    return this.boardColumnsRepository.findBy({ board: { id: boardId } });
+    return this.boardColumnsRepository.find({
+      where: { board: { id: boardId } },
+      relations: { jobApplications: true },
+    });
   }
 
   async rearangeColumns(boardId: string, columnsIds: string[]) {
@@ -61,10 +64,10 @@ export class BoardColumnsService {
       dbColumns.find((x) => x.id === columnsIds[i]).order = i;
     }
 
-    return await this.boardColumnsRepository.upsert(dbColumns, ['id']);
+    await this.boardColumnsRepository.upsert(dbColumns, ['id']);
   }
 
-  async update(columnId: string, dto: UpdateBoardColumnDto) {
+  async update(columnId: string, dto: UpdateBoardColumnDto): Promise<BoardColumn> {
     const entity = await this.findById(columnId);
     Object.assign(entity, dto);
     return await this.boardColumnsRepository.save(entity);
