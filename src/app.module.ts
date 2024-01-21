@@ -9,6 +9,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { getDataSourceOptions } from '../database.config';
 import { BoardsModule } from './boards/boards.module';
 import { BoardColumnsModule } from './board-columns/board-columns.module';
+import { JobApplicationsModule } from './job-applications/job-applications.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { BoardColumnsModule } from './board-columns/board-columns.module';
     UsersModule,
     BoardsModule,
     BoardColumnsModule,
+    JobApplicationsModule,
   ],
   controllers: [AppController],
   providers: [
