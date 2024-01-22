@@ -41,7 +41,7 @@ export class BoardsService {
     return this.boardRepository.findOneBy({ id });
   }
 
-  async update(id: string, dto: UpdateBoardDto) {
+  async update(id: string, dto: UpdateBoardDto): Promise<Board> {
     const entity = await this.findById(id);
     Object.assign(entity, dto);
     return await this.boardRepository.save(entity);
