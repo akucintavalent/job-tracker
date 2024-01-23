@@ -10,9 +10,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User) private readonly usersRepository: Repository<User>,
-  ) {}
+  constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>) {}
 
   async create(dto: CreateUserDto): Promise<User> {
     await this.valiateIfUserExists(dto);
@@ -46,9 +44,7 @@ export class UsersService {
     const user = this.usersRepository.findOneBy(where);
 
     if (!user) {
-      throw new NotFoundException(
-        `User with properties '${JSON.stringify(where)}' not found.`,
-      );
+      throw new NotFoundException(`User with properties '${JSON.stringify(where)}' not found.`);
     }
 
     return user;
