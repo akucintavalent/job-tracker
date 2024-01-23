@@ -23,22 +23,24 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { FindUsersDto } from './dtos/find-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
+import { UserMapper } from './users.mapper';
 
 @ApiTags('users')
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly mapper: UserMapper,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
   @ApiCreatedResponse({ description: 'User record', type: UserDto })
-  @ApiResponse({
-    status: 400,
-    description: 'Validation error or user already exists',
-  })
-  createUser(@Body() body: CreateUserDto) {
-    return this.usersService.create(body);
+  @ApiResponse({ status: 400, description: 'Validation error or user already exists' })
+  async createUser(@Body() body: CreateUserDto) {
+    const entity = await this.usersService.create(body);
+    return this.mapper.toDto(entity);
   }
 
   @Get()
@@ -46,14 +48,15 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'User records',
-    type: Array<UserDto>,
+    type: [UserDto],
   })
   @ApiResponse({
     status: 400,
     description: 'Validation error',
   })
-  findUsers(@Query() query: FindUsersDto) {
-    return this.usersService.findBy(query);
+  async findUsers(@Query() query: FindUsersDto) {
+    const entities = await this.usersService.findBy(query);
+    return entities.map(this.mapper.toDto);
   }
 
   @Get('/:id')
@@ -68,20 +71,24 @@ export class UsersController {
     description: 'Validation error',
   })
   @ApiNotFoundResponse({ description: 'User not found' })
-  findUserById(@Param('id', ParseUUIDPipe) id: string) {
-    return this.usersService.findOneBy({ id });
+  async findUserById(@Param('id', ParseUUIDPipe) id: string) {
+    const entity = await this.usersService.findOneBy({ id });
+    return this.mapper.toDto(entity);
   }
 
   @Patch('/:id')
-  updateUser(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: UpdateUserDto,
-  ) {
-    return this.usersService.update(id, body);
+  @ApiResponse({
+    status: 200,
+    description: 'User updated',
+    type: UserDto,
+  })
+  async updateUser(@Param('id', ParseUUIDPipe) id: string, @Body() body: UpdateUserDto) {
+    const entity = await this.usersService.update(id, body);
+    return this.mapper.toDto(entity);
   }
 
   @Delete('/:id')
-  deleteUser(@Param('id', ParseUUIDPipe) id: string) {
-    return this.usersService.remove(id);
+  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
+    await this.usersService.remove(id);
   }
 }
