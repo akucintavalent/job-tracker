@@ -14,6 +14,13 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    // TODO: Uncoment to enable AuthGuard on each endpoint
+    //{
+    //  provide: APP_GUARD,
+    //  useClass: AuthGuard,
+    //},
+  ],
 })
 export class AuthModule {}
