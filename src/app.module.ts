@@ -10,6 +10,7 @@ import { getDataSourceOptions } from '../database.config';
 import { BoardsModule } from './boards/boards.module';
 import { BoardColumnsModule } from './board-columns/board-columns.module';
 import { JobApplicationsModule } from './job-applications/job-applications.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { JobApplicationsModule } from './job-applications/job-applications.modul
     BoardsModule,
     BoardColumnsModule,
     JobApplicationsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
