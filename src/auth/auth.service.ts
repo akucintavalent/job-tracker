@@ -2,6 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { JwtTokensDto } from './dtos/jwt-tokens.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,7 +37,7 @@ export class AuthService {
   private async generateTokens(userId: string, username: string) {
     const payload = { sub: userId, username: username };
 
-    return {
+    return new JwtTokensDto({
       accessToken: await this.jwtService.signAsync(payload, {
         secret: process.env.JWT_ACCESS_TOKEN,
         expiresIn: '1h',
@@ -45,6 +46,6 @@ export class AuthService {
         secret: process.env.JWT_REFRESH_TOKEN,
         expiresIn: '7d',
       }),
-    };
+    });
   }
 }
