@@ -17,30 +17,32 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload = { sub: user.id, username: user.username };
-    return {
-      accessToken: await this.jwtService.signAsync(payload, {
-        secret: 'jwt-secret',
-        expiresIn: '1h',
-      }),
-      refreshToken: await this.jwtService.signAsync(payload, {
-        secret: 'jwt-refresh-secret',
-        expiresIn: '7d',
-      }),
-    };
+    return await this.generateTokens(user.id, user.username);
   }
 
   async refreshToken(req: string): Promise<any> {
-    const payload = await this.jwtService.verifyAsync(req, { secret: 'jwt-refresh-secret' });
-    const newPayload = { sub: payload.sub, username: payload.username };
+    let payload = null;
+    try {
+      payload = await this.jwtService.verifyAsync(req, {
+        secret: process.env.JWT_REFRESH_TOKEN,
+      });
+    } catch (JsonWebTokenError) {
+      throw new UnauthorizedException();
+    }
+
+    return await this.generateTokens(payload.sub, payload.username);
+  }
+
+  private async generateTokens(userId: string, username: string) {
+    const payload = { sub: userId, username: username };
 
     return {
-      accessToken: await this.jwtService.signAsync(newPayload, {
-        secret: 'jwt-secret',
+      accessToken: await this.jwtService.signAsync(payload, {
+        secret: process.env.JWT_ACCESS_TOKEN,
         expiresIn: '1h',
       }),
-      refreshToken: await this.jwtService.signAsync(newPayload, {
-        secret: 'jwt-refresh-secret',
+      refreshToken: await this.jwtService.signAsync(payload, {
+        secret: process.env.JWT_REFRESH_TOKEN,
         expiresIn: '7d',
       }),
     };
