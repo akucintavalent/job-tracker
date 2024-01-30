@@ -7,6 +7,7 @@ import {
   UseGuards,
   Get,
   Request,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -27,6 +28,20 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto.username, signInDto.password);
+  }
+
+  @Public()
+  @Get('refresh')
+  @ApiOperation({ summary: 'Refresh Access token' })
+  @ApiResponse({ status: 200, description: 'Token is updated' })
+  @ApiResponse({ status: 401, description: 'Invalid token' })
+  async refreshToken(@Request() req: any) {
+    const [type, token] = req.headers.authorization?.split(' ') ?? [];
+    if (type !== 'Bearer' || !token) {
+      throw new UnauthorizedException();
+    }
+
+    return await this.authService.refreshToken(token);
   }
 
   @UseGuards(AuthGuard)

@@ -9,8 +9,8 @@ import { JwtModule } from '@nestjs/jwt';
     UsersModule,
     JwtModule.register({
       global: true,
-      secret: 'jwt-secret', // TODO: move it to the env
-      signOptions: { expiresIn: '60s' },
+      //secret: 'jwt-secret', // TODO: move it to the env
+      //signOptions: { expiresIn: '60s' },
     }),
   ],
   controllers: [AuthController],
