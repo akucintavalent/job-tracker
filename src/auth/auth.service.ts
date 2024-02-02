@@ -3,12 +3,14 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtTokensDto } from './dtos/jwt-tokens.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async signIn(username: string, pass: string): Promise<any> {
@@ -25,7 +27,7 @@ export class AuthService {
     let payload = null;
     try {
       payload = await this.jwtService.verifyAsync(req, {
-        secret: process.env.JWT_REFRESH_TOKEN,
+        secret: this.configService.get('JWT_REFRESH_TOKEN'),
       });
     } catch (JsonWebTokenError) {
       throw new UnauthorizedException();
@@ -39,11 +41,11 @@ export class AuthService {
 
     return new JwtTokensDto({
       accessToken: await this.jwtService.signAsync(payload, {
-        secret: process.env.JWT_ACCESS_TOKEN,
+        secret: this.configService.get('JWT_ACCESS_TOKEN'),
         expiresIn: '1h',
       }),
       refreshToken: await this.jwtService.signAsync(payload, {
-        secret: process.env.JWT_REFRESH_TOKEN,
+        secret: this.configService.get('JWT_REFRESH_TOKEN'),
         expiresIn: '7d',
       }),
     });
