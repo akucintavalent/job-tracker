@@ -12,6 +12,9 @@ $ docker compose up postgres_dev
 $ yarn install
 ```
 
+## Configuration
+Create `.env` file in the root directory. Copy and populate all content from `.env.example` file.
+
 ## Run DB migration
 ```bash
 $ yarn run typeorm migration:run -d src/data-source.ts
