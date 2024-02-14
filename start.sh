@@ -32,4 +32,5 @@ do
 done
 
 # Connection is established
+yarn run typeorm migration:run -d src/data-source.ts
 yarn start
