@@ -12,5 +12,26 @@ services:
     volumes:
       - postgres_dev_data:/var/lib/postgresql/data
 
+  api:
+    build: .
+    container_name: api
+    depends_on:
+      - postgres_dev
+    environment:
+      - DB_HOST=postgres_dev
+      - DB_PORT=5432
+      - DB_USERNAME=job_tracker_dev_user
+      - DB_PASSWORD=job_tracker_dev_password
+      - DB_DATABASE=job_tracker_dev_db
+      - JWT_ACCESS_TOKEN=jwt_access_token
+      - JWT_REFRESH_TOKEN=jwt_refresh_token
+    ports:
+      - 3000:3000
+    networks:
+      - dev
+
 volumes:
   postgres_dev_data:
+
+networks:
+  dev:
