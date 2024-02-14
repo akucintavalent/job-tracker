@@ -1,16 +1,16 @@
 version: '3.7'
 services:
- postgres_dev:
-   image: postgres:15
-   container_name: postgres_dev_db
-   ports:
-     - '5432:5432'
-   environment:
-     POSTGRES_DB: job_tracker_dev_db
-     POSTGRES_USER: job_tracker_dev_user
-     POSTGRES_PASSWORD: job_tracker_dev_password
-   volumes:
-     - postgres_dev_data:/var/lib/postgresql/data
+  postgres_dev:
+    image: postgres:15
+    container_name: postgres_dev_db
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: job_tracker_dev_db
+      POSTGRES_USER: job_tracker_dev_user
+      POSTGRES_PASSWORD: job_tracker_dev_password
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
 
 volumes:
- postgres_dev_data:
+  postgres_dev_data:
