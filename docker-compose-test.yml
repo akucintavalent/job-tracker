@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  postgres_test:
+    image: postgres:15
+    container_name: postgres_test_db
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_DB: job_tracker_test_db
+      POSTGRES_USER: job_tracker_test_user
+      POSTGRES_PASSWORD: job_tracker_test_password
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_test_data:
