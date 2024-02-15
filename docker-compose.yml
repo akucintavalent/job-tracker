@@ -6,9 +6,9 @@ services:
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_DB: job_tracker_dev_db
-      POSTGRES_USER: job_tracker_dev_user
-      POSTGRES_PASSWORD: job_tracker_dev_password
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_dev_data:/var/lib/postgresql/data
     networks:
@@ -21,14 +21,10 @@ services:
       - postgres_dev
     ports:
       - 3000:3000
+    env_file:
+      - .env
     environment:
       - DB_HOST=postgres_dev
-      - DB_PORT=5432
-      - DB_USERNAME=job_tracker_dev_user
-      - DB_PASSWORD=job_tracker_dev_password
-      - DB_DATABASE=job_tracker_dev_db
-      - JWT_ACCESS_TOKEN=jwt_access_token
-      - JWT_REFRESH_TOKEN=jwt_refresh_token
     networks:
       - dev
 
