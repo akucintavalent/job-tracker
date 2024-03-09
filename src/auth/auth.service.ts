@@ -13,14 +13,14 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async signIn(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOneBy({ username });
+  async signIn(email: string, pass: string): Promise<any> {
+    const user = await this.usersService.findOneBy({ email });
 
     if (user == null || !(await bcrypt.compare(pass, user.password))) {
       throw new UnauthorizedException();
     }
 
-    return await this.generateTokens(user.id, user.username);
+    return await this.generateTokens(user.id, user.email);
   }
 
   async refreshToken(req: string): Promise<any> {
@@ -33,11 +33,11 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    return await this.generateTokens(payload.sub, payload.username);
+    return await this.generateTokens(payload.sub, payload.email);
   }
 
-  private async generateTokens(userId: string, username: string) {
-    const payload = { sub: userId, username: username };
+  private async generateTokens(userId: string, email: string) {
+    const payload = { sub: userId, email: email };
 
     return new JwtTokensDto({
       accessToken: await this.jwtService.signAsync(payload, {

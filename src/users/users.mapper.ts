@@ -8,7 +8,6 @@ export class UserMapper {
     const dto = new UserDto();
     dto.id = entity.id;
     dto.email = entity.email;
-    dto.username = entity.username;
     dto.role = entity.role;
     return dto;
   }

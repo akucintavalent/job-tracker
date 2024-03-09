@@ -39,6 +39,7 @@ export class UsersController {
   @ApiCreatedResponse({ description: 'User record', type: UserDto })
   @ApiResponse({ status: 400, description: 'Validation error or user already exists' })
   async createUser(@Body() body: CreateUserDto) {
+    if (!body.role) body.role = 'user';
     const entity = await this.usersService.create(body);
     return this.mapper.toDto(entity);
   }
