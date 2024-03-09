@@ -28,7 +28,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Signed in', type: JwtTokensDto })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   signIn(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+    return this.authService.signIn(signInDto.email, signInDto.password);
   }
 
   @Public()
