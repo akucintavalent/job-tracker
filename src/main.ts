@@ -5,6 +5,8 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
+  app.enableCors();
+
   // Setup Swagger page on /api
   const config = new DocumentBuilder()
     .setTitle('Job Tracker API')
