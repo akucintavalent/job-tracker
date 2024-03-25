@@ -4,7 +4,6 @@ import {
   Post,
   HttpCode,
   HttpStatus,
-  UseGuards,
   Get,
   Request,
   UnauthorizedException,
@@ -12,7 +11,6 @@ import {
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SignInDto } from './dtos/sign-in.dto';
-import { AuthGuard } from './auth.guard';
 import { Public } from './public.decorator';
 import { JwtTokensDto } from './dtos/jwt-tokens.dto';
 
@@ -45,7 +43,6 @@ export class AuthController {
     return await this.authService.refreshToken(token);
   }
 
-  @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req: any) {
     return req.user;

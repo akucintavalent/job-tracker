@@ -24,6 +24,8 @@ import { FindUsersDto } from './dtos/find-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
 import { UserMapper } from './users.mapper';
+import { Public } from 'src/auth/public.decorator';
+import { AuthUser } from 'src/auth/user.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -35,6 +37,7 @@ export class UsersController {
   ) {}
 
   @Post()
+  @Public()
   @ApiOperation({ summary: 'Create a new user' })
   @ApiCreatedResponse({ description: 'User record', type: UserDto })
   @ApiResponse({ status: 400, description: 'Validation error or user already exists' })
@@ -86,6 +89,12 @@ export class UsersController {
   async updateUser(@Param('id', ParseUUIDPipe) id: string, @Body() body: UpdateUserDto) {
     const entity = await this.usersService.update(id, body);
     return this.mapper.toDto(entity);
+  }
+
+  @Delete()
+  async deleteUser2(@AuthUser() user: any) {
+    //await this.usersService.remove(id);
+    return user;
   }
 
   @Delete('/:id')
