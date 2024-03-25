@@ -4,6 +4,7 @@ import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './public.decorator';
 import { ConfigService } from '@nestjs/config';
+import { AuthUserMapper } from './auth.user.mapper';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -11,6 +12,7 @@ export class AuthGuard implements CanActivate {
     private readonly jwtService: JwtService,
     private readonly reflector: Reflector,
     private readonly configService: ConfigService,
+    private readonly mapper: AuthUserMapper,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -30,7 +32,7 @@ export class AuthGuard implements CanActivate {
         secret: this.configService.get('JWT_ACCESS_TOKEN'),
       });
 
-      request['user'] = payload;
+      request['user'] = this.mapper.toAuthUserDto(payload);
     } catch {
       throw new UnauthorizedException();
     }
