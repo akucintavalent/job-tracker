@@ -4,6 +4,8 @@ import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth.guard';
 
 @Module({
   imports: [
@@ -16,11 +18,10 @@ import { ConfigService } from '@nestjs/config';
   providers: [
     AuthService,
     ConfigService,
-    // TODO: Uncoment to enable AuthGuard on each endpoint
-    //{
-    //  provide: APP_GUARD,
-    //  useClass: AuthGuard,
-    //},
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AuthModule {}
