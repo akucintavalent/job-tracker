@@ -4,8 +4,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -26,6 +24,7 @@ import { UserDto } from './dtos/user.dto';
 import { UserMapper } from './users.mapper';
 import { Public } from 'src/auth/public.decorator';
 import { AuthUser } from 'src/auth/user.decorator';
+import { AuthUserDto } from 'src/auth/dtos/auth.user.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -47,7 +46,7 @@ export class UsersController {
     return this.mapper.toDto(entity);
   }
 
-  @Get()
+  @Get('/find')
   @ApiOperation({ summary: 'Fetch all users' })
   @ApiResponse({
     status: 200,
@@ -63,7 +62,7 @@ export class UsersController {
     return entities.map(this.mapper.toDto);
   }
 
-  @Get('/:id')
+  @Get()
   @ApiOperation({ summary: 'Fetch user' })
   @ApiResponse({
     status: 200,
@@ -75,30 +74,25 @@ export class UsersController {
     description: 'Validation error',
   })
   @ApiNotFoundResponse({ description: 'User not found' })
-  async findUserById(@Param('id', ParseUUIDPipe) id: string) {
+  async getUserDetails(@AuthUser() user: AuthUserDto) {
+    const id = user.userId;
     const entity = await this.usersService.findOneBy({ id });
     return this.mapper.toDto(entity);
   }
 
-  @Patch('/:id')
+  @Patch()
   @ApiResponse({
     status: 200,
     description: 'User updated',
     type: UserDto,
   })
-  async updateUser(@Param('id', ParseUUIDPipe) id: string, @Body() body: UpdateUserDto) {
-    const entity = await this.usersService.update(id, body);
+  async updateUser(@AuthUser() user: AuthUserDto, @Body() body: UpdateUserDto) {
+    const entity = await this.usersService.update(user.userId, body);
     return this.mapper.toDto(entity);
   }
 
   @Delete()
-  async deleteUser2(@AuthUser() user: any) {
-    //await this.usersService.remove(id);
-    return user;
-  }
-
-  @Delete('/:id')
-  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
-    await this.usersService.remove(id);
+  async deleteUser(@AuthUser() user: AuthUserDto) {
+    await this.usersService.remove(user.userId);
   }
 }
