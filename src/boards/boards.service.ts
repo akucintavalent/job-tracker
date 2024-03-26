@@ -16,14 +16,14 @@ export class BoardsService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(dto: CreateBoardDto): Promise<Board> {
-    if (!(await this.userRepository.existsBy({ id: dto.userId }))) {
+  async create(dto: CreateBoardDto, userId: string): Promise<Board> {
+    if (!(await this.userRepository.existsBy({ id: userId }))) {
       throw new BadRequestException("User doesn't exists");
     }
 
     const entity = this.boardRepository.create({
       name: dto.name,
-      user: { id: dto.userId },
+      user: { id: userId },
     });
 
     return await this.boardRepository.save(entity);

@@ -16,6 +16,8 @@ import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
 import { BoardMapper } from './boards.mapper';
 import { BoardDto } from './dtos/board.dto';
+import { AuthUser } from 'src/auth/user.decorator';
+import { AuthUserDto } from 'src/auth/dtos/auth.user.dto';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -30,8 +32,8 @@ export class BoardsController {
   @ApiResponse({ status: 200, description: 'Board created', type: BoardDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'User not found' })
-  async createBoard(@Body() boardDto: CreateBoardDto) {
-    const entity = await this.boardService.create(boardDto);
+  async createBoard(@Body() boardDto: CreateBoardDto, @AuthUser() user: AuthUserDto) {
+    const entity = await this.boardService.create(boardDto, user.userId);
     return this.mapper.toDto(entity);
   }
 
@@ -42,7 +44,7 @@ export class BoardsController {
   @ApiQuery({ name: 'id', description: 'Board id', required: false })
   @ApiQuery({ name: 'userId', description: 'User id', required: false })
   @ApiQuery({ name: 'name', description: 'Board name', required: false })
-  async findBoards(@Query() query: FindBoardDto) {
+  async findBoards(@Query() query: FindBoardDto, @AuthUser() user: AuthUserDto) {
     const entities = await this.boardService.findBy(query);
     return entities.map(this.mapper.toDto);
   }
@@ -52,7 +54,7 @@ export class BoardsController {
   @ApiOperation({ summary: 'Fetch board' })
   @ApiResponse({ status: 200, description: 'Board record', type: BoardDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  async findBoard(@Param('id', ParseUUIDPipe) id: string) {
+  async findBoard(@Param('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {
     const entity = await this.boardService.findOne(id);
     return this.mapper.toDto(entity);
   }
@@ -62,7 +64,11 @@ export class BoardsController {
   @ApiResponse({ status: 200, description: 'Board updated', type: BoardDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'Board not found' })
-  async updateBoard(@Param('id', ParseUUIDPipe) id: string, @Body() body: UpdateBoardDto) {
+  async updateBoard(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateBoardDto,
+    @AuthUser() user: AuthUserDto,
+  ) {
     const entity = await this.boardService.update(id, body);
     return this.mapper.toDto(entity);
   }
@@ -72,7 +78,7 @@ export class BoardsController {
   @ApiOperation({ summary: 'Delete board' })
   @ApiResponse({ status: 200, description: 'Board deleted' })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  async deleteBoard(@Param('id', ParseUUIDPipe) id: string) {
+  async deleteBoard(@Param('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {
     await this.boardService.remove(id);
   }
 }
