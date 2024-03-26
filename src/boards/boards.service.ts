@@ -37,25 +37,26 @@ export class BoardsService {
     });
   }
 
-  findOne(id: string): Promise<Board> {
-    return this.boardRepository.findOneBy({ id });
+  async findOne(boardId: string, userId: string): Promise<Board> {
+    return await this.findUsersBoard(boardId, userId);
   }
 
-  async update(id: string, dto: UpdateBoardDto): Promise<Board> {
-    const entity = await this.findById(id);
+  async update(boardId: string, dto: UpdateBoardDto, userId: string): Promise<Board> {
+    const entity = await this.findUsersBoard(boardId, userId);
     Object.assign(entity, dto);
     return await this.boardRepository.save(entity);
   }
 
-  async remove(id: string): Promise<Board> {
-    const entity = await this.findById(id);
+  async remove(boardId: string, userId: string): Promise<Board> {
+    const entity = await this.findUsersBoard(boardId, userId);
     return this.boardRepository.remove(entity);
   }
 
-  private async findById(id: string) {
-    const entity = await this.boardRepository.findOneBy({ id });
+  // Finds a specific board by the boardId assigned to a specific user
+  private async findUsersBoard(boardId: string, userId: string) {
+    const entity = await this.boardRepository.findOneBy({ id: boardId, user: {id: userId} });
     if (!entity) {
-      throw new BadRequestException("Board doesn't exists");
+      throw new BadRequestException("The Board does not exist or the user does not have access");
     }
     return entity;
   }
