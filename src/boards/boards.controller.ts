@@ -37,7 +37,7 @@ export class BoardsController {
     return this.mapper.toDto(entity);
   }
 
-  @Get('/find')
+  @Get()
   @ApiOperation({ summary: "Fetch all user's boards" })
   @ApiResponse({ status: 200, description: 'Board records', type: [BoardDto] })
   @ApiResponse({ status: 400, description: 'Validation error' })
@@ -61,7 +61,7 @@ export class BoardsController {
   }
 
   @Patch('/:id')
-  @ApiOperation({ summary: "Updates board for user' })
+  @ApiOperation({ summary: "Updates user's board" })
   @ApiParam({ name: 'id', description: 'Board id' })
   @ApiResponse({ status: 200, description: 'Board updated', type: BoardDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
@@ -76,7 +76,7 @@ export class BoardsController {
   }
 
   @Delete('/:id')
-  @ApiOperation({ summary: "Delete user's" })
+  @ApiOperation({ summary: "Delete user's board" })
   @ApiParam({ name: 'id', description: 'Board id' })
   @ApiOperation({ summary: 'Delete board' })
   @ApiResponse({ status: 200, description: 'Board deleted' })
