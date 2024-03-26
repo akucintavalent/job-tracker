@@ -54,9 +54,9 @@ export class BoardsService {
 
   // Finds a specific board by the boardId assigned to a specific user
   private async findBoard(boardId: string, userId: string) {
-    const entity = await this.boardRepository.findOneBy({ id: boardId, user: {id: userId} });
+    const entity = await this.boardRepository.findOneBy({ id: boardId, user: { id: userId } });
     if (!entity) {
-      throw new BadRequestException("The Board does not exist or the user does not have access");
+      throw new BadRequestException('The Board does not exist or the user does not have access');
     }
     return entity;
   }
