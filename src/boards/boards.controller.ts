@@ -38,7 +38,7 @@ export class BoardsController {
   }
 
   @Get('/find')
-  @ApiOperation({ summary: 'Fetch all boards for user' })
+  @ApiOperation({ summary: "Fetch all user's boards" })
   @ApiResponse({ status: 200, description: 'Board records', type: [BoardDto] })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiQuery({ name: 'id', description: 'Board id', required: false })
@@ -52,7 +52,7 @@ export class BoardsController {
 
   @Get('/:id')
   @ApiParam({ name: 'id', description: 'Board id' })
-  @ApiOperation({ summary: 'Fetch single board for user' })
+  @ApiOperation({ summary: "Fetch single user's board" })
   @ApiResponse({ status: 200, description: 'Board record', type: BoardDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
   async findBoard(@Param('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {
@@ -61,7 +61,7 @@ export class BoardsController {
   }
 
   @Patch('/:id')
-  @ApiOperation({ summary: 'Updates board for user' })
+  @ApiOperation({ summary: "Updates board for user' })
   @ApiParam({ name: 'id', description: 'Board id' })
   @ApiResponse({ status: 200, description: 'Board updated', type: BoardDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
@@ -76,7 +76,7 @@ export class BoardsController {
   }
 
   @Delete('/:id')
-  @ApiOperation({ summary: 'Delete board for user' })
+  @ApiOperation({ summary: "Delete user's" })
   @ApiParam({ name: 'id', description: 'Board id' })
   @ApiOperation({ summary: 'Delete board' })
   @ApiResponse({ status: 200, description: 'Board deleted' })

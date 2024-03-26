@@ -38,22 +38,22 @@ export class BoardsService {
   }
 
   async findOne(boardId: string, userId: string): Promise<Board> {
-    return await this.findUsersBoard(boardId, userId);
+    return await this.findBoard(boardId, userId);
   }
 
   async update(boardId: string, dto: UpdateBoardDto, userId: string): Promise<Board> {
-    const entity = await this.findUsersBoard(boardId, userId);
+    const entity = await this.findBoard(boardId, userId);
     Object.assign(entity, dto);
     return await this.boardRepository.save(entity);
   }
 
   async remove(boardId: string, userId: string): Promise<Board> {
-    const entity = await this.findUsersBoard(boardId, userId);
+    const entity = await this.findBoard(boardId, userId);
     return this.boardRepository.remove(entity);
   }
 
   // Finds a specific board by the boardId assigned to a specific user
-  private async findUsersBoard(boardId: string, userId: string) {
+  private async findBoard(boardId: string, userId: string) {
     const entity = await this.boardRepository.findOneBy({ id: boardId, user: {id: userId} });
     if (!entity) {
       throw new BadRequestException("The Board does not exist or the user does not have access");
