@@ -5,6 +5,8 @@ import { CreateJobApplicationDto } from './dtos/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dtos/update-job-application.dto';
 import { JobApplicationMapper } from './job-applications.mapper';
 import { JobApplicationDto } from './dtos/job-application.dto';
+import { AuthUserDto } from 'src/auth/dtos/auth.user.dto';
+import { AuthUser } from 'src/auth/user.decorator';
 
 @ApiTags('job-applications')
 @Controller('job-applications')
@@ -19,8 +21,11 @@ export class JobApplicationsController {
   @ApiOperation({ summary: `Fetch all job application from column` })
   @ApiResponse({ status: 200, description: 'Job application records', type: [JobApplicationDto] })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  async findJobsByColumn(@Param('id', ParseUUIDPipe) columnId: string) {
-    const entities = await this.jobApplicationsService.findBy(columnId);
+  async findJobsByColumn(
+    @Param('id', ParseUUIDPipe) columnId: string,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    const entities = await this.jobApplicationsService.findBy(columnId, user.userId);
     return entities.map((e) => this.mapper.toDto(e));
   }
 
@@ -29,8 +34,8 @@ export class JobApplicationsController {
   @ApiResponse({ status: 200, description: 'Job Application created', type: JobApplicationDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'Board Column not found' })
-  async create(@Body() dto: CreateJobApplicationDto) {
-    const entity = await this.jobApplicationsService.create(dto);
+  async create(@Body() dto: CreateJobApplicationDto, @AuthUser() user: AuthUserDto) {
+    const entity = await this.jobApplicationsService.create(dto, user.userId);
     return this.mapper.toDto(entity);
   }
 
@@ -41,8 +46,12 @@ export class JobApplicationsController {
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'Job Application not found' })
   @ApiResponse({ status: 400, description: 'Board Column not found' })
-  async update(@Param('id', ParseUUIDPipe) jobId: string, @Body() dto: UpdateJobApplicationDto) {
-    const entity = await this.jobApplicationsService.update(jobId, dto);
+  async update(
+    @Param('id', ParseUUIDPipe) jobId: string,
+    @Body() dto: UpdateJobApplicationDto,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    const entity = await this.jobApplicationsService.update(jobId, dto, user.userId);
     return this.mapper.toDto(entity);
   }
 
@@ -52,7 +61,7 @@ export class JobApplicationsController {
   @ApiResponse({ status: 200, description: 'Job Application deleted' })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'Job Application not found' })
-  async delete(@Param('id', ParseUUIDPipe) jobId: string) {
-    await this.jobApplicationsService.delete(jobId);
+  async delete(@Param('id', ParseUUIDPipe) jobId: string, @AuthUser() user: AuthUserDto) {
+    await this.jobApplicationsService.delete(jobId, user.userId);
   }
 }
