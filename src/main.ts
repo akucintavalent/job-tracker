@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle('Job Tracker API')
     .setDescription('API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
 

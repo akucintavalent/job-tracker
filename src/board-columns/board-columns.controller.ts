@@ -15,6 +15,8 @@ import { CreateBoardColumnDto } from './dtos/create-board-column.dto';
 import { UpdateBoardColumnDto } from './dtos/update-board-column.dto';
 import { BoardColumnDto } from './dtos/board-column.dto';
 import { BoardColumnMapper } from './board-columns.mapper';
+import { AuthUser } from 'src/auth/user.decorator';
+import { AuthUserDto } from 'src/auth/dtos/auth.user.dto';
 
 @ApiTags('board-columns')
 @Controller('board-columns')
@@ -30,8 +32,8 @@ export class BoardColumnsController {
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'Board not found' })
   @ApiResponse({ status: 409, description: 'Board Column with that name already exists' })
-  async createBoard(@Body() boardDto: CreateBoardColumnDto) {
-    const entity = await this.boardColumnsService.create(boardDto);
+  async createBoard(@Body() boardDto: CreateBoardColumnDto, @AuthUser() user: AuthUserDto) {
+    const entity = await this.boardColumnsService.create(boardDto, user.userId);
     return this.mapper.toDto(entity);
   }
 
@@ -40,8 +42,8 @@ export class BoardColumnsController {
   @ApiOperation({ summary: `Fetch all board's column` })
   @ApiResponse({ status: 200, description: 'Column records', type: [BoardColumnDto] })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  async findColumns(@Param('id', ParseUUIDPipe) boardId: string) {
-    const entities = await this.boardColumnsService.findColumns(boardId);
+  async findColumns(@Param('id', ParseUUIDPipe) boardId: string, @AuthUser() user: AuthUserDto) {
+    const entities = await this.boardColumnsService.findColumns(boardId, user.userId);
     return entities.map((e) => this.mapper.toDto(e));
   }
 
@@ -54,8 +56,12 @@ export class BoardColumnsController {
   @ApiOperation({ summary: `Rearange all columns for this Board` })
   @ApiResponse({ status: 200, description: 'Columns rearanged' })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  async rearange(@Param('id', ParseUUIDPipe) boardId: string, @Body() columnIds: string[]) {
-    await this.boardColumnsService.rearangeColumns(boardId, columnIds);
+  async rearange(
+    @Param('id', ParseUUIDPipe) boardId: string,
+    @Body() columnIds: string[],
+    @AuthUser() user: AuthUserDto,
+  ) {
+    await this.boardColumnsService.rearangeColumns(boardId, columnIds, user.userId);
   }
 
   @Patch('/:id')
@@ -67,8 +73,9 @@ export class BoardColumnsController {
   async updateBoard(
     @Param('id', ParseUUIDPipe) columnId: string,
     @Body() body: UpdateBoardColumnDto,
+    @AuthUser() user: AuthUserDto,
   ) {
-    const entity = await this.boardColumnsService.update(columnId, body);
+    const entity = await this.boardColumnsService.update(columnId, body, user.userId);
     return this.mapper.toDto(entity);
   }
 
@@ -77,7 +84,7 @@ export class BoardColumnsController {
   @ApiOperation({ summary: 'Delete column' })
   @ApiResponse({ status: 200, description: 'Column deleted' })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  async deleteBoard(@Param('id', ParseUUIDPipe) columnId: string) {
-    await this.boardColumnsService.remove(columnId);
+  async deleteBoard(@Param('id', ParseUUIDPipe) columnId: string, @AuthUser() user: AuthUserDto) {
+    await this.boardColumnsService.remove(columnId, user.userId);
   }
 }
