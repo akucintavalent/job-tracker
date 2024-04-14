@@ -13,6 +13,7 @@ import { JobApplicationsModule } from './job-applications/job-applications.modul
 import { AuthModule } from './auth/auth.module';
 import { EmailSenderModule } from './email-sender/email-sender.module';
 import { HttpExceptionFilter } from './exceptions/http-exception.filter';
+import { ContactsModule } from './contacts/contacts.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { HttpExceptionFilter } from './exceptions/http-exception.filter';
     JobApplicationsModule,
     AuthModule,
     EmailSenderModule,
+    ContactsModule,
   ],
   controllers: [AppController],
   providers: [
