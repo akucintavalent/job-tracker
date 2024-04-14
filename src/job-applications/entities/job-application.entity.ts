@@ -1,6 +1,7 @@
 import { BaseEntity } from '../../entities/base.entity';
 import { BoardColumn } from '../../board-columns/entities/board-column.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
+import { Contact } from '../../contacts/entities/contact.entity';
 
 @Entity('job-applications')
 export class JobApplication extends BaseEntity {
@@ -16,4 +17,7 @@ export class JobApplication extends BaseEntity {
   @ManyToOne(() => BoardColumn, (column) => column.jobApplications)
   @JoinColumn({ name: 'column_id' })
   column: BoardColumn;
+
+  @ManyToMany(() => Contact, (contact) => contact.jobApplications)
+  contacts: Contact[];
 }

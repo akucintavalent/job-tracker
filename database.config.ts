@@ -5,6 +5,7 @@ import { Board } from './src/boards/entities/board.entity';
 import { BoardColumn } from './src/board-columns/entities/board-column.entity';
 import { JobApplication } from './src/job-applications/entities/job-application.entity';
 import { UserCodeVerification } from './src/users/user.code.verification.entity';
+import { Contact } from './src/contacts/entities/contact.entity';
 
 if (process.env.NODE_ENV !== 'test') {
   config();
@@ -19,7 +20,7 @@ export const getDataSourceOptions = (): DataSourceOptions => ({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [User, Board, BoardColumn, JobApplication, UserCodeVerification],
+  entities: [User, Board, BoardColumn, JobApplication, UserCodeVerification, Contact],
   migrations: ['dist/src/migrations/*.js'],
   migrationsRun: false,
   synchronize: false,

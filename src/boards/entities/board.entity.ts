@@ -2,6 +2,7 @@ import { User } from '../../users/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../entities/base.entity';
 import { BoardColumn } from '../../board-columns/entities/board-column.entity';
+import { Contact } from '../../contacts/entities/contact.entity';
 
 @Entity('boards')
 export class Board extends BaseEntity {
@@ -14,4 +15,7 @@ export class Board extends BaseEntity {
 
   @OneToMany(() => BoardColumn, (column) => column.board)
   columns: BoardColumn[];
+
+  @OneToMany(() => Contact, (contact) => contact.board)
+  contacts: Contact[];
 }
