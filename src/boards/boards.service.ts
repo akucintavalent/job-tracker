@@ -29,11 +29,11 @@ export class BoardsService {
     return await this.boardRepository.save(entity);
   }
 
-  findBy(query: FindBoardDto): Promise<Board[]> {
+  findBy(query: FindBoardDto, userId: string): Promise<Board[]> {
     return this.boardRepository.findBy({
       id: query.id,
       name: query.name,
-      user: { id: query.userId },
+      user: { id: userId },
     });
   }
 
