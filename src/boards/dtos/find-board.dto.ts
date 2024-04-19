@@ -6,10 +6,6 @@ export class FindBoardDto {
   id?: string;
 
   @IsOptional()
-  @IsUUID()
-  userId?: string;
-
-  @IsOptional()
   @IsString()
   name?: string;
 }

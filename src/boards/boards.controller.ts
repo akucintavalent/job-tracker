@@ -45,8 +45,7 @@ export class BoardsController {
   @ApiQuery({ name: 'userId', description: 'User id', required: false })
   @ApiQuery({ name: 'name', description: 'Board name', required: false })
   async findBoards(@Query() query: FindBoardDto, @AuthUser() user: AuthUserDto) {
-    query.userId = user.userId;
-    const entities = await this.boardService.findBy(query);
+    const entities = await this.boardService.findBy(query, user.userId);
     return entities.map(this.mapper.toDto);
   }
 

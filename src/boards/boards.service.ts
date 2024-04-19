@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Board } from './entities/board.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { User } from '../users/user.entity';
 import { FindBoardDto } from './dtos/find-board.dto';
@@ -29,11 +29,13 @@ export class BoardsService {
     return await this.boardRepository.save(entity);
   }
 
-  findBy(query: FindBoardDto): Promise<Board[]> {
+  findBy(query: FindBoardDto, userId: string): Promise<Board[]> {
+    const boardName = query.name?.length > 0 ? Like(`%${query.name}%`) : null;
+
     return this.boardRepository.findBy({
       id: query.id,
-      name: query.name,
-      user: { id: query.userId },
+      name: boardName,
+      user: { id: userId },
     });
   }
 
