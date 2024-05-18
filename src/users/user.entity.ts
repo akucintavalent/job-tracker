@@ -4,6 +4,7 @@ import { Exclude } from 'class-transformer';
 import { UserRole, UserRoleType } from './enums/user-role.enum';
 import { Board } from '../boards/entities/board.entity';
 import { BaseEntity } from '../entities/base.entity';
+import { UserCodeVerification } from '../users/user.code.verification.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -23,6 +24,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Board, (board) => board.user)
   board: Board[];
+
+  @OneToMany(() => UserCodeVerification, (userCode) => userCode.user)
+  userCodeVerifications: UserCodeVerification[];
 
   @BeforeInsert()
   @BeforeUpdate()
