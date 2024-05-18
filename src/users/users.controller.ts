@@ -25,6 +25,8 @@ import { UserMapper } from './users.mapper';
 import { Public } from 'src/auth/public.decorator';
 import { AuthUser } from 'src/auth/user.decorator';
 import { AuthUserDto } from 'src/auth/dtos/auth.user.dto';
+import { UserCodeVerificationService } from './user.code.verification.service';
+import { EmailVerificationCodeDto } from './dtos/email-verification-code.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -33,6 +35,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly mapper: UserMapper,
+    private readonly codeVerification: UserCodeVerificationService,
   ) {}
 
   @Post()
@@ -94,5 +97,15 @@ export class UsersController {
   @Delete()
   async deleteUser(@AuthUser() user: AuthUserDto) {
     await this.usersService.remove(user.userId);
+  }
+
+  @Post('/verification/create-email-verification-code')
+  async createEmailVerificationCode(@AuthUser() user: AuthUserDto) {
+    await this.codeVerification.createVerificationCode(user.userId);
+  }
+
+  @Post('/verification/verify-email-code')
+  async verifyEmailCode(@AuthUser() user: AuthUserDto, @Body() body: EmailVerificationCodeDto) {
+    await this.codeVerification.verifyCode(body.code, user.userId);
   }
 }
