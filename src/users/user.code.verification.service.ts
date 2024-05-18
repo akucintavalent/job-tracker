@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { UserCodeVerification } from './user.code.verification.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import { LessThan } from 'typeorm';
 
 @Injectable()
 export class UserCodeVerificationService {
@@ -22,14 +23,24 @@ export class UserCodeVerificationService {
   }
 
   async verifyCode(code: string, userId: string): Promise<boolean> {
-    // TODO: delete all expired verification codes
     if (code == null || userId == null)
       throw new BadRequestException(this.BAD_VERIFICATION_CODE_EXCEPTION);
+
+    await this.updateAllExpiredCodes();
+
     const entity = await this.repository.findOneBy({ code: code, user: { id: userId } });
     if (entity == null) throw new BadRequestException(this.BAD_VERIFICATION_CODE_EXCEPTION);
-    await this.repository.remove(entity);
+    await this.repository.update({ id: entity.id }, { deletedAt: new Date().toISOString() });
     await this.userRepository.update({ id: userId }, { isEmailVerified: true });
     return true;
+  }
+
+  private async updateAllExpiredCodes() {
+    const a5minAgo = new Date(new Date().getTime() - 1000 * 60 * 5).toISOString();
+    await this.repository.update(
+      { createdAt: LessThan(a5minAgo) },
+      { deletedAt: new Date().toISOString() },
+    );
   }
 
   private generateCode() {
