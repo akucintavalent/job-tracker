@@ -6,8 +6,7 @@ import { Resend } from 'resend';
 export class EmailSenderService {
   constructor(private readonly configService: ConfigService) {}
 
-  async sendVerificationEmail(to: string) {
-    const code = '1234';
+  async sendVerificationEmail(to: string, code: string) {
     await this.sendEmail('SignUp', to, 'JobTracker Email verification', `Code: ${code}`);
   }
 
