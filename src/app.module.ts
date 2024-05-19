@@ -11,6 +11,7 @@ import { BoardsModule } from './boards/boards.module';
 import { BoardColumnsModule } from './board-columns/board-columns.module';
 import { JobApplicationsModule } from './job-applications/job-applications.module';
 import { AuthModule } from './auth/auth.module';
+import { EmailSenderModule } from './email-sender/email-sender.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AuthModule } from './auth/auth.module';
     BoardColumnsModule,
     JobApplicationsModule,
     AuthModule,
+    EmailSenderModule,
   ],
   controllers: [AppController],
   providers: [

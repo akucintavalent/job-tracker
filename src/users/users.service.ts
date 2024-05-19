@@ -7,15 +7,26 @@ import { UserAlreadyExistsException } from './exceptions/user-exists.exception';
 import { FindUserDto } from './dtos/find-user.dto';
 import { FindUsersDto } from './dtos/find-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { EmailSenderService } from 'src/email-sender/email-sender.service';
+import { UserCodeVerificationService } from './user.code.verification.service';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    private readonly emailSender: EmailSenderService,
+    private readonly userCodeVerificationService: UserCodeVerificationService,
+  ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
     await this.valiateIfUserExists(dto.email);
     const user = this.usersRepository.create(dto);
-    return this.usersRepository.save(user);
+
+    await this.usersRepository.save(user);
+
+    const code = await this.userCodeVerificationService.createVerificationCode(user.id);
+    await this.emailSender.sendVerificationEmail(user.email, code);
+    return user;
   }
 
   private async valiateIfUserExists(email: string): Promise<void> {

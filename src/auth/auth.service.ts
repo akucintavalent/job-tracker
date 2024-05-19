@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtTokensDto } from './dtos/jwt-tokens.dto';
@@ -19,6 +19,8 @@ export class AuthService {
     if (user == null || !(await bcrypt.compare(pass, user.password))) {
       throw new UnauthorizedException();
     }
+
+    if (!user.isEmailVerified) throw new ForbiddenException('Email is not verified');
 
     return await this.generateTokens(user.id, user.email);
   }
