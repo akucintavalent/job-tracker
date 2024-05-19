@@ -15,23 +15,27 @@ export class UserCodeVerificationService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async createVerificationCode(userId: string): Promise<string> {
+  async createVerificationCode(email: string): Promise<string> {
     const code = this.generateCode();
-    const entity = this.repository.create({ code: code, user: { id: userId } });
+    const user = await this.userRepository.findOne({
+      select: { id: true },
+      where: { email: email },
+    });
+    const entity = this.repository.create({ code: code, user: { id: user.id } });
     await this.repository.save(entity);
     return code;
   }
 
-  async verifyCode(code: string, userId: string): Promise<boolean> {
-    if (code == null || userId == null)
+  async verifyCode(code: string, email: string): Promise<boolean> {
+    if (code == null || email == null)
       throw new BadRequestException(this.BAD_VERIFICATION_CODE_EXCEPTION);
 
     await this.updateAllExpiredCodes();
 
-    const entity = await this.repository.findOneBy({ code: code, user: { id: userId } });
+    const entity = await this.repository.findOneBy({ code: code, user: { email: email } });
     if (entity == null) throw new BadRequestException(this.BAD_VERIFICATION_CODE_EXCEPTION);
     await this.repository.update({ id: entity.id }, { deletedAt: new Date().toISOString() });
-    await this.userRepository.update({ id: userId }, { isEmailVerified: true });
+    await this.userRepository.update({ email: email }, { isEmailVerified: true });
     return true;
   }
 
