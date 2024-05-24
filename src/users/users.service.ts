@@ -19,17 +19,17 @@ export class UsersService {
   ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
-    await this.valiateIfUserExists(dto.email);
+    await this.validateIfUserExists(dto.email);
     const user = this.usersRepository.create(dto);
 
     await this.usersRepository.save(user);
 
-    const code = await this.userCodeVerificationService.createVerificationCode(user.id);
+    const code = await this.userCodeVerificationService.createVerificationCode(user.email);
     await this.emailSender.sendVerificationEmail(user.email, code);
     return user;
   }
 
-  private async valiateIfUserExists(email: string): Promise<void> {
+  private async validateIfUserExists(email: string): Promise<void> {
     const userExists = await this.usersRepository.existsBy({ email });
 
     if (userExists)
