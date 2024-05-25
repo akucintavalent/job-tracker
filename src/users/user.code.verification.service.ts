@@ -50,7 +50,7 @@ export class UserCodeVerificationService {
   private generateCode() {
     let result = '';
     const codeLenght = 6;
-    const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const characters = '0123456789';
     const charactersLength = characters.length;
     let counter = 0;
     while (counter < codeLenght) {
