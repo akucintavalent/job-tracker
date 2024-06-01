@@ -6,10 +6,10 @@ import { User } from './user.entity';
 import { LessThan } from 'typeorm';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
 import { ErrorCode } from 'src/constants/error-codes';
+import { ExceptionMessages } from 'src/constants/exception-messages';
 
 @Injectable()
 export class UserCodeVerificationService {
-  private readonly BAD_VERIFICATION_CODE_EXCEPTION = 'Email Verification Code or User are invalid';
   constructor(
     @InjectRepository(UserCodeVerification)
     private readonly repository: Repository<UserCodeVerification>,
@@ -68,6 +68,6 @@ export class UserCodeVerificationService {
   }
 
   private throw(code: ErrorCode) {
-    throw new BadRequestException(this.BAD_VERIFICATION_CODE_EXCEPTION, code);
+    throw new BadRequestException(ExceptionMessages.BAD_VERIFICATION_CODE_EXCEPTION, code);
   }
 }
