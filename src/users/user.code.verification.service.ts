@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { LessThan } from 'typeorm';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
-import { ErrorCode } from 'src/constants/exception.constants';
+import { ErrorCode } from 'src/constants/error-codes';
 
 @Injectable()
 export class UserCodeVerificationService {

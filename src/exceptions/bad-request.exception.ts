@@ -1,4 +1,4 @@
-import { ErrorCode } from 'src/constants/exception.constants';
+import { ErrorCode } from 'src/constants/error-codes';
 import { CustomHttpException } from './custom.exception';
 import { HttpStatus } from '@nestjs/common';
 
