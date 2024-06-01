@@ -5,13 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // import { AppDataSource } from './data-source';
 import { HealthCheckModule } from './health-check/health-check.module';
 import { UsersModule } from './users/users.module';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { getDataSourceOptions } from '../database.config';
 import { BoardsModule } from './boards/boards.module';
 import { BoardColumnsModule } from './board-columns/board-columns.module';
 import { JobApplicationsModule } from './job-applications/job-applications.module';
 import { AuthModule } from './auth/auth.module';
 import { EmailSenderModule } from './email-sender/email-sender.module';
+import { HttpExceptionFilter } from './exceptions/http-exception.filter';
 
 @Module({
   imports: [
@@ -34,6 +35,10 @@ import { EmailSenderModule } from './email-sender/email-sender.module';
       useValue: new ValidationPipe({
         whitelist: true,
       }),
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
     },
   ],
 })
