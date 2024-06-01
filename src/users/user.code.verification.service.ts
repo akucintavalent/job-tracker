@@ -37,12 +37,21 @@ export class UserCodeVerificationService {
 
     await this.updateAllExpiredCodes();
 
-    const entity = await this.repository.findOneBy({ code: code, user: { email: email } });
+    const entity = await this.repository.findOne({
+      where: { code: code, user: { email: email } },
+      withDeleted: true,
+    });
     if (entity == null)
       throw new BadRequestException(
         this.BAD_VERIFICATION_CODE_EXCEPTION,
-        ErrorCode.EMAIL_CODE_MISSING,
+        ErrorCode.EMAIL_CODE_NOT_FOUND,
       );
+    if (entity.deletedAt) {
+      throw new BadRequestException(
+        this.BAD_VERIFICATION_CODE_EXCEPTION,
+        ErrorCode.EMAIL_CODE_EXPIRED,
+      );
+    }
     await this.repository.update({ id: entity.id }, { deletedAt: new Date().toISOString() });
     await this.userRepository.update({ email: email }, { isEmailVerified: true });
     return true;
