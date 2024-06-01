@@ -1,9 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserCodeVerification } from './user.code.verification.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { LessThan } from 'typeorm';
+import { BadRequestException } from 'src/exceptions/bad-request.exception';
+import { ErrorCode } from 'src/constants/exception.constants';
 
 @Injectable()
 export class UserCodeVerificationService {
@@ -28,12 +30,19 @@ export class UserCodeVerificationService {
 
   async verifyCode(code: string, email: string): Promise<boolean> {
     if (code == null || email == null)
-      throw new BadRequestException(this.BAD_VERIFICATION_CODE_EXCEPTION);
+      throw new BadRequestException(
+        this.BAD_VERIFICATION_CODE_EXCEPTION,
+        ErrorCode.EMAIL_CODE_OR_EMAIL_NULL,
+      );
 
     await this.updateAllExpiredCodes();
 
     const entity = await this.repository.findOneBy({ code: code, user: { email: email } });
-    if (entity == null) throw new BadRequestException(this.BAD_VERIFICATION_CODE_EXCEPTION);
+    if (entity == null)
+      throw new BadRequestException(
+        this.BAD_VERIFICATION_CODE_EXCEPTION,
+        ErrorCode.EMAIL_CODE_MISSING,
+      );
     await this.repository.update({ id: entity.id }, { deletedAt: new Date().toISOString() });
     await this.userRepository.update({ email: email }, { isEmailVerified: true });
     return true;
