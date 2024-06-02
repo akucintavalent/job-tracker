@@ -51,3 +51,7 @@ $ yarn run test:cov
 ```bash
 $ yarn run typeorm migration:generate src/migrations/{name} -d src/data-source.ts
 ```
+### Revert the last migration
+```bash
+$ yarn run typeorm migration:revert -- -d src/data-source.ts
+```
