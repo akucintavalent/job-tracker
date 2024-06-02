@@ -16,7 +16,6 @@ export class CreateContactTable1717312329645 implements MigrationInterface {
     await queryRunner.query(
       `CREATE INDEX "IDX_d7c645da4256ca9cbb38f5d52b" ON "contacts_job_applications_job-applications" ("jobApplicationsId") `,
     );
-    await queryRunner.query(`ALTER TABLE "users" DROP COLUMN "is-email-verified"`);
     await queryRunner.query(
       `ALTER TABLE "contacts" ADD CONSTRAINT "FK_4d31bfcbce0320d8e79ad6ccff9" FOREIGN KEY ("board_id") REFERENCES "boards"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
@@ -37,9 +36,6 @@ export class CreateContactTable1717312329645 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "contacts" DROP CONSTRAINT "FK_4d31bfcbce0320d8e79ad6ccff9"`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "users" ADD "is-email-verified" boolean NOT NULL DEFAULT false`,
     );
     await queryRunner.query(`DROP INDEX "public"."IDX_d7c645da4256ca9cbb38f5d52b"`);
     await queryRunner.query(`DROP INDEX "public"."IDX_6801319887329223ab5cd33f99"`);
