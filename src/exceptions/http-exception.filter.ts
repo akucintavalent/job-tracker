@@ -22,6 +22,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       return;
     }
 
+    // TODO: rewrite response from class-validator
+    //exception.getResponse()
     response.status(status).json({
       exceptionId: exceptionId,
       message: exception.message,
