@@ -11,11 +11,10 @@ export class ContactsService {
     @InjectRepository(Board) private readonly boardsRepository: Repository<Board>,
   ) {}
 
-  async getAllContactsForBoard(userId: string, boardId: string) {
+  async getAllContactsForBoard(userId: string, boardId: string): Promise<Contact[]> {
     if (!userId || !boardId) throw new BadRequestException('UserId or BoardId is invalid');
     if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } })))
       throw new BadRequestException('Board or user is not found');
-    const contacts = await this.contactsRepository.findBy({ board: { id: boardId } });
-    return contacts;
+    return await this.contactsRepository.findBy({ board: { id: boardId } });
   }
 }
