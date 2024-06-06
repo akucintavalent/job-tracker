@@ -25,6 +25,19 @@ export class ContactsService {
     return this.contactsRepository.save(entity);
   }
 
+  async update(contactId: string, userId: string, body: CreateContactDto) {
+    if (!contactId || !userId) throw new BadRequestException('UserId or BoardId is invalid');
+    if (
+      !(await this.contactsRepository.existsBy({
+        id: contactId,
+        board: { user: { id: userId } },
+      }))
+    )
+      throw new BadRequestException('Contact is not found');
+    const entity = this.mapper.toEntity(body);
+    return this.contactsRepository.update({ id: contactId }, entity);
+  }
+
   private async validateBoadrExists(userId: string, boardId: string) {
     if (!userId || !boardId) throw new BadRequestException('UserId or BoardId is invalid');
     if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } })))

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthUserDto } from 'src/auth/dtos/auth.user.dto';
 import { AuthUser } from 'src/auth/user.decorator';
@@ -25,5 +25,14 @@ export class ContactsController {
   @Post()
   async createContact(@Body() body: CreateContactDto, @AuthUser() user: AuthUserDto) {
     await this.contactService.create(user.userId, body);
+  }
+
+  @Put('/:id')
+  async updateContact(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: CreateContactDto,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    await this.contactService.update(id, user.userId, body);
   }
 }
