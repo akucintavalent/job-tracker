@@ -8,6 +8,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+    // TODO: we are getting error here in case of DB exception
+    // TypeError: exception.getStatus is not a function
+    // exception is class QueryFailedError
     const status = exception.getStatus();
 
     const exceptionId = Guid.newGuid();
