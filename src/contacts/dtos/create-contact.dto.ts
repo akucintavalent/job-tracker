@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateContactDto {
+  @IsString()
   @ApiProperty()
   firstName: string;
 
@@ -17,24 +18,38 @@ export class CreateContactDto {
   @IsUUID()
   boardId: string;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty({ nullable: true })
-  companyName?: string;
+  companyName: string;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty({ nullable: true })
-  companyLocation?: string;
+  companyLocation: string;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty({ nullable: true })
-  twiterUrl?: string;
+  twiterUrl: string;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty({ nullable: true })
-  facebookUrl?: string;
+  facebookUrl: string;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty({ nullable: true })
-  linkedinUrl?: string;
+  linkedinUrl: string;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty({ nullable: true })
-  githubUrl?: string;
+  githubUrl: string;
 
+  @IsString()
+  @IsOptional()
   @ApiProperty({ nullable: true })
-  comment?: string;
+  comment: string;
 }

@@ -4,12 +4,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from 'src/boards/entities/board.entity';
 import { CreateContactDto } from './dtos/create-contact.dto';
+import { ContactMapper } from './contacts.mapper';
 
 @Injectable()
 export class ContactsService {
   constructor(
     @InjectRepository(Contact) private readonly contactsRepository: Repository<Contact>,
     @InjectRepository(Board) private readonly boardsRepository: Repository<Board>,
+    private readonly mapper: ContactMapper,
   ) {}
 
   async getAllContactsForBoard(userId: string, boardId: string): Promise<Contact[]> {
@@ -19,9 +21,8 @@ export class ContactsService {
 
   async create(userId: string, body: CreateContactDto) {
     await this.validateBoadrExists(userId, body.boardId);
-    const entity = this.contactsRepository.create(body);
-    await this.contactsRepository.save(entity);
-    return entity;
+    const entity = this.mapper.toEntity(body);
+    return this.contactsRepository.save(entity);
   }
 
   private async validateBoadrExists(userId: string, boardId: string) {
