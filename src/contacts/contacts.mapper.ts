@@ -14,6 +14,10 @@ export class ContactMapper {
     dto.jobTitle = entity.jobTitle;
     dto.companyName = entity.companyName;
     dto.companyLocation = entity.companyLocation;
+    dto.twiterUrl = entity.twiterUrl;
+    dto.facebookUrl = entity.facebookUrl;
+    dto.linkedinUrl = entity.linkedinUrl;
+    dto.githubUrl = entity.githubUrl;
     dto.comment = entity.comment;
     dto.boardId = entity.board?.id;
     dto.jobApplicationIds = entity.jobApplications?.map((x) => x.id);
