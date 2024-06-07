@@ -26,27 +26,13 @@ export class ContactsService {
   }
 
   async update(contactId: string, userId: string, body: CreateContactDto) {
-    if (!contactId || !userId) throw new BadRequestException('UserId or BoardId is invalid');
-    if (
-      !(await this.contactsRepository.existsBy({
-        id: contactId,
-        board: { user: { id: userId } },
-      }))
-    )
-      throw new BadRequestException('Contact is not found');
+    await this.validateContactExists(contactId, userId);
     const entity = this.mapper.toEntity(body);
     return this.contactsRepository.update({ id: contactId }, entity);
   }
 
   async delete(contactId: string, userId: string) {
-    if (!contactId || !userId) throw new BadRequestException('UserId or BoardId is invalid');
-    if (
-      !(await this.contactsRepository.existsBy({
-        id: contactId,
-        board: { user: { id: userId } },
-      }))
-    )
-      throw new BadRequestException('Contact is not found');
+    await this.validateContactExists(contactId, userId);
     await this.contactsRepository.softDelete({ id: contactId });
   }
 
@@ -54,5 +40,16 @@ export class ContactsService {
     if (!userId || !boardId) throw new BadRequestException('UserId or BoardId is invalid');
     if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } })))
       throw new BadRequestException('Board or user is not found');
+  }
+
+  private async validateContactExists(contactId: string, userId: string) {
+    if (!contactId || !userId) throw new BadRequestException('UserId or BoardId is invalid');
+    if (
+      !(await this.contactsRepository.existsBy({
+        id: contactId,
+        board: { user: { id: userId } },
+      }))
+    )
+      throw new BadRequestException('Contact is not found');
   }
 }
