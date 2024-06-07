@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthUserDto } from 'src/auth/dtos/auth.user.dto';
 import { AuthUser } from 'src/auth/user.decorator';
@@ -34,5 +44,10 @@ export class ContactsController {
     @AuthUser() user: AuthUserDto,
   ) {
     await this.contactService.update(id, user.userId, body);
+  }
+
+  @Delete('/:id')
+  async deleteContact(@Param('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {
+    await this.contactService.delete(id, user.userId);
   }
 }

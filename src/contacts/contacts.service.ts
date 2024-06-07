@@ -38,6 +38,18 @@ export class ContactsService {
     return this.contactsRepository.update({ id: contactId }, entity);
   }
 
+  async delete(contactId: string, userId: string) {
+    if (!contactId || !userId) throw new BadRequestException('UserId or BoardId is invalid');
+    if (
+      !(await this.contactsRepository.existsBy({
+        id: contactId,
+        board: { user: { id: userId } },
+      }))
+    )
+      throw new BadRequestException('Contact is not found');
+    await this.contactsRepository.softDelete({ id: contactId });
+  }
+
   private async validateBoadrExists(userId: string, boardId: string) {
     if (!userId || !boardId) throw new BadRequestException('UserId or BoardId is invalid');
     if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } })))
