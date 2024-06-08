@@ -102,7 +102,6 @@ export class ContactsService {
     jobApplicationId: string,
     userId: string,
   ): Promise<{ contactEntity: Contact; jobApplicationEntity: JobApplication }> {
-    // TODO: move to DTO annotation validation
     if (!contactId || !jobApplicationId || !userId)
       throw new BadRequestException('Data is invalid');
 
