@@ -6,6 +6,8 @@ import { Board } from 'src/boards/entities/board.entity';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { ContactMapper } from './contacts.mapper';
 import { JobApplication } from 'src/job-applications/entities/job-application.entity';
+import { FindContactDto } from './dtos/find-contact.dto';
+import { ContactDto } from './dtos/contact.dto';
 
 @Injectable()
 export class ContactsService {
@@ -17,12 +19,13 @@ export class ContactsService {
     private readonly mapper: ContactMapper,
   ) {}
 
-  async getAllContactsForBoard(userId: string, boardId: string): Promise<Contact[]> {
-    await this.validateBoadrExists(userId, boardId);
-    return await this.contactsRepository.find({
-      where: { board: { id: boardId } },
-      relations: { jobApplications: true },
+  async find(userId: string, params: FindContactDto): Promise<ContactDto[]> {
+    if (!userId) throw new BadRequestException('UserId is required');
+    const entities = await this.contactsRepository.find({
+      where: { id: params.contactId, board: { id: params.boardId, user: { id: userId } } },
+      relations: { board: true, jobApplications: true },
     });
+    return entities.map(this.mapper.toDto);
   }
 
   async create(userId: string, body: CreateContactDto) {
@@ -43,17 +46,17 @@ export class ContactsService {
   }
 
   async assignContactToJobApplication(contactId: string, jobApplicationId: string, userId: string) {
-    const entities = await this.validateIsJobApplicationAlignToContact(
+    const data = await this.validateIsJobApplicationAlignToContact(
       contactId,
       jobApplicationId,
       userId,
     );
 
-    if (entities.contactEntity.jobApplications.filter((x) => x.id === jobApplicationId).length > 0)
+    if (data.contactEntity.jobApplications.filter((x) => x.id === jobApplicationId).length > 0)
       throw new BadRequestException('Contact is alredy assigned to this JobApplication');
 
-    entities.contactEntity.jobApplications.push(entities.jobApplicationEntity);
-    await this.contactsRepository.save(entities.contactEntity);
+    data.contactEntity.jobApplications.push(data.jobApplicationEntity);
+    await this.contactsRepository.save(data.contactEntity);
   }
 
   async unassigContactFromJobApplication(
@@ -61,21 +64,19 @@ export class ContactsService {
     jobApplicationId: string,
     userId: string,
   ) {
-    const entities = await this.validateIsJobApplicationAlignToContact(
+    const data = await this.validateIsJobApplicationAlignToContact(
       contactId,
       jobApplicationId,
       userId,
     );
 
-    if (
-      entities.contactEntity.jobApplications.filter((x) => x.id === jobApplicationId).length === 0
-    )
+    if (data.contactEntity.jobApplications.filter((x) => x.id === jobApplicationId).length === 0)
       throw new BadRequestException('Contact is not assigned to this JobApplication');
 
-    entities.contactEntity.jobApplications = entities.contactEntity.jobApplications.filter(
+    data.contactEntity.jobApplications = data.contactEntity.jobApplications.filter(
       (x) => x.id !== jobApplicationId,
     );
-    await this.contactsRepository.save(entities.contactEntity);
+    await this.contactsRepository.save(data.contactEntity);
   }
 
   private async validateBoadrExists(userId: string, boardId: string) {

@@ -27,10 +27,9 @@ export class ContactsController {
     private readonly contactMapper: ContactMapper,
   ) {}
 
-  @Get('/find')
-  async getAllContactsForBoard(@AuthUser() user: AuthUserDto, @Query() contact: FindContactDto) {
-    const entities = await this.contactService.getAllContactsForBoard(user.userId, contact.boardId);
-    return entities.map(this.contactMapper.toDto);
+  @Get()
+  async getContacts(@AuthUser() user: AuthUserDto, @Query() params: FindContactDto) {
+    return await this.contactService.find(user.userId, params);
   }
 
   @Post()
