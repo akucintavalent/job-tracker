@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Contact } from './entities/contact.entity';
 import { Board } from './../boards/entities/board.entity';
 import { ContactMapper } from './contacts.mapper';
+import { JobApplication } from '../job-applications/entities/job-application.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Contact, Board])],
+  imports: [TypeOrmModule.forFeature([Contact, Board, JobApplication])],
   providers: [ContactsService, ContactMapper],
   controllers: [ContactsController],
 })

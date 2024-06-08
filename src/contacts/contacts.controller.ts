@@ -16,6 +16,7 @@ import { ContactsService } from './contacts.service';
 import { FindContactDto } from './dtos/find-contact.dto';
 import { ContactMapper } from './contacts.mapper';
 import { CreateContactDto } from './dtos/create-contact.dto';
+import { AssignContactToJobApplication } from './dtos/assign-contact-to-job-application.dto';
 
 @ApiTags('contacts')
 @Controller('contacts')
@@ -44,6 +45,18 @@ export class ContactsController {
     @AuthUser() user: AuthUserDto,
   ) {
     await this.contactService.update(id, user.userId, body);
+  }
+
+  @Post('/assignToJobApplication')
+  async assignToJobApplication(
+    @Body() body: AssignContactToJobApplication,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    await this.contactService.assignContactToJobApplication(
+      body.contactId,
+      body.jobApplicationId,
+      user.userId,
+    );
   }
 
   @Delete('/:id')
