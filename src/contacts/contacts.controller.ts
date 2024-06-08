@@ -47,12 +47,24 @@ export class ContactsController {
     await this.contactService.update(id, user.userId, body);
   }
 
-  @Post('/assignToJobApplication')
+  @Post('/jobApplication/assign')
   async assignToJobApplication(
     @Body() body: AssignContactToJobApplication,
     @AuthUser() user: AuthUserDto,
   ) {
     await this.contactService.assignContactToJobApplication(
+      body.contactId,
+      body.jobApplicationId,
+      user.userId,
+    );
+  }
+
+  @Delete('/jobApplication/unassign')
+  async unassignFromJobApplication(
+    @Body() body: AssignContactToJobApplication,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    await this.contactService.unassigContactFromJobApplication(
       body.contactId,
       body.jobApplicationId,
       user.userId,

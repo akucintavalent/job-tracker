@@ -75,6 +75,45 @@ export class ContactsService {
     await this.contactsRepository.save(contactEntity);
   }
 
+  async unassigContactFromJobApplication(
+    contactId: string,
+    jobApplicationId: string,
+    userId: string,
+  ) {
+    // TODO: move to DTO annotation validation
+    if (!contactId || !jobApplicationId || !userId)
+      throw new BadRequestException('Data is invalid');
+
+    const contactEntity = await this.contactsRepository.findOne({
+      where: { id: contactId },
+      select: { id: true, board: { id: true }, jobApplications: true },
+      relations: { board: true, jobApplications: true },
+    });
+
+    if (!contactEntity) throw new BadRequestException('Contact is not found');
+
+    const jobApplicationEntity = await this.jobApplicationRepository.findOne({
+      where: { id: jobApplicationId, column: { board: { user: { id: userId } } } },
+      select: { id: true, column: { id: true, board: { id: true } } },
+      relations: { column: { board: true } },
+    });
+
+    if (!jobApplicationEntity) throw new BadRequestException('JobApplication is not found');
+
+    if (jobApplicationEntity.column.board.id !== contactEntity.board.id)
+      throw new BadRequestException(
+        'Contact cannot be assigned to this JobApplication, since this Contact is assigned to the different Board',
+      );
+
+    if (contactEntity.jobApplications.filter((x) => x.id === jobApplicationId).length === 0)
+      throw new BadRequestException('Contact is not assigned to this JobApplication');
+
+    contactEntity.jobApplications = contactEntity.jobApplications.filter(
+      (x) => x.id !== jobApplicationId,
+    );
+    await this.contactsRepository.save(contactEntity);
+  }
+
   private async validateBoadrExists(userId: string, boardId: string) {
     if (!userId || !boardId) throw new BadRequestException('UserId or BoardId is invalid');
     if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } })))
