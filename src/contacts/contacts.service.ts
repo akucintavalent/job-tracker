@@ -19,7 +19,10 @@ export class ContactsService {
 
   async getAllContactsForBoard(userId: string, boardId: string): Promise<Contact[]> {
     await this.validateBoadrExists(userId, boardId);
-    return await this.contactsRepository.findBy({ board: { id: boardId } });
+    return await this.contactsRepository.find({
+      where: { board: { id: boardId } },
+      relations: { jobApplications: true },
+    });
   }
 
   async create(userId: string, body: CreateContactDto) {
