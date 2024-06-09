@@ -3,10 +3,17 @@ import { Contact } from './entities/contact.entity';
 import { ContactDto } from './dtos/contact.dto';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { Board } from 'src/boards/entities/board.entity';
+import { BoardMapper } from '../boards/boards.mapper';
+import { JobApplicationMapper } from '../job-applications/job-applications.mapper';
 
 @Injectable()
 export class ContactMapper {
   toDto(entity: Contact) {
+    // TODO: Replace these initialization with proper DI.
+    // For some reason I cannot Inject these mappers here
+    const boardMapper = new BoardMapper();
+    const jobApplicationMapper = new JobApplicationMapper();
+
     const dto = new ContactDto();
     dto.id = entity.id;
     dto.firstName = entity.firstName;
@@ -19,8 +26,8 @@ export class ContactMapper {
     dto.linkedinUrl = entity.linkedinUrl;
     dto.githubUrl = entity.githubUrl;
     dto.comment = entity.comment;
-    dto.boardId = entity.board?.id;
-    dto.jobApplicationIds = entity.jobApplications?.map((x) => x.id);
+    dto.board = boardMapper.toDto(entity.board);
+    dto.jobApplications = entity.jobApplications?.map(jobApplicationMapper.toDto);
     return dto;
   }
 
