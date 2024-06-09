@@ -17,6 +17,7 @@ import { FindContactDto } from './dtos/find-contact.dto';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { AssignContactToJobApplication } from './dtos/assign-contact-to-job-application.dto';
 import { ContactDto } from './dtos/contact.dto';
+import { UpdateContact } from './dtos/update-contact.dto';
 
 @ApiTags('contacts')
 @Controller('contacts')
@@ -55,7 +56,7 @@ export class ContactsController {
     await this.contactService.create(user.userId, body);
   }
 
-  @Put('/:id')
+  @Put()
   @ApiOperation({ summary: 'Updates Contact' })
   @ApiResponse({
     status: 201,
@@ -65,12 +66,8 @@ export class ContactsController {
     status: 400,
     description: 'Validation error',
   })
-  async updateContact(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: CreateContactDto,
-    @AuthUser() user: AuthUserDto,
-  ) {
-    await this.contactService.update(id, user.userId, body);
+  async updateContact(@Body() body: UpdateContact, @AuthUser() user: AuthUserDto) {
+    await this.contactService.update(user.userId, body);
   }
 
   @Post('/jobApplication/assign')

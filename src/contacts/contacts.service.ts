@@ -8,6 +8,7 @@ import { ContactMapper } from './contacts.mapper';
 import { JobApplication } from 'src/job-applications/entities/job-application.entity';
 import { FindContactDto } from './dtos/find-contact.dto';
 import { ContactDto } from './dtos/contact.dto';
+import { UpdateContact } from './dtos/update-contact.dto';
 
 @Injectable()
 export class ContactsService {
@@ -34,10 +35,10 @@ export class ContactsService {
     return this.contactsRepository.save(entity);
   }
 
-  async update(contactId: string, userId: string, body: CreateContactDto) {
-    await this.validateContactExists(contactId, userId);
+  async update(userId: string, body: UpdateContact) {
+    await this.validateContactExists(body.id, userId);
     const entity = this.mapper.toEntity(body);
-    return this.contactsRepository.update({ id: contactId }, entity);
+    return this.contactsRepository.update({ id: body.id }, entity);
   }
 
   async delete(contactId: string, userId: string) {
