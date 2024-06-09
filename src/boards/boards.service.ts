@@ -57,7 +57,9 @@ export class BoardsService {
   }
 
   async findOne(boardId: string, userId: string): Promise<Board> {
-    return await this.findBoard(boardId, userId);
+    const boardEntity = await this.findBoard(boardId, userId);
+    boardEntity.columns = await this.boardColumnService.findColumns(boardEntity.id, userId);
+    return boardEntity;
   }
 
   async update(boardId: string, dto: UpdateBoardDto, userId: string): Promise<Board> {
