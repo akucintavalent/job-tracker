@@ -92,7 +92,7 @@ export class ContactsController {
   }
 
   @Delete('/jobApplication/unassign')
-  @ApiOperation({ summary: 'Unassig Contact from JobAplication' })
+  @ApiOperation({ summary: 'Unassigns Contact from JobAplication' })
   @ApiResponse({
     status: 201,
     description: 'Contact assigned',
