@@ -6,6 +6,7 @@ import { CreateBoardDto } from './dtos/create-board.dto';
 import { User } from '../users/user.entity';
 import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
+import { BoardColumnsService } from 'src/board-columns/board-columns.service';
 
 @Injectable()
 export class BoardsService {
@@ -14,6 +15,7 @@ export class BoardsService {
     private readonly boardRepository: Repository<Board>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly boardColumnService: BoardColumnsService,
   ) {}
 
   async create(dto: CreateBoardDto, userId: string): Promise<Board> {
@@ -27,6 +29,21 @@ export class BoardsService {
     });
 
     return await this.boardRepository.save(entity);
+  }
+
+  async createDefaultBoard(userId: string) {
+    if (!(await this.userRepository.existsBy({ id: userId }))) {
+      throw new BadRequestException("User doesn't exists");
+    }
+
+    const entity = this.boardRepository.create({
+      name: `Job Search ${new Date().getFullYear()}`,
+      user: { id: userId },
+    });
+
+    const boardEntity = await this.boardRepository.save(entity);
+
+    await this.boardColumnService.createDefaultBoardColumns(boardEntity.id, userId);
   }
 
   findBy(query: FindBoardDto, userId: string): Promise<Board[]> {

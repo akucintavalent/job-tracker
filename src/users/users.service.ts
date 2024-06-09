@@ -9,6 +9,7 @@ import { FindUsersDto } from './dtos/find-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
 import { UserCodeVerificationService } from './user.code.verification.service';
+import { BoardsService } from 'src/boards/boards.service';
 
 @Injectable()
 export class UsersService {
@@ -16,13 +17,16 @@ export class UsersService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     private readonly emailSender: EmailSenderService,
     private readonly userCodeVerificationService: UserCodeVerificationService,
+    private readonly boardService: BoardsService,
   ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
     await this.validateIfUserExists(dto.email);
     const user = this.usersRepository.create(dto);
 
-    await this.usersRepository.save(user);
+    const entity = await this.usersRepository.save(user);
+
+    await this.boardService.createDefaultBoard(entity.id);
 
     const code = await this.userCodeVerificationService.createVerificationCode(user.email);
     await this.emailSender.sendVerificationEmail(user.email, code);

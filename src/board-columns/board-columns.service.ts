@@ -41,6 +41,18 @@ export class BoardColumnsService {
     return await this.boardColumnsRepository.save(entity);
   }
 
+  async createDefaultBoardColumns(boardId: string, userId: string) {
+    if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } }))) {
+      throw new BadRequestException("Board doesn't exists");
+    }
+
+    const defaultColumns = ['Wishlist', 'Applied', 'Interview', 'Offer', 'Rejected'].map((v, i) =>
+      this.boardColumnsRepository.create({ name: v, board: { id: boardId }, order: i }),
+    );
+
+    await this.boardColumnsRepository.save(defaultColumns);
+  }
+
   findColumns(boardId: string, userId: string): Promise<BoardColumn[]> {
     return this.boardColumnsRepository.find({
       where: { board: { id: boardId, user: { id: userId } } },

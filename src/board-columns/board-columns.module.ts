@@ -11,5 +11,6 @@ import { JobApplicationMapper } from 'src/job-applications/job-applications.mapp
   imports: [TypeOrmModule.forFeature([BoardColumn, Board])],
   controllers: [BoardColumnsController],
   providers: [BoardColumnsService, BoardColumnMapper, JobApplicationMapper],
+  exports: [BoardColumnsService],
 })
 export class BoardColumnsModule {}
