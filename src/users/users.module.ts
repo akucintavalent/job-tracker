@@ -7,9 +7,14 @@ import { UserMapper } from './users.mapper';
 import { EmailSenderModule } from 'src/email-sender/email-sender.module';
 import { UserCodeVerificationService } from './user.code.verification.service';
 import { UserCodeVerification } from './user.code.verification.entity';
+import { BoardsModule } from 'src/boards/boards.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, UserCodeVerification]), EmailSenderModule],
+  imports: [
+    TypeOrmModule.forFeature([User, UserCodeVerification]),
+    EmailSenderModule,
+    BoardsModule,
+  ],
   controllers: [UsersController],
   providers: [UsersService, UserMapper, UserCodeVerificationService],
   exports: [UsersService],
