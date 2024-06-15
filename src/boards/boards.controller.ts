@@ -38,11 +38,14 @@ export class BoardsController {
   }
 
   @Get()
-  @ApiOperation({ summary: "Fetch all user's boards" })
+  @ApiOperation({
+    summary: "Gets all user's boards.",
+    description:
+      'Finds board by `name` or `id` query. Gets all boards if nothing is provided. `columns` property excluded from reponse body.',
+  })
   @ApiResponse({ status: 200, description: 'Board records', type: [BoardDto] })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiQuery({ name: 'id', description: 'Board id', required: false })
-  @ApiQuery({ name: 'userId', description: 'User id', required: false })
   @ApiQuery({ name: 'name', description: 'Board name', required: false })
   async findBoards(@Query() query: FindBoardDto, @AuthUser() user: AuthUserDto) {
     const entities = await this.boardService.findBy(query, user.userId);
@@ -50,8 +53,10 @@ export class BoardsController {
   }
 
   @Get('/:id')
+  @ApiOperation({
+    summary: 'Gets a single board with all `Columns` and `JobApplications`.',
+  })
   @ApiParam({ name: 'id', description: 'Board id' })
-  @ApiOperation({ summary: "Fetch single user's board" })
   @ApiResponse({ status: 200, description: 'Board record', type: BoardDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
   async findBoard(@Param('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {
