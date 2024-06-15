@@ -5,7 +5,6 @@ import { CreateContactDto } from './dtos/create-contact.dto';
 import { Board } from 'src/boards/entities/board.entity';
 import { BoardMapper } from '../boards/boards.mapper';
 import { JobApplicationMapper } from '../job-applications/job-applications.mapper';
-import { BoardColumnMapper } from 'src/board-columns/board-columns.mapper';
 
 @Injectable()
 export class ContactMapper {
@@ -13,8 +12,7 @@ export class ContactMapper {
     // TODO: Replace these initialization with proper DI.
     // For some reason I cannot Inject these mappers here
     const jobApplicationMapper = new JobApplicationMapper();
-    const columnMapper = new BoardColumnMapper(jobApplicationMapper);
-    const boardMapper = new BoardMapper(columnMapper);
+    const boardMapper = new BoardMapper();
 
     const dto = new ContactDto();
     dto.id = entity.id;

@@ -5,15 +5,15 @@ import { JobApplicationMapper } from 'src/job-applications/job-applications.mapp
 
 @Injectable()
 export class BoardColumnMapper {
-  constructor(private readonly jobMapper: JobApplicationMapper) {}
-
   toDto(entity: BoardColumn) {
+    const jobMapper = new JobApplicationMapper();
+
     const dto = new BoardColumnDto();
     dto.id = entity.id;
     dto.name = entity.name;
     dto.order = entity.order;
     dto.boardId = entity.board?.id;
-    dto.jobApplications = entity.jobApplications?.map((e) => this.jobMapper.toDto(e));
+    dto.jobApplications = entity.jobApplications?.map((e) => jobMapper.toDto(e));
     return dto;
   }
 }
