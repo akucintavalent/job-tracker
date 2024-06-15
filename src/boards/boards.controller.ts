@@ -41,11 +41,10 @@ export class BoardsController {
   @ApiOperation({
     summary: "Gets all user's boards.",
     description:
-      'Finds board by `name` or `id` query. Gets all boards if nothing is provided. `columns` property excluded from reponse body.',
+      'Gets all boards and/or filters them by `name`. `columns` property excluded from reponse body.',
   })
   @ApiResponse({ status: 200, description: 'Board records', type: [BoardDto] })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  @ApiQuery({ name: 'id', description: 'Board id', required: false })
   @ApiQuery({ name: 'name', description: 'Board name', required: false })
   async findBoards(@Query() query: FindBoardDto, @AuthUser() user: AuthUserDto) {
     const entities = await this.boardService.findBy(query, user.userId);
