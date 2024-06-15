@@ -11,7 +11,7 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column({ name: 'is-email-verified', default: false })
+  @Column({ name: 'is_email_verified', default: false })
   isEmailVerified: boolean;
 
   @Exclude({ toPlainOnly: true })
