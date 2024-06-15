@@ -52,8 +52,10 @@ export class BoardsController {
   }
 
   @Get('/:id')
+  @ApiOperation({
+    summary: 'Gets a single board with all `Columns` and `JobApplications`.',
+  })
   @ApiParam({ name: 'id', description: 'Board id' })
-  @ApiOperation({ summary: "Fetch single user's board" })
   @ApiResponse({ status: 200, description: 'Board record', type: BoardDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
   async findBoard(@Param('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {

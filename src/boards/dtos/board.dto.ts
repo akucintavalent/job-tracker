@@ -11,6 +11,6 @@ export class BoardDto {
   @ApiProperty()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: [BoardColumnDto] })
   columns: BoardColumnDto[];
 }
