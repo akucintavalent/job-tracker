@@ -40,7 +40,8 @@ export class BoardsController {
   @Get()
   @ApiOperation({
     summary: "Gets all user's boards.",
-    description: 'Finds board by `name` or `id` query. Gets all boards if nothing is provided.',
+    description:
+      'Finds board by `name` or `id` query. Gets all boards if nothing is provided. `columns` property excluded from reponse body.',
   })
   @ApiResponse({ status: 200, description: 'Board records', type: [BoardDto] })
   @ApiResponse({ status: 400, description: 'Validation error' })
