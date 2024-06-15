@@ -50,7 +50,6 @@ export class BoardsService {
     const boardName = query.name?.length > 0 ? Like(`%${query.name}%`) : null;
 
     return this.boardRepository.findBy({
-      id: query.id,
       name: boardName,
       user: { id: userId },
     });
