@@ -28,8 +28,7 @@ export class UsersService {
 
     await this.boardService.createDefaultBoard(entity.id);
 
-    const code = await this.userCodeVerificationService.createVerificationCode(user.email);
-    await this.emailSender.sendVerificationEmail(user.email, code);
+    await this.userCodeVerificationService.createAndSendVerificationCode(user.email);
     return user;
   }
 

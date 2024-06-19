@@ -103,7 +103,7 @@ export class UsersController {
   @Public()
   @Post('/verification/create-email-verification-code')
   async createEmailVerificationCode(@Body() body: CreateEmailVerificationCode) {
-    await this.codeVerification.createVerificationCode(body.email);
+    await this.codeVerification.createAndSendVerificationCode(body.email);
   }
 
   @Public()
