@@ -6,7 +6,7 @@ import { User } from './user.entity';
 import { LessThan } from 'typeorm';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
 import { ErrorCode } from 'src/constants/error-codes';
-import { ExceptionMessages } from 'src/constants/exception-messages';
+import { ExceptionMessages } from 'src/exceptions/exception-messages';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
 
 @Injectable()
