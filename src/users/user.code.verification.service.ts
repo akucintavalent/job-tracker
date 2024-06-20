@@ -71,7 +71,7 @@ export class UserCodeVerificationService {
     return result;
   }
 
-  private throw(userFiendlyMessage: UserFriendlyErrorMessages) {
-    throw new BadRequestException(userFiendlyMessage, userFiendlyMessage);
+  private throw(userFriendlyMessage: UserFriendlyErrorMessages) {
+    throw new BadRequestException(userFriendlyMessage, userFriendlyMessage);
   }
 }
