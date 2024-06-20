@@ -5,8 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { LessThan } from 'typeorm';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
-import { ErrorCode } from 'src/constants/error-codes';
-import { ExceptionMessages } from 'src/exceptions/exception-messages';
+import { UserFriendlyErrorMessages } from 'src/exceptions/user-frienly-error-messages';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
 
 @Injectable()
@@ -36,7 +35,8 @@ export class UserCodeVerificationService {
   }
 
   async verifyCode(code: string, email: string): Promise<boolean> {
-    if (code == null || email == null) this.throw(ErrorCode.EMAIL_CODE_OR_EMAIL_NULL);
+    // TODO: check if this case is reachable.
+    if (code == null || email == null) throw new BadRequestException('Email and Code are required');
 
     await this.updateAllExpiredCodes();
 
@@ -45,8 +45,8 @@ export class UserCodeVerificationService {
       withDeleted: true,
     });
 
-    if (entity == null) this.throw(ErrorCode.EMAIL_CODE_NOT_FOUND);
-    if (entity.deletedAt) this.throw(ErrorCode.EMAIL_CODE_EXPIRED);
+    if (entity == null) this.throw(UserFriendlyErrorMessages.EMAIL_CODE_NOT_FOUND);
+    if (entity.deletedAt) this.throw(UserFriendlyErrorMessages.EMAIL_CODE_EXPIRED);
 
     await this.repository.update({ id: entity.id }, { deletedAt: new Date().toISOString() });
     await this.userRepository.update({ email: email }, { isEmailVerified: true });
@@ -74,7 +74,7 @@ export class UserCodeVerificationService {
     return result;
   }
 
-  private throw(code: ErrorCode) {
-    throw new BadRequestException(ExceptionMessages.BAD_VERIFICATION_CODE_EXCEPTION, code);
+  private throw(userFiendlyMessage: UserFriendlyErrorMessages) {
+    throw new BadRequestException(userFiendlyMessage, userFiendlyMessage);
   }
 }
