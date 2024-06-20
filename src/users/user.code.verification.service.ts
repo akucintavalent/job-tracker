@@ -60,11 +60,11 @@ export class UserCodeVerificationService {
 
   private generateCode() {
     let result = '';
-    const codeLenght = 6;
+    const codeLength = 6;
     const characters = '0123456789';
     const charactersLength = characters.length;
     let counter = 0;
-    while (counter < codeLenght) {
+    while (counter < codeLength) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
       counter += 1;
     }
