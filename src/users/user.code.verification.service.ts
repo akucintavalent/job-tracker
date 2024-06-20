@@ -35,9 +35,6 @@ export class UserCodeVerificationService {
   }
 
   async verifyCode(code: string, email: string): Promise<boolean> {
-    // TODO: check if this case is reachable.
-    if (code == null || email == null) throw new BadRequestException('Email and Code are required');
-
     await this.updateAllExpiredCodes();
 
     const entity = await this.repository.findOne({
