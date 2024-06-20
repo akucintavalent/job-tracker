@@ -27,6 +27,7 @@ export class AuthController {
   @ApiOperation({ summary: 'User Sign In' })
   @ApiResponse({ status: 200, description: 'Signed in', type: JwtTokensDto })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  @ApiResponse({ status: 403, description: 'Email is not verified' })
   signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }

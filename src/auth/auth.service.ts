@@ -1,9 +1,11 @@
 import * as bcrypt from 'bcrypt';
-import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtTokensDto } from './dtos/jwt-tokens.dto';
 import { ConfigService } from '@nestjs/config';
+import { UserFriendlyErrorMessages } from 'src/exceptions/user-frienly-error-messages';
+import { CustomHttpException } from 'src/exceptions/custom.exception';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +22,12 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    if (!user.isEmailVerified) throw new ForbiddenException('Email is not verified');
+    if (!user.isEmailVerified)
+      throw new CustomHttpException(
+        'Email is not verified',
+        HttpStatus.FORBIDDEN,
+        UserFriendlyErrorMessages.EMAIL_NOT_VERIFIED,
+      );
 
     return await this.generateTokens(user.id, user.email);
   }

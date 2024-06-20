@@ -5,8 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { LessThan } from 'typeorm';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
-import { ErrorCode } from 'src/constants/error-codes';
-import { ExceptionMessages } from 'src/constants/exception-messages';
+import { UserFriendlyErrorMessages } from 'src/exceptions/user-frienly-error-messages';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
 
 @Injectable()
@@ -36,8 +35,6 @@ export class UserCodeVerificationService {
   }
 
   async verifyCode(code: string, email: string): Promise<boolean> {
-    if (code == null || email == null) this.throw(ErrorCode.EMAIL_CODE_OR_EMAIL_NULL);
-
     await this.updateAllExpiredCodes();
 
     const entity = await this.repository.findOne({
@@ -45,8 +42,8 @@ export class UserCodeVerificationService {
       withDeleted: true,
     });
 
-    if (entity == null) this.throw(ErrorCode.EMAIL_CODE_NOT_FOUND);
-    if (entity.deletedAt) this.throw(ErrorCode.EMAIL_CODE_EXPIRED);
+    if (entity == null) this.throw(UserFriendlyErrorMessages.EMAIL_CODE_NOT_FOUND);
+    if (entity.deletedAt) this.throw(UserFriendlyErrorMessages.EMAIL_CODE_EXPIRED);
 
     await this.repository.update({ id: entity.id }, { deletedAt: new Date().toISOString() });
     await this.userRepository.update({ email: email }, { isEmailVerified: true });
@@ -63,18 +60,18 @@ export class UserCodeVerificationService {
 
   private generateCode() {
     let result = '';
-    const codeLenght = 6;
+    const codeLength = 6;
     const characters = '0123456789';
     const charactersLength = characters.length;
     let counter = 0;
-    while (counter < codeLenght) {
+    while (counter < codeLength) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
       counter += 1;
     }
     return result;
   }
 
-  private throw(code: ErrorCode) {
-    throw new BadRequestException(ExceptionMessages.BAD_VERIFICATION_CODE_EXCEPTION, code);
+  private throw(userFriendlyMessage: UserFriendlyErrorMessages) {
+    throw new BadRequestException(userFriendlyMessage, userFriendlyMessage);
   }
 }

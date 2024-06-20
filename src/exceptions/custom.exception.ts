@@ -1,10 +1,14 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { ErrorCode } from '../constants/error-codes';
+import { UserFriendlyErrorMessages } from './user-frienly-error-messages';
 
 export class CustomHttpException extends HttpException {
-  public readonly errorCode: ErrorCode;
-  constructor(message: string, httpStatus: HttpStatus, errorCode: ErrorCode) {
+  public readonly userFriendlyMessage: UserFriendlyErrorMessages;
+  constructor(
+    message: string,
+    httpStatus: HttpStatus,
+    userFriendlyMessage?: UserFriendlyErrorMessages,
+  ) {
     super(message, httpStatus);
-    this.errorCode = errorCode;
+    this.userFriendlyMessage = userFriendlyMessage;
   }
 }

@@ -31,14 +31,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
       response.status(exception.getStatus()).json({
         exceptionId: exceptionId,
         message: exception.message,
-        errorCode: exception.errorCode,
+        userFriendlyMessage: exception.userFriendlyMessage,
       });
       return;
     }
 
     try {
-      // class-validator has their own response message. This line returns their error
-      response.status(exception.getStatus()).json(exception.getResponse());
+      // class-validator has their own response message. These lines returns their error
+      const classValidatorResponse = exception.getResponse() as object;
+      response.status(exception.getStatus()).json({ exceptionId, ...classValidatorResponse });
     } catch {
       // Unhandled exception. exception.getStatus() or exception.getResponse() might be null
       response
