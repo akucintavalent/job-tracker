@@ -1,6 +1,6 @@
 import { CustomHttpException } from './custom.exception';
 import { HttpStatus } from '@nestjs/common';
-import { UserFriendlyErrorMessages } from './user-frienly-error-messages';
+import { UserFriendlyErrorMessages } from './user-friendly-error-messages';
 
 export class BadRequestException extends CustomHttpException {
   constructor(message: string, userFriendlyMessage?: UserFriendlyErrorMessages) {

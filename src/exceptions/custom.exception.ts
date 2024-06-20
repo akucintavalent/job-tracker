@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { UserFriendlyErrorMessages } from './user-frienly-error-messages';
+import { UserFriendlyErrorMessages } from './user-friendly-error-messages';
 
 export class CustomHttpException extends HttpException {
   public readonly userFriendlyMessage: UserFriendlyErrorMessages;
