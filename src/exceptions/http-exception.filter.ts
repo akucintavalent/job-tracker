@@ -28,23 +28,40 @@ export class HttpExceptionFilter implements ExceptionFilter {
     );
 
     if (exception instanceof CustomHttpException) {
-      response.status(exception.getStatus()).json({
-        exceptionId: exceptionId,
-        message: exception.message,
-        userFriendlyMessage: exception.userFriendlyMessage,
-      });
+      response
+        .status(exception.getStatus())
+        .json(this.formResponse(exceptionId, exception.message, exception.userFriendlyMessage));
       return;
     }
 
     try {
-      // class-validator has their own response message. These lines returns their error
-      const classValidatorResponse = exception.getResponse() as object;
-      response.status(exception.getStatus()).json({ exceptionId, ...classValidatorResponse });
+      // Catch DTO validation exception from `class-validator`
+      type ClassValidatorResponse = { message: string[] };
+      const classValidatorResponse = exception.getResponse() as ClassValidatorResponse;
+      response
+        .status(exception.getStatus())
+        .json(
+          this.formResponse(
+            exceptionId,
+            'Validation exception',
+            null,
+            classValidatorResponse.message,
+          ),
+        );
     } catch {
-      // Unhandled exception. exception.getStatus() or exception.getResponse() might be null
+      // Unhandled exception. Posible reasons: exception.getStatus() or exception.getResponse() might be null
       response
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .json({ exceptionId: exceptionId, message: 'Unhandled exception occurred' });
+        .json(this.formResponse(exceptionId, 'Unhandled exception occurred'));
     }
+  }
+
+  private formResponse(
+    exceptionId: string,
+    message: string,
+    userFriendlyMessage: string = null,
+    details: string[] = null,
+  ) {
+    return { exceptionId, message, userFriendlyMessage, details };
   }
 }
