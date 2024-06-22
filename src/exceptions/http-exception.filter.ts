@@ -27,14 +27,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception,
     );
 
-    if (exception instanceof CustomHttpException) {
-      response
-        .status(exception.getStatus())
-        .json(this.formResponse(exceptionId, exception.message, exception.userFriendlyMessage));
-      return;
-    }
-
     try {
+      if (exception instanceof CustomHttpException) {
+        response
+          .status(exception.getStatus())
+          .json(this.formResponse(exceptionId, exception.message, exception.userFriendlyMessage));
+        return;
+      }
+
+      if (exception.getStatus() == 401) {
+        response
+          .status(exception.getStatus())
+          .json(this.formResponse(exceptionId, 'Unauthorized', null, null));
+        return;
+      }
+
       // Catch DTO validation exception from `class-validator`
       type ClassValidatorResponse = { message: string[] };
       const classValidatorResponse = exception.getResponse() as ClassValidatorResponse;
