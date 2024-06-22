@@ -13,6 +13,9 @@ export class Board extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({ name: 'is_archived', default: false })
+  isArchived: boolean;
+
   @OneToMany(() => BoardColumn, (column) => column.board)
   columns: BoardColumn[];
 
