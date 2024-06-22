@@ -11,6 +11,9 @@ export class BoardDto {
   @ApiProperty()
   name: string;
 
+  @ApiProperty()
+  isArchived: boolean;
+
   @ApiProperty({ type: [BoardColumnDto] })
   columns: BoardColumnDto[];
 }

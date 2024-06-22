@@ -11,6 +11,7 @@ export class BoardMapper {
     const dto = new BoardDto();
     dto.id = entity.id;
     dto.name = entity.name;
+    dto.isArchived = entity.isArchived;
     dto.userId = entity.user?.id;
 
     dto.columns = !entity.columns ? null : entity.columns.map(columnMapper.toDto);
