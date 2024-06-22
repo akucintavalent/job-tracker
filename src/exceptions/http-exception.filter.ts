@@ -19,8 +19,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         params: request.params,
         query: request.query,
         headers: {
-          autorization: request.headers.authorization,
-          contetnType: request.headers['content-type'],
+          authorization: request.headers.authorization,
+          contentType: request.headers['content-type'],
         },
         body: request.body,
       },
