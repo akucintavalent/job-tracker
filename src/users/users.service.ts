@@ -10,6 +10,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
 import { UserCodeVerificationService } from './user.code.verification.service';
 import { BoardsService } from 'src/boards/boards.service';
+import { VerificationProcess } from './enums/verification-process.enum';
 
 @Injectable()
 export class UsersService {
@@ -28,7 +29,10 @@ export class UsersService {
 
     await this.boardService.createDefaultBoard(entity.id);
 
-    await this.userCodeVerificationService.createAndSendVerificationCode(user.email);
+    await this.userCodeVerificationService.createAndSendVerificationCode(
+      user.email,
+      VerificationProcess.USER_SIGNUP,
+    );
     return user;
   }
 

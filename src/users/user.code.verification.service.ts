@@ -7,6 +7,7 @@ import { LessThan } from 'typeorm';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
 import { UserFriendlyErrorMessages } from 'src/exceptions/user-friendly-error-messages';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
+import { VerificationProcessType } from './enums/verification-process.enum';
 
 @Injectable()
 export class UserCodeVerificationService {
@@ -18,19 +19,26 @@ export class UserCodeVerificationService {
     private readonly emailSender: EmailSenderService,
   ) {}
 
-  async createVerificationCode(email: string): Promise<string> {
+  async createVerificationCode(
+    email: string,
+    processType: VerificationProcessType,
+  ): Promise<string> {
     const code = this.generateCode();
     const user = await this.userRepository.findOne({
       select: { id: true },
       where: { email: email },
     });
-    const entity = this.repository.create({ code: code, user: { id: user.id } });
+    const entity = this.repository.create({
+      code: code,
+      process: processType,
+      user: { id: user.id },
+    });
     await this.repository.save(entity);
     return code;
   }
 
-  async createAndSendVerificationCode(email: string) {
-    const code = await this.createVerificationCode(email);
+  async createAndSendVerificationCode(email: string, processType: VerificationProcessType) {
+    const code = await this.createVerificationCode(email, processType);
     await this.emailSender.sendVerificationEmail(email, code);
   }
 

@@ -28,6 +28,7 @@ import { AuthUserDto } from 'src/auth/dtos/auth.user.dto';
 import { UserCodeVerificationService } from './user.code.verification.service';
 import { EmailVerificationCodeDto } from './dtos/email-verification-code.dto';
 import { CreateEmailVerificationCode } from './dtos/create-email-verification-code.dto';
+import { VerificationProcess } from './enums/verification-process.enum';
 
 @ApiTags('users')
 @Controller('users')
@@ -103,7 +104,10 @@ export class UsersController {
   @Public()
   @Post('/verification/create-email-verification-code')
   async createEmailVerificationCode(@Body() body: CreateEmailVerificationCode) {
-    await this.codeVerification.createAndSendVerificationCode(body.email);
+    await this.codeVerification.createAndSendVerificationCode(
+      body.email,
+      VerificationProcess.USER_SIGNUP,
+    );
   }
 
   @Public()
