@@ -96,6 +96,26 @@ export class UsersController {
     return this.mapper.toDto(entity);
   }
 
+  @Post('/delete/create-verification-code')
+  @ApiOperation({
+    summary: "Creates & sends user's code. Must be called before DELETE `/users/delete`",
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'User code created and sent',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  async createVerificationCode(@AuthUser() user: AuthUserDto) {
+    await this.codeVerification.createAndSendVerificationCode(
+      user.email,
+      VerificationProcess.USER_DELETE,
+    );
+  }
+
   @Delete()
   async deleteUser(@AuthUser() user: AuthUserDto) {
     await this.usersService.remove(user.userId);
