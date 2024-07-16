@@ -4,6 +4,9 @@ export class UpdateUserCodeVerification1721118043714 implements MigrationInterfa
   name = 'UpdateUserCodeVerification1721118043714';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    // custom query:
+    await queryRunner.query(`DELETE FROM user_code_verifications`);
+
     await queryRunner.query(
       `CREATE TYPE "public"."user_code_verifications_process_enum" AS ENUM('USER_SIGNUP', 'USER_DELETE')`,
     );
