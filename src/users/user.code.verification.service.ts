@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { UserCodeVerification } from './user.code.verification.entity';
+import { UserCodeVerification } from './entities/user.code.verification.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { LessThan } from 'typeorm';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
 import { UserFriendlyErrorMessages } from 'src/exceptions/user-friendly-error-messages';

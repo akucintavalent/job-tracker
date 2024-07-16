@@ -1,4 +1,4 @@
-import { User } from '../../users/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../entities/base.entity';
 import { BoardColumn } from '../../board-columns/entities/board-column.entity';

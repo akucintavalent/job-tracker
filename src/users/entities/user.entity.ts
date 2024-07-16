@@ -1,10 +1,10 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
-import { UserRole, UserRoleType } from './enums/user-role.enum';
-import { Board } from '../boards/entities/board.entity';
-import { BaseEntity } from '../entities/base.entity';
-import { UserCodeVerification } from '../users/user.code.verification.entity';
+import { UserRole, UserRoleType } from '../enums/user-role.enum';
+import { Board } from '../../boards/entities/board.entity';
+import { BaseEntity } from '../../entities/base.entity';
+import { UserCodeVerification } from './user.code.verification.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
