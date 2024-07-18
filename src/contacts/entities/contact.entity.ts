@@ -14,11 +14,11 @@ export class Contact extends BaseEntity {
   @Column({ name: 'job_title' })
   jobTitle: string;
 
-  @ManyToOne(() => Board, (board) => board.contacts, { nullable: false })
+  @ManyToOne(() => Board, (board) => board.contacts, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'board_id' })
   board: Board;
 
-  @ManyToMany(() => JobApplication, (job) => job.contacts)
+  @ManyToMany(() => JobApplication, (job) => job.contacts, { onDelete: 'CASCADE' })
   @JoinTable()
   jobApplications: JobApplication[];
 

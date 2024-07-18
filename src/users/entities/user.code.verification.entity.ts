@@ -8,7 +8,7 @@ export class UserCodeVerification extends BaseEntity {
   @Column({ length: 6 })
   code: string;
 
-  @ManyToOne(() => User, (user) => user.userCodeVerifications)
+  @ManyToOne(() => User, (user) => user.userCodeVerifications, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 

@@ -14,10 +14,10 @@ export class JobApplication extends BaseEntity {
   @Column({ nullable: true })
   description: string;
 
-  @ManyToOne(() => BoardColumn, (column) => column.jobApplications)
+  @ManyToOne(() => BoardColumn, (column) => column.jobApplications, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'column_id' })
   column: BoardColumn;
 
-  @ManyToMany(() => Contact, (contact) => contact.jobApplications)
+  @ManyToMany(() => Contact, (contact) => contact.jobApplications, { onDelete: 'CASCADE' })
   contacts: Contact[];
 }

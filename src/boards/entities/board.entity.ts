@@ -6,7 +6,7 @@ import { Contact } from '../../contacts/entities/contact.entity';
 
 @Entity('boards')
 export class Board extends BaseEntity {
-  @ManyToOne(() => User, (user) => user.board)
+  @ManyToOne(() => User, (user) => user.board, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
