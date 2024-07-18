@@ -60,7 +60,7 @@ export class BoardColumnsService {
     });
   }
 
-  async rearangeColumns(boardId: string, columnsIds: string[], userId: string) {
+  async rearrangeColumns(boardId: string, columnsIds: string[], userId: string) {
     if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } }))) {
       throw new BadRequestException("Board doesn't exists");
     }
@@ -70,7 +70,7 @@ export class BoardColumnsService {
     });
 
     const dbColumnsIds = dbColumns.map((x) => x.id);
-    this.validateRearange(columnsIds, dbColumnsIds);
+    this.validateRearrange(columnsIds, dbColumnsIds);
 
     for (let i = 0; i < dbColumns.length; i++) {
       dbColumns.find((x) => x.id === columnsIds[i]).order = i;
@@ -101,7 +101,7 @@ export class BoardColumnsService {
     return entity;
   }
 
-  private validateRearange(columnsIds: string[], dbColumnsIds: string[]) {
+  private validateRearrange(columnsIds: string[], dbColumnsIds: string[]) {
     if (!columnsIds.length) throw new BadRequestException('List of Column Ids is empty');
     if (this.hasDuplicates(columnsIds)) throw new BadRequestException('List has duplicated Id.');
     if (!this.areEquals(columnsIds, dbColumnsIds))

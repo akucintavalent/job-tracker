@@ -47,21 +47,21 @@ export class BoardColumnsController {
     return entities.map((e) => this.mapper.toDto(e));
   }
 
-  @Put('/:id/rearange')
+  @Put('/:id/rearrange')
   @ApiParam({ name: 'id', description: 'Board id' })
   @ApiBody({
     description: 'List all Column IDs for this Board in the desired order',
     type: [String],
   })
-  @ApiOperation({ summary: `Rearange all columns for this Board` })
-  @ApiResponse({ status: 200, description: 'Columns rearanged' })
+  @ApiOperation({ summary: `Rearrange all columns for this Board` })
+  @ApiResponse({ status: 200, description: 'Columns rearranged' })
   @ApiResponse({ status: 400, description: 'Validation error' })
-  async rearange(
+  async rearrange(
     @Param('id', ParseUUIDPipe) boardId: string,
     @Body() columnIds: string[],
     @AuthUser() user: AuthUserDto,
   ) {
-    await this.boardColumnsService.rearangeColumns(boardId, columnIds, user.userId);
+    await this.boardColumnsService.rearrangeColumns(boardId, columnIds, user.userId);
   }
 
   @Patch('/:id')
