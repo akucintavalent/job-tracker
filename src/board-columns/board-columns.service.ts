@@ -91,12 +91,12 @@ export class BoardColumnsService {
   }
 
   private async findById(id: string, userId: string) {
-    const entity = await this.boardColumnsRepository.findOneBy({ id });
+    const entity = await this.boardColumnsRepository.findOneBy({
+      id: id,
+      board: { user: { id: userId } },
+    });
     if (!entity) {
       throw new BadRequestException("Columns doesn't exists");
-    }
-    if (!(await this.boardsRepository.existsBy({ id: entity.board.id, user: { id: userId } }))) {
-      throw new BadRequestException("Column doesn't exists");
     }
     return entity;
   }
