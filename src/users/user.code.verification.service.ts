@@ -7,7 +7,7 @@ import { LessThan } from 'typeorm';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
 import { UserFriendlyErrorMessages } from 'src/exceptions/user-friendly-error-messages';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
-import { VerificationProcessType } from './enums/verification-process.enum';
+import { VerificationProcess, VerificationProcessType } from './enums/verification-process.enum';
 
 @Injectable()
 export class UserCodeVerificationService {
@@ -46,7 +46,7 @@ export class UserCodeVerificationService {
     await this.updateAllExpiredCodes();
 
     const entity = await this.repository.findOne({
-      where: { code: code, user: { email: email } },
+      where: { code: code, process: VerificationProcess.USER_SIGNUP, user: { email: email } },
       withDeleted: true,
     });
 
