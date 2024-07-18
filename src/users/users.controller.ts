@@ -98,7 +98,7 @@ export class UsersController {
 
   @Post('/delete/create-verification-code')
   @ApiOperation({
-    summary: "Creates & sends user's code. Must be called before DELETE `/users/delete`",
+    summary: "Creates & sends user's code. Must be called before DELETE `/users`",
   })
   @ApiResponse({
     status: 201,
@@ -117,6 +117,18 @@ export class UsersController {
   }
 
   @Delete()
+  @ApiOperation({
+    summary:
+      'Permanently deletes user from the system. Must be called after POST `/users/delete/create-verification-code`',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'User deleted',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
   async deleteUser(@AuthUser() user: AuthUserDto) {
     await this.usersService.remove(user.userId);
   }
