@@ -65,7 +65,13 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async remove(id: string): Promise<User> {
+  async remove(id: string, code: string): Promise<User> {
+    await this.userCodeVerificationService.verifyUserCode(
+      { id: id, email: undefined },
+      code,
+      VerificationProcess.USER_DELETE,
+    );
+
     const user = await this.findOneBy({ id });
     return this.usersRepository.remove(user);
   }

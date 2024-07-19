@@ -29,6 +29,7 @@ import { UserCodeVerificationService } from './user.code.verification.service';
 import { EmailVerificationCodeDto } from './dtos/email-verification-code.dto';
 import { CreateEmailVerificationCode } from './dtos/create-email-verification-code.dto';
 import { VerificationProcess } from './enums/verification-process.enum';
+import { DeleteUserDto } from './dtos/delete-user.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -129,8 +130,8 @@ export class UsersController {
     status: 400,
     description: 'Validation error',
   })
-  async deleteUser(@AuthUser() user: AuthUserDto) {
-    await this.usersService.remove(user.userId);
+  async deleteUser(@Body() dto: DeleteUserDto, @AuthUser() user: AuthUserDto) {
+    await this.usersService.remove(user.userId, dto.code);
   }
 
   @Public()
