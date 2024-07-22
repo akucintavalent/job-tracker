@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Ee1721316693082 implements MigrationInterface {
-  name = 'Ee1721316693082';
+export class SetCascadeDelete1721316693082 implements MigrationInterface {
+  name = 'SetCascadeDelete1721316693082';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
