@@ -16,6 +16,8 @@ yarn install
 Create `.env` file in the root directory. Copy and populate all content from `.env.example` file.
 
 ## Run DB migration
+You might need to run the app before running this command.
+
 ```bash
 yarn run typeorm migration:run -d src/data-source.ts
 ```
