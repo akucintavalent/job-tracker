@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserAlreadyExistsException } from './exceptions/user-exists.exception';
@@ -10,6 +10,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
 import { UserCodeVerificationService } from './user.code.verification.service';
 import { BoardsService } from 'src/boards/boards.service';
+import { VerificationProcess } from './enums/verification-process.enum';
 
 @Injectable()
 export class UsersService {
@@ -28,7 +29,10 @@ export class UsersService {
 
     await this.boardService.createDefaultBoard(entity.id);
 
-    await this.userCodeVerificationService.createAndSendVerificationCode(user.email);
+    await this.userCodeVerificationService.createAndSendVerificationCode(
+      user.email,
+      VerificationProcess.USER_SIGNUP,
+    );
     return user;
   }
 
@@ -61,7 +65,13 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async remove(id: string): Promise<User> {
+  async remove(id: string, code: string): Promise<User> {
+    await this.userCodeVerificationService.verifyUserCode(
+      { id: id, email: undefined },
+      code,
+      VerificationProcess.USER_DELETE,
+    );
+
     const user = await this.findOneBy({ id });
     return this.usersRepository.remove(user);
   }

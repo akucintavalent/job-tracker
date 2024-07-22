@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { UserCodeVerification } from './user.code.verification.entity';
+import { UserCodeVerification } from './entities/user.code.verification.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { LessThan } from 'typeorm';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
 import { UserFriendlyErrorMessages } from 'src/exceptions/user-friendly-error-messages';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
+import { VerificationProcess, VerificationProcessType } from './enums/verification-process.enum';
 
 @Injectable()
 export class UserCodeVerificationService {
@@ -18,27 +19,54 @@ export class UserCodeVerificationService {
     private readonly emailSender: EmailSenderService,
   ) {}
 
-  async createVerificationCode(email: string): Promise<string> {
+  async verifyUserCode(
+    user: { id: string; email: string },
+    code: string,
+    process: VerificationProcessType,
+  ) {
+    await this.updateAllExpiredCodes();
+
+    const entity = await this.repository.findOne({
+      where: { process: process, code: code, user: { id: user.id, email: user.email } },
+      withDeleted: true,
+    });
+
+    if (entity == null) this.throw(UserFriendlyErrorMessages.EMAIL_CODE_NOT_FOUND);
+    if (entity.deletedAt) this.throw(UserFriendlyErrorMessages.EMAIL_CODE_EXPIRED);
+
+    await this.repository.softDelete({ id: entity.id });
+    return true;
+  }
+
+  async createVerificationCode(
+    email: string,
+    processType: VerificationProcessType,
+  ): Promise<string> {
     const code = this.generateCode();
     const user = await this.userRepository.findOne({
       select: { id: true },
       where: { email: email },
     });
-    const entity = this.repository.create({ code: code, user: { id: user.id } });
+    const entity = this.repository.create({
+      code: code,
+      process: processType,
+      user: { id: user.id },
+    });
     await this.repository.save(entity);
     return code;
   }
 
-  async createAndSendVerificationCode(email: string) {
-    const code = await this.createVerificationCode(email);
+  async createAndSendVerificationCode(email: string, processType: VerificationProcessType) {
+    const code = await this.createVerificationCode(email, processType);
     await this.emailSender.sendVerificationEmail(email, code);
   }
 
+  // TODO: replace with verifyUserCode()
   async verifyCode(code: string, email: string): Promise<boolean> {
     await this.updateAllExpiredCodes();
 
     const entity = await this.repository.findOne({
-      where: { code: code, user: { email: email } },
+      where: { code: code, process: VerificationProcess.USER_SIGNUP, user: { email: email } },
       withDeleted: true,
     });
 

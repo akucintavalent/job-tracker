@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { UserMapper } from './users.mapper';
 import { EmailSenderModule } from 'src/email-sender/email-sender.module';
 import { UserCodeVerificationService } from './user.code.verification.service';
-import { UserCodeVerification } from './user.code.verification.entity';
+import { UserCodeVerification } from './entities/user.code.verification.entity';
 import { BoardsModule } from 'src/boards/boards.module';
 
 @Module({

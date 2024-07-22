@@ -16,7 +16,7 @@ export class BoardColumn extends BaseEntity {
   @Column()
   order: number;
 
-  @ManyToOne(() => Board, (board) => board.columns)
+  @ManyToOne(() => Board, (board) => board.columns, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'board_id' })
   board: Board;
 

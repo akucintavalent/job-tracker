@@ -28,6 +28,8 @@ import { AuthUserDto } from 'src/auth/dtos/auth.user.dto';
 import { UserCodeVerificationService } from './user.code.verification.service';
 import { EmailVerificationCodeDto } from './dtos/email-verification-code.dto';
 import { CreateEmailVerificationCode } from './dtos/create-email-verification-code.dto';
+import { VerificationProcess } from './enums/verification-process.enum';
+import { DeleteUserDto } from './dtos/delete-user.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -95,15 +97,50 @@ export class UsersController {
     return this.mapper.toDto(entity);
   }
 
+  @Post('/delete/create-verification-code')
+  @ApiOperation({
+    summary: "Creates & sends user's code. Must be called before DELETE `/users`",
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'User code created and sent',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  async createVerificationCode(@AuthUser() user: AuthUserDto) {
+    await this.codeVerification.createAndSendVerificationCode(
+      user.email,
+      VerificationProcess.USER_DELETE,
+    );
+  }
+
   @Delete()
-  async deleteUser(@AuthUser() user: AuthUserDto) {
-    await this.usersService.remove(user.userId);
+  @ApiOperation({
+    summary:
+      'Permanently deletes user from the system. Must be called after POST `/users/delete/create-verification-code`',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'User deleted',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  async deleteUser(@Body() dto: DeleteUserDto, @AuthUser() user: AuthUserDto) {
+    await this.usersService.remove(user.userId, dto.code);
   }
 
   @Public()
   @Post('/verification/create-email-verification-code')
   async createEmailVerificationCode(@Body() body: CreateEmailVerificationCode) {
-    await this.codeVerification.createAndSendVerificationCode(body.email);
+    await this.codeVerification.createAndSendVerificationCode(
+      body.email,
+      VerificationProcess.USER_SIGNUP,
+    );
   }
 
   @Public()
