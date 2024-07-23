@@ -7,16 +7,14 @@ import { UserAlreadyExistsException } from './exceptions/user-exists.exception';
 import { FindUserDto } from './dtos/find-user.dto';
 import { FindUsersDto } from './dtos/find-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { EmailSenderService } from 'src/email-sender/email-sender.service';
 import { UserCodeVerificationService } from './user.code.verification.service';
-import { BoardsService } from 'src/boards/boards.service';
+import { BoardsService } from './../boards/boards.service';
 import { VerificationProcess } from './enums/verification-process.enum';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
-    private readonly emailSender: EmailSenderService,
     private readonly userCodeVerificationService: UserCodeVerificationService,
     private readonly boardService: BoardsService,
   ) {}

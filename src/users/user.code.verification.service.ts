@@ -4,9 +4,9 @@ import { UserCodeVerification } from './entities/user.code.verification.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { LessThan } from 'typeorm';
-import { BadRequestException } from 'src/exceptions/bad-request.exception';
-import { UserFriendlyErrorMessages } from 'src/exceptions/user-friendly-error-messages';
-import { EmailSenderService } from 'src/email-sender/email-sender.service';
+import { BadRequestException } from './../exceptions/bad-request.exception';
+import { UserFriendlyErrorMessages } from './../exceptions/user-friendly-error-messages';
+import { EmailSenderService } from './../email-sender/email-sender.service';
 import { VerificationProcess, VerificationProcessType } from './enums/verification-process.enum';
 
 @Injectable()

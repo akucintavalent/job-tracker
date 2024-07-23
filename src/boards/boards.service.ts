@@ -6,7 +6,7 @@ import { CreateBoardDto } from './dtos/create-board.dto';
 import { User } from '../users/entities/user.entity';
 import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
-import { BoardColumnsService } from 'src/board-columns/board-columns.service';
+import { BoardColumnsService } from './../board-columns/board-columns.service';
 
 @Injectable()
 export class BoardsService {
