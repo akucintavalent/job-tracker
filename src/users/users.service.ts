@@ -39,7 +39,7 @@ export class UsersService {
 
     if (userExists)
       throw new UserAlreadyExistsException(
-        `'${email}' email is alredy in use. User cannot be created.`,
+        `'${email}' email is already in use. User cannot be created.`,
       );
   }
 
@@ -57,6 +57,7 @@ export class UsersService {
     return this.usersRepository.findBy(where);
   }
 
+  // TODO: update password properly
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     const user = await this.findOneBy({ id });
     Object.assign(user, dto);
