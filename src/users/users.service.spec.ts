@@ -6,6 +6,7 @@ import { BoardsService } from './../boards/boards.service';
 import { UserCodeVerificationService } from './user.code.verification.service';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
+import { UserRole } from './enums/user-role.enum';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -21,7 +22,7 @@ describe('UsersService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
-        { provide: repositoryToken, useValue: { findOneBy: jest.fn() } },
+        { provide: repositoryToken, useValue: { findOneBy: jest.fn(), save: jest.fn() } },
         { provide: UserCodeVerificationService, useValue: userCodeVerificationServiceMock },
         { provide: BoardsService, useValue: boardServiceMock },
       ],
@@ -54,5 +55,19 @@ describe('UsersService', () => {
 
     // Act & Assert
     expect(() => service.findOneBy({ email: 'user@mail.com' })).toThrow(NotFoundException);
+  });
+
+  it('update, user exists, user updated', async () => {
+    // Arrange
+    const entity = new User();
+    entity.email = 'user@mail.com';
+    entity.role = UserRole.USER;
+    jest.spyOn(repository, 'findOneBy').mockImplementation(() => Promise.resolve(entity));
+
+    // Act
+    await service.update('id', { role: UserRole.ADMIN });
+
+    // Assert
+    expect(repository.save).toHaveBeenCalledWith({ email: entity.email, role: UserRole.ADMIN });
   });
 });
