@@ -57,6 +57,7 @@ export class UsersService {
     return this.usersRepository.findBy(where);
   }
 
+  // TODO: update password properly
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     const user = await this.findOneBy({ id });
     Object.assign(user, dto);
