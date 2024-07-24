@@ -39,7 +39,7 @@ export class UsersService {
 
     if (userExists)
       throw new UserAlreadyExistsException(
-        `'${email}' email is alredy in use. User cannot be created.`,
+        `'${email}' email is already in use. User cannot be created.`,
       );
   }
 
