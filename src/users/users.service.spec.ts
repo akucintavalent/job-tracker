@@ -11,8 +11,7 @@ import { UserRole } from './enums/user-role.enum';
 describe('UsersService', () => {
   let service: UsersService;
   let repository: Repository<User>;
-  let userCodeVerificationServiceMock: Partial<UserCodeVerificationService>;
-  let boardServiceMock: Partial<BoardsService>;
+  let userCodeVerificationServiceMock: UserCodeVerificationService;
 
   const validUser = {
     id: '8167a958-5d55-476a-8bd2-f5fcdb8e9c5b',
@@ -21,11 +20,10 @@ describe('UsersService', () => {
   } as User;
 
   beforeEach(async () => {
-    userCodeVerificationServiceMock = {};
-    boardServiceMock = {};
     const repositoryMock = {
       findOneBy: jest.fn().mockImplementation(() => Promise.resolve(validUser)),
       save: jest.fn().mockImplementation(() => Promise.resolve(validUser)),
+      remove: jest.fn().mockImplementation(() => Promise.resolve(validUser)),
     };
 
     const repositoryToken = getRepositoryToken(User);
@@ -33,12 +31,15 @@ describe('UsersService', () => {
       providers: [
         UsersService,
         { provide: repositoryToken, useValue: repositoryMock },
-        { provide: UserCodeVerificationService, useValue: userCodeVerificationServiceMock },
-        { provide: BoardsService, useValue: boardServiceMock },
+        { provide: UserCodeVerificationService, useValue: { verifyUserCode: jest.fn() } },
+        { provide: BoardsService, useValue: {} },
       ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
+    userCodeVerificationServiceMock = module.get<UserCodeVerificationService>(
+      UserCodeVerificationService,
+    );
     repository = module.get<Repository<User>>(repositoryToken);
   });
 
@@ -69,5 +70,24 @@ describe('UsersService', () => {
 
     // Assert
     expect(repository.save).toHaveBeenCalledWith({ ...validUser, role: UserRole.ADMIN });
+  });
+
+  it('should delete user', async () => {
+    // Act
+    await service.remove(validUser.id, 'code');
+
+    // Assert
+    expect(repository.remove).toHaveBeenCalledWith(validUser);
+  });
+
+  it('should throw exception on delete user', async () => {
+    // Arrange
+    jest
+      .spyOn(userCodeVerificationServiceMock, 'verifyUserCode')
+      .mockImplementation(() => Promise.reject(new Error('unit test error')));
+
+    // Act & Assert
+    expect(async () => await service.remove(validUser.id, 'some code')).rejects.toThrow();
+    expect(repository.remove).toHaveBeenCalledTimes(0);
   });
 });
