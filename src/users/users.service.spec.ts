@@ -14,15 +14,25 @@ describe('UsersService', () => {
   let userCodeVerificationServiceMock: Partial<UserCodeVerificationService>;
   let boardServiceMock: Partial<BoardsService>;
 
+  const validUser = {
+    id: '8167a958-5d55-476a-8bd2-f5fcdb8e9c5b',
+    email: 'user@email.com',
+    role: UserRole.USER,
+  } as User;
+
   beforeEach(async () => {
     userCodeVerificationServiceMock = {};
     boardServiceMock = {};
+    const repositoryMock = {
+      findOneBy: jest.fn().mockImplementation(() => Promise.resolve(validUser)),
+      save: jest.fn().mockImplementation(() => Promise.resolve(validUser)),
+    };
 
     const repositoryToken = getRepositoryToken(User);
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
-        { provide: repositoryToken, useValue: { findOneBy: jest.fn(), save: jest.fn() } },
+        { provide: repositoryToken, useValue: repositoryMock },
         { provide: UserCodeVerificationService, useValue: userCodeVerificationServiceMock },
         { provide: BoardsService, useValue: boardServiceMock },
       ],
@@ -36,38 +46,28 @@ describe('UsersService', () => {
     expect(service).toBeDefined();
   });
 
-  it('findOneBy user exists', async () => {
-    // Arrange
-    const entity = new User();
-    entity.email = 'user@mail.com';
-    jest.spyOn(repository, 'findOneBy').mockImplementation(() => Promise.resolve(entity));
-
-    // Act
-    const result = await service.findOneBy({ email: 'user@mail.com' });
-
-    // Assert
-    expect(result).toBe(entity);
+  it('should find a user', async () => {
+    // Act & Assert
+    expect(await service.findOneBy({ email: validUser.email })).toEqual({
+      id: validUser.id,
+      email: validUser.email,
+      role: validUser.role,
+    });
   });
 
-  it('findOneBy user missing', async () => {
+  it('should throw NotFoundException', async () => {
     // Arrange
     jest.spyOn(repository, 'findOneBy').mockImplementation(() => null);
 
     // Act & Assert
-    expect(() => service.findOneBy({ email: 'user@mail.com' })).toThrow(NotFoundException);
+    expect(() => service.findOneBy({ email: 'user@email.com' })).toThrow(NotFoundException);
   });
 
-  it('update, user exists, user updated', async () => {
-    // Arrange
-    const entity = new User();
-    entity.email = 'user@mail.com';
-    entity.role = UserRole.USER;
-    jest.spyOn(repository, 'findOneBy').mockImplementation(() => Promise.resolve(entity));
-
+  it('should update user', async () => {
     // Act
-    await service.update('id', { role: UserRole.ADMIN });
+    await service.update(validUser.id, { role: UserRole.ADMIN });
 
     // Assert
-    expect(repository.save).toHaveBeenCalledWith({ email: entity.email, role: UserRole.ADMIN });
+    expect(repository.save).toHaveBeenCalledWith({ ...validUser, role: UserRole.ADMIN });
   });
 });
