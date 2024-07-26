@@ -67,7 +67,7 @@ export class UsersService {
 
   async remove(id: string, code: string): Promise<User> {
     await this.userCodeVerificationService.verifyUserCode(
-      { id: id, email: undefined },
+      { id: id },
       code,
       VerificationProcess.USER_DELETE,
     );
