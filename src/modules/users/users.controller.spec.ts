@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UserMapper } from './users.mapper';
-import { UserCodeVerificationService } from './user.code.verification.service';
+import { UserCodeVerificationService } from './user-code-verification.service';
 
 describe('UsersController', () => {
   let controller: UsersController;

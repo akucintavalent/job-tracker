@@ -25,7 +25,7 @@ import { UserMapper } from './users.mapper';
 import { Public } from '../auth/public.decorator';
 import { AuthUser } from '../auth/user.decorator';
 import { AuthUserDto } from '../auth/dtos/auth.user.dto';
-import { UserCodeVerificationService } from './user.code.verification.service';
+import { UserCodeVerificationService } from './user-code-verification.service';
 import { EmailVerificationCodeDto } from './dtos/email-verification-code.dto';
 import { CreateEmailVerificationCode } from './dtos/create-email-verification-code.dto';
 import { VerificationProcess } from './enums/verification-process.enum';

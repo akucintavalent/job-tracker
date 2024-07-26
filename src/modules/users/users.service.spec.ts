@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { BoardsService } from '../boards/boards.service';
-import { UserCodeVerificationService } from './user.code.verification.service';
+import { UserCodeVerificationService } from './user-code-verification.service';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { UserRole } from './enums/user-role.enum';
