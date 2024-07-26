@@ -3,7 +3,7 @@ import { ContactsService } from './contacts.service';
 import { ContactsController } from './contacts.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Contact } from './entities/contact.entity';
-import { Board } from '../modules/boards/entities/board.entity';
+import { Board } from '../boards/entities/board.entity';
 import { ContactMapper } from './contacts.mapper';
 import { JobApplication } from '../job-applications/entities/job-application.entity';
 

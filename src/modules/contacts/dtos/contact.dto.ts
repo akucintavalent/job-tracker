@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BoardDto } from 'src/modules/boards/dtos/board.dto';
-import { JobApplicationDto } from 'src/job-applications/dtos/job-application.dto';
+import { BoardDto } from '../../boards/dtos/board.dto';
+import { JobApplicationDto } from '../../job-applications/dtos/job-application.dto';
 
 export class ContactDto {
   @ApiProperty()

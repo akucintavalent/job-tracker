@@ -5,8 +5,8 @@ import { CreateJobApplicationDto } from './dtos/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dtos/update-job-application.dto';
 import { JobApplicationMapper } from './job-applications.mapper';
 import { JobApplicationDto } from './dtos/job-application.dto';
-import { AuthUserDto } from 'src/auth/dtos/auth.user.dto';
-import { AuthUser } from 'src/auth/user.decorator';
+import { AuthUserDto } from 'src/modules/auth/dtos/auth.user.dto';
+import { AuthUser } from 'src/modules/auth/user.decorator';
 
 @ApiTags('job-applications')
 @Controller('job-applications')

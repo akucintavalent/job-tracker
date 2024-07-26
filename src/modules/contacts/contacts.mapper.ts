@@ -3,7 +3,7 @@ import { Contact } from './entities/contact.entity';
 import { ContactDto } from './dtos/contact.dto';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { Board } from 'src/modules/boards/entities/board.entity';
-import { BoardMapper } from '../modules/boards/boards.mapper';
+import { BoardMapper } from '../boards/boards.mapper';
 import { JobApplicationMapper } from '../job-applications/job-applications.mapper';
 
 @Injectable()

@@ -6,7 +6,7 @@ import { User } from './entities/user.entity';
 import { LessThan } from 'typeorm';
 import { BadRequestException } from '../../exceptions/bad-request.exception';
 import { UserFriendlyErrorMessages } from '../../exceptions/user-friendly-error-messages';
-import { EmailSenderService } from '../../email-sender/email-sender.service';
+import { EmailSenderService } from '../email-sender/email-sender.service';
 import { VerificationProcess, VerificationProcessType } from './enums/verification-process.enum';
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BoardColumn } from './entities/board-column.entity';
 import { BoardColumnDto } from './dtos/board-column.dto';
-import { JobApplicationMapper } from 'src/job-applications/job-applications.mapper';
+import { JobApplicationMapper } from '../job-applications/job-applications.mapper';
 
 @Injectable()
 export class BoardColumnMapper {

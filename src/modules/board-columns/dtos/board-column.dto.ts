@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { JobApplicationDto } from 'src/job-applications/dtos/job-application.dto';
+import { JobApplicationDto } from '../../job-applications/dtos/job-application.dto';
 
 export class BoardColumnDto {
   @ApiProperty({ type: 'string', format: 'uuid' })

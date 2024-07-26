@@ -1,4 +1,4 @@
-import { BaseEntity } from '../../entities/base.entity';
+import { BaseEntity } from '../../../entities/base.entity';
 import { BoardColumn } from '../../board-columns/entities/board-column.entity';
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
 import { Contact } from '../../contacts/entities/contact.entity';

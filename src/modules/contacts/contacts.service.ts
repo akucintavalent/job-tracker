@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { Board } from 'src/modules/boards/entities/board.entity';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { ContactMapper } from './contacts.mapper';
-import { JobApplication } from 'src/job-applications/entities/job-application.entity';
+import { JobApplication } from '../job-applications/entities/job-application.entity';
 import { FindContactDto } from './dtos/find-contact.dto';
 import { ContactDto } from './dtos/contact.dto';
 import { UpdateContact } from './dtos/update-contact.dto';

@@ -1,8 +1,8 @@
 import { User } from '../../users/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../entities/base.entity';
-import { BoardColumn } from '../../../board-columns/entities/board-column.entity';
-import { Contact } from '../../../contacts/entities/contact.entity';
+import { BoardColumn } from '../../board-columns/entities/board-column.entity';
+import { Contact } from '../../contacts/entities/contact.entity';
 
 @Entity('boards')
 export class Board extends BaseEntity {

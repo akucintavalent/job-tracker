@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BoardColumnDto } from 'src/board-columns/dtos/board-column.dto';
+import { BoardColumnDto } from 'src/modules/board-columns/dtos/board-column.dto';
 
 export class BoardDto {
   @ApiProperty({ type: 'string', format: 'uuid' })

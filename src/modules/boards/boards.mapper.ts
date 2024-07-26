@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BoardDto } from './dtos/board.dto';
 import { Board } from './entities/board.entity';
-import { BoardColumnMapper } from 'src/board-columns/board-columns.mapper';
+import { BoardColumnMapper } from 'src/modules/board-columns/board-columns.mapper';
 
 @Injectable()
 export class BoardMapper {
