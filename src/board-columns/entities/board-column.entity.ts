@@ -1,5 +1,5 @@
 import { JobApplication } from '../../job-applications/entities/job-application.entity';
-import { Board } from '../../boards/entities/board.entity';
+import { Board } from '../../modules/boards/entities/board.entity';
 import { BaseEntity } from '../../entities/base.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, Unique } from 'typeorm';
 

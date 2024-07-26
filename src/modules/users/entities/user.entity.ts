@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { UserRole, UserRoleType } from '../enums/user-role.enum';
 import { Board } from '../../boards/entities/board.entity';
-import { BaseEntity } from '../../entities/base.entity';
+import { BaseEntity } from '../../../entities/base.entity';
 import { UserCodeVerification } from './user.code.verification.entity';
 
 @Entity('users')

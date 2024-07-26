@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { BaseEntity } from '../../entities/base.entity';
+import { BaseEntity } from '../../../entities/base.entity';
 import { User } from './user.entity';
 import { VerificationProcess, VerificationProcessType } from '../enums/verification-process.enum';
 

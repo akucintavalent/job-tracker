@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../entities/base.entity';
-import { Board } from '../../boards/entities/board.entity';
+import { Board } from '../../modules/boards/entities/board.entity';
 import { JobApplication } from '../../job-applications/entities/job-application.entity';
 
 @Entity('contacts')

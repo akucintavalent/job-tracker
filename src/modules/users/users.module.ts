@@ -7,7 +7,7 @@ import { UserMapper } from './users.mapper';
 import { EmailSenderModule } from 'src/email-sender/email-sender.module';
 import { UserCodeVerificationService } from './user.code.verification.service';
 import { UserCodeVerification } from './entities/user.code.verification.entity';
-import { BoardsModule } from 'src/boards/boards.module';
+import { BoardsModule } from 'src/modules/boards/boards.module';
 
 @Module({
   imports: [

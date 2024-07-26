@@ -8,7 +8,7 @@ import { FindUserDto } from './dtos/find-user.dto';
 import { FindUsersDto } from './dtos/find-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserCodeVerificationService } from './user.code.verification.service';
-import { BoardsService } from './../boards/boards.service';
+import { BoardsService } from '../boards/boards.service';
 import { VerificationProcess } from './enums/verification-process.enum';
 
 @Injectable()

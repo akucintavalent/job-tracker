@@ -3,7 +3,7 @@ import { BoardColumnsController } from './board-columns.controller';
 import { BoardColumnsService } from './board-columns.service';
 import { BoardColumn } from './entities/board-column.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Board } from '../boards/entities/board.entity';
+import { Board } from '../modules/boards/entities/board.entity';
 import { BoardColumnMapper } from './board-columns.mapper';
 import { JobApplicationMapper } from 'src/job-applications/job-applications.mapper';
 

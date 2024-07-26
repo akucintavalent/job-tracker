@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JobApplication } from './entities/job-application.entity';
 import { BoardColumn } from '../board-columns/entities/board-column.entity';
 import { JobApplicationMapper } from './job-applications.mapper';
-import { Board } from 'src/boards/entities/board.entity';
+import { Board } from 'src/modules/boards/entities/board.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([JobApplication, BoardColumn, Board])],
