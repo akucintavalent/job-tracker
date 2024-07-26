@@ -1,11 +1,11 @@
 import { DataSourceOptions } from 'typeorm';
 import { config } from 'dotenv';
-import { User } from './src/users/entities/user.entity';
-import { Board } from './src/boards/entities/board.entity';
-import { BoardColumn } from './src/board-columns/entities/board-column.entity';
-import { JobApplication } from './src/job-applications/entities/job-application.entity';
-import { UserCodeVerification } from './src/users/entities/user.code.verification.entity';
-import { Contact } from './src/contacts/entities/contact.entity';
+import { User } from './src/modules/users/entities/user.entity';
+import { Board } from './src/modules/boards/entities/board.entity';
+import { BoardColumn } from './src/modules/board-columns/entities/board-column.entity';
+import { JobApplication } from './src/modules/job-applications/entities/job-application.entity';
+import { UserCodeVerification } from './src/modules/users/entities/user.code.verification.entity';
+import { Contact } from './src/modules/contacts/entities/contact.entity';
 
 if (process.env.NODE_ENV !== 'test') {
   config();
