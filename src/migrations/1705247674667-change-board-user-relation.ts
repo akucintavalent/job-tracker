@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class ChangeBoardUserRelation1705247674667
-  implements MigrationInterface
-{
+export class ChangeBoardUserRelation1705247674667 implements MigrationInterface {
   name = 'ChangeBoardUserRelation1705247674667';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
