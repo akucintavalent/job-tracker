@@ -28,7 +28,7 @@ export class BoardsService {
       user: { id: userId },
     });
 
-    return await this.boardRepository.save(entity);
+    return this.boardRepository.save(entity);
   }
 
   async createDefaultBoard(userId: string) {
@@ -64,7 +64,7 @@ export class BoardsService {
   async update(boardId: string, dto: UpdateBoardDto, userId: string): Promise<Board> {
     const entity = await this.findBoard(boardId, userId);
     Object.assign(entity, dto);
-    return await this.boardRepository.save(entity);
+    return this.boardRepository.save(entity);
   }
 
   async remove(boardId: string, userId: string): Promise<Board> {

@@ -22,7 +22,8 @@ export class EmailSenderService {
     });
 
     if (error) {
-      return console.error('Error during sending email', { error });
+      console.error('Error during sending email', { error });
+      return;
     }
 
     console.log('Email sent', { data });

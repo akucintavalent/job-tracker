@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate {
         secret: this.configService.get('JWT_ACCESS_TOKEN'),
       });
 
-      request['user'] = this.mapper.toAuthUserDto(payload);
+      request.user = this.mapper.toAuthUserDto(payload);
     } catch {
       throw new UnauthorizedException();
     }

@@ -37,10 +37,11 @@ export class UsersService {
   private async validateIfUserExists(email: string): Promise<void> {
     const userExists = await this.usersRepository.existsBy({ email });
 
-    if (userExists)
+    if (userExists) {
       throw new UserAlreadyExistsException(
         `'${email}' email is already in use. User cannot be created.`,
       );
+    }
   }
 
   findOneBy(where: FindUserDto): Promise<User> {

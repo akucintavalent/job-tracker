@@ -53,8 +53,9 @@ export class ContactsService {
       userId,
     );
 
-    if (data.contactEntity.jobApplications.filter((x) => x.id === jobApplicationId).length > 0)
+    if (data.contactEntity.jobApplications.filter((x) => x.id === jobApplicationId).length > 0) {
       throw new BadRequestException('Contact is alredy assigned to this JobApplication');
+    }
 
     data.contactEntity.jobApplications.push(data.jobApplicationEntity);
     await this.contactsRepository.save(data.contactEntity);
@@ -71,8 +72,9 @@ export class ContactsService {
       userId,
     );
 
-    if (data.contactEntity.jobApplications.filter((x) => x.id === jobApplicationId).length === 0)
+    if (data.contactEntity.jobApplications.filter((x) => x.id === jobApplicationId).length === 0) {
       throw new BadRequestException('Contact is not assigned to this JobApplication');
+    }
 
     data.contactEntity.jobApplications = data.contactEntity.jobApplications.filter(
       (x) => x.id !== jobApplicationId,
@@ -81,9 +83,12 @@ export class ContactsService {
   }
 
   private async validateBoadrExists(userId: string, boardId: string) {
-    if (!userId || !boardId) throw new BadRequestException('UserId or BoardId is invalid');
-    if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } })))
+    if (!userId || !boardId) {
+      throw new BadRequestException('UserId or BoardId is invalid');
+    }
+    if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } }))) {
       throw new BadRequestException('Board or user is not found');
+    }
   }
 
   private async validateContactExists(contactId: string, userId: string) {
@@ -93,8 +98,9 @@ export class ContactsService {
         id: contactId,
         board: { user: { id: userId } },
       }))
-    )
+    ) {
       throw new BadRequestException('Contact is not found');
+    }
   }
 
   // Gets the Entity of a Contact and checks whether this Contact can be associated with a particular JobApplication.
@@ -104,8 +110,9 @@ export class ContactsService {
     jobApplicationId: string,
     userId: string,
   ): Promise<{ contactEntity: Contact; jobApplicationEntity: JobApplication }> {
-    if (!contactId || !jobApplicationId || !userId)
+    if (!contactId || !jobApplicationId || !userId) {
       throw new BadRequestException('Data is invalid');
+    }
 
     const contactEntity = await this.contactsRepository.findOne({
       where: { id: contactId },
@@ -113,7 +120,9 @@ export class ContactsService {
       relations: { board: true, jobApplications: true },
     });
 
-    if (!contactEntity) throw new BadRequestException('Contact is not found');
+    if (!contactEntity) {
+      throw new BadRequestException('Contact is not found');
+    }
 
     const jobApplicationEntity = await this.jobApplicationRepository.findOne({
       where: { id: jobApplicationId, column: { board: { user: { id: userId } } } },
@@ -121,12 +130,15 @@ export class ContactsService {
       relations: { column: { board: true } },
     });
 
-    if (!jobApplicationEntity) throw new BadRequestException('JobApplication is not found');
+    if (!jobApplicationEntity) {
+      throw new BadRequestException('JobApplication is not found');
+    }
 
-    if (jobApplicationEntity.column.board.id !== contactEntity.board.id)
+    if (jobApplicationEntity.column.board.id !== contactEntity.board.id) {
       throw new BadRequestException(
         'Contact cannot be assigned to this JobApplication, since this Contact is assigned to the different Board',
       );
+    }
 
     return { contactEntity, jobApplicationEntity };
   }
