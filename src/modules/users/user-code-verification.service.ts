@@ -8,6 +8,7 @@ import { BadRequestException } from '../../exceptions/bad-request.exception';
 import { UserFriendlyErrorMessages } from '../../exceptions/user-friendly-error-messages';
 import { EmailSenderService } from '../email-sender/email-sender.service';
 import { VerificationProcessType } from './enums/verification-process.enum';
+import { ArgumentInvalidException } from '../../exceptions/argument-invalid.exceptions';
 
 @Injectable()
 export class UserCodeVerificationService {
@@ -24,7 +25,8 @@ export class UserCodeVerificationService {
     code: string,
     process: VerificationProcessType,
   ) {
-    if (!user.id && !user.email) throw new Error('One of user.id or user.email field is required.');
+    if (!user.id && !user.email)
+      throw new ArgumentInvalidException('One of user.id or user.email field is required.');
 
     await this.updateAllExpiredCodes();
 
@@ -59,7 +61,7 @@ export class UserCodeVerificationService {
       user: { id: user.id },
     });
     await this.repository.save(entity);
-    return code;
+    return entity.code;
   }
 
   async createAndSendVerificationCode(email: string, processType: VerificationProcessType) {
