@@ -55,6 +55,9 @@ export class UserCodeVerificationService {
       select: { id: true },
       where: { email: email },
     });
+
+    if (!user) throw new ArgumentInvalidException('User not found. Email field is invalid.');
+
     const entity = this.repository.create({
       code: code,
       process: processType,
