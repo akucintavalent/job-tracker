@@ -92,8 +92,9 @@ export class JobApplicationsService {
       .where('board.user_id = :userId', { userId })
       .getOne();
 
-    if (entity == null)
+    if (entity == null) {
       throw new BadRequestException(`Job Application with '${jobId}' id doesn't exists`);
+    }
 
     return entity;
   }

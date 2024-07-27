@@ -31,8 +31,12 @@ export class UserCodeVerificationService {
       withDeleted: true,
     });
 
-    if (entity == null) this.throw(UserFriendlyErrorMessages.EMAIL_CODE_NOT_FOUND);
-    if (entity.deletedAt) this.throw(UserFriendlyErrorMessages.EMAIL_CODE_EXPIRED);
+    if (entity == null) {
+      this.throw(UserFriendlyErrorMessages.EMAIL_CODE_NOT_FOUND);
+    }
+    if (entity.deletedAt) {
+      this.throw(UserFriendlyErrorMessages.EMAIL_CODE_EXPIRED);
+    }
 
     await this.repository.softDelete({ id: entity.id });
     return true;
@@ -70,8 +74,12 @@ export class UserCodeVerificationService {
       withDeleted: true,
     });
 
-    if (entity == null) this.throw(UserFriendlyErrorMessages.EMAIL_CODE_NOT_FOUND);
-    if (entity.deletedAt) this.throw(UserFriendlyErrorMessages.EMAIL_CODE_EXPIRED);
+    if (entity == null) {
+      this.throw(UserFriendlyErrorMessages.EMAIL_CODE_NOT_FOUND);
+    }
+    if (entity.deletedAt) {
+      this.throw(UserFriendlyErrorMessages.EMAIL_CODE_EXPIRED);
+    }
 
     await this.repository.update({ id: entity.id }, { deletedAt: new Date().toISOString() });
     await this.userRepository.update({ email: email }, { isEmailVerified: true });

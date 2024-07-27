@@ -38,7 +38,7 @@ export class BoardColumnsService {
       order: order,
     });
 
-    return await this.boardColumnsRepository.save(entity);
+    return this.boardColumnsRepository.save(entity);
   }
 
   async createDefaultBoardColumns(boardId: string, userId: string) {
@@ -82,7 +82,7 @@ export class BoardColumnsService {
   async update(columnId: string, dto: UpdateBoardColumnDto, userId: string): Promise<BoardColumn> {
     const entity = await this.findById(columnId, userId);
     Object.assign(entity, dto);
-    return await this.boardColumnsRepository.save(entity);
+    return this.boardColumnsRepository.save(entity);
   }
 
   async remove(columnId: string, userId: string): Promise<BoardColumn> {
@@ -102,10 +102,15 @@ export class BoardColumnsService {
   }
 
   private validateRearrange(columnsIds: string[], dbColumnsIds: string[]) {
-    if (!columnsIds.length) throw new BadRequestException('List of Column Ids is empty');
-    if (this.hasDuplicates(columnsIds)) throw new BadRequestException('List has duplicated Id.');
-    if (!this.areEquals(columnsIds, dbColumnsIds))
+    if (!columnsIds.length) {
+      throw new BadRequestException('List of Column Ids is empty');
+    }
+    if (this.hasDuplicates(columnsIds)) {
+      throw new BadRequestException('List has duplicated Id.');
+    }
+    if (!this.areEquals(columnsIds, dbColumnsIds)) {
       throw new BadRequestException('List must contains all Columns from this board.');
+    }
   }
 
   private hasDuplicates(array: any[]): boolean {

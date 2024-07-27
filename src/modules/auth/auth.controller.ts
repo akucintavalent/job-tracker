@@ -43,7 +43,7 @@ export class AuthController {
       throw new UnauthorizedException();
     }
 
-    return await this.authService.refreshToken(token);
+    return this.authService.refreshToken(token);
   }
 
   @Get('profile')

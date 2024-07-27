@@ -42,7 +42,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    return await this.generateTokens(payload.sub, payload.email);
+    return this.generateTokens(payload.sub, payload.email);
   }
 
   private async generateTokens(userId: string, email: string) {
