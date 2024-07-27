@@ -1,6 +1,6 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { Guid } from '../models/Guid';
+import { newGuid } from '../utils/guid';
 import { CustomHttpException } from './custom.exception';
 
 @Catch()
@@ -10,7 +10,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
 
-    const exceptionId = Guid.newGuid();
+    const exceptionId = newGuid();
     console.error(
       `ExceptionId: ${exceptionId},`,
       {
