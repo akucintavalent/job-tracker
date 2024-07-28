@@ -1,22 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { getDataSourceOptions } from '../../../database.config';
-import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
+import { UserMapper } from './users.mapper';
+import { UserCodeVerificationService } from './user-code-verification.service';
 
 describe('UsersController', () => {
   let controller: UsersController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot({
-          ...getDataSourceOptions(),
-        }),
-        TypeOrmModule.forFeature([User]),
+      providers: [
+        { provide: UsersService, useValue: {} },
+        { provide: UserMapper, useValue: {} },
+        { provide: UserCodeVerificationService, useValue: {} },
       ],
-      providers: [UsersService],
       controllers: [UsersController],
     }).compile();
 

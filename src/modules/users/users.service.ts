@@ -7,7 +7,7 @@ import { UserAlreadyExistsException } from './exceptions/user-exists.exception';
 import { FindUserDto } from './dtos/find-user.dto';
 import { FindUsersDto } from './dtos/find-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { UserCodeVerificationService } from './user.code.verification.service';
+import { UserCodeVerificationService } from './user-code-verification.service';
 import { BoardsService } from '../boards/boards.service';
 import { VerificationProcess } from './enums/verification-process.enum';
 
@@ -67,7 +67,7 @@ export class UsersService {
 
   async remove(id: string, code: string): Promise<User> {
     await this.userCodeVerificationService.verifyUserCode(
-      { id: id, email: undefined },
+      { id: id },
       code,
       VerificationProcess.USER_DELETE,
     );

@@ -22,10 +22,10 @@ import { FindUsersDto } from './dtos/find-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
 import { UserMapper } from './users.mapper';
-import { Public } from 'src/modules/auth/public.decorator';
-import { AuthUser } from 'src/modules/auth/user.decorator';
-import { AuthUserDto } from 'src/modules/auth/dtos/auth.user.dto';
-import { UserCodeVerificationService } from './user.code.verification.service';
+import { Public } from '../auth/public.decorator';
+import { AuthUser } from '../auth/user.decorator';
+import { AuthUserDto } from '../auth/dtos/auth.user.dto';
+import { UserCodeVerificationService } from './user-code-verification.service';
 import { EmailVerificationCodeDto } from './dtos/email-verification-code.dto';
 import { CreateEmailVerificationCode } from './dtos/create-email-verification-code.dto';
 import { VerificationProcess } from './enums/verification-process.enum';
@@ -146,6 +146,10 @@ export class UsersController {
   @Public()
   @Post('/verification/verify-email-code')
   async verifyEmailCode(@Body() body: EmailVerificationCodeDto) {
-    await this.codeVerification.verifyCode(body.code, body.email);
+    await this.codeVerification.verifyUserCode(
+      { email: body.email },
+      body.code,
+      VerificationProcess.USER_SIGNUP,
+    );
   }
 }
