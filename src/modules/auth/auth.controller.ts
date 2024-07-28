@@ -24,7 +24,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  @ApiOperation({ summary: 'User Sign In' })
+  @ApiOperation({ summary: 'User sign in' })
   @ApiResponse({ status: 200, description: 'Signed in', type: JwtTokensDto })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @ApiResponse({ status: 403, description: 'Email is not verified' })
@@ -34,7 +34,7 @@ export class AuthController {
 
   @Public()
   @Get('refresh')
-  @ApiOperation({ summary: 'Refresh Access token' })
+  @ApiOperation({ summary: 'Refresh access token' })
   @ApiResponse({ status: 200, description: 'Token is updated', type: JwtTokensDto })
   @ApiResponse({ status: 401, description: 'Invalid token' })
   async refreshToken(@Request() req: any) {
