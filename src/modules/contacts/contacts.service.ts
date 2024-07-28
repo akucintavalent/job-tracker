@@ -16,7 +16,7 @@ export class ContactsService {
     @InjectRepository(Contact) private readonly contactsRepository: Repository<Contact>,
     @InjectRepository(Board) private readonly boardsRepository: Repository<Board>,
     @InjectRepository(JobApplication)
-    private readonly jobApplicationRepository: Repository<JobApplication>,
+    private readonly jobApplicationsRepository: Repository<JobApplication>,
     private readonly mapper: ContactMapper,
   ) {}
 
@@ -126,7 +126,7 @@ export class ContactsService {
       throw new BadRequestException('Contact is not found');
     }
 
-    const jobApplicationEntity = await this.jobApplicationRepository.findOne({
+    const jobApplicationEntity = await this.jobApplicationsRepository.findOne({
       where: { id: jobApplicationId, column: { board: { user: { id: userId } } } },
       select: { id: true, column: { id: true, board: { id: true } } },
       relations: { column: { board: true } },

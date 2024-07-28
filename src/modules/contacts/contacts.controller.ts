@@ -23,7 +23,7 @@ import { UpdateContact } from './dtos/update-contact.dto';
 @Controller('contacts')
 @Controller('contacts')
 export class ContactsController {
-  constructor(private readonly contactService: ContactsService) {}
+  constructor(private readonly contactsService: ContactsService) {}
 
   @Get()
   @ApiOperation({ summary: 'Fetch all Contacts.' })
@@ -39,7 +39,7 @@ export class ContactsController {
     description: 'Validation error',
   })
   async getContacts(@AuthUser() user: AuthUserDto, @Query() params: FindContactDto) {
-    return await this.contactService.find(user.userId, params);
+    return await this.contactsService.find(user.userId, params);
   }
 
   @Post()
@@ -53,7 +53,7 @@ export class ContactsController {
     description: 'Validation error',
   })
   async createContact(@Body() body: CreateContactDto, @AuthUser() user: AuthUserDto) {
-    await this.contactService.create(user.userId, body);
+    await this.contactsService.create(user.userId, body);
   }
 
   @Put()
@@ -67,7 +67,7 @@ export class ContactsController {
     description: 'Validation error',
   })
   async updateContact(@Body() body: UpdateContact, @AuthUser() user: AuthUserDto) {
-    await this.contactService.update(user.userId, body);
+    await this.contactsService.update(user.userId, body);
   }
 
   @Post('/jobApplication/assign')
@@ -84,7 +84,7 @@ export class ContactsController {
     @Body() body: AssignContactToJobApplication,
     @AuthUser() user: AuthUserDto,
   ) {
-    await this.contactService.assignContactToJobApplication(
+    await this.contactsService.assignContactToJobApplication(
       body.contactId,
       body.jobApplicationId,
       user.userId,
@@ -105,7 +105,7 @@ export class ContactsController {
     @Body() body: AssignContactToJobApplication,
     @AuthUser() user: AuthUserDto,
   ) {
-    await this.contactService.unassignContactFromJobApplication(
+    await this.contactsService.unassignContactFromJobApplication(
       body.contactId,
       body.jobApplicationId,
       user.userId,
@@ -123,6 +123,6 @@ export class ContactsController {
     description: 'Validation error',
   })
   async deleteContact(@Param('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {
-    await this.contactService.delete(id, user.userId);
+    await this.contactsService.delete(id, user.userId);
   }
 }
