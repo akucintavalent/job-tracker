@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HealthCheckController } from './health-check.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppDataSource } from '../data-source';
+import { AppDataSource } from '../../data-source';
 import { HealthCheckService } from './health-check.service';
 
 describe('HealthCheckController', () => {

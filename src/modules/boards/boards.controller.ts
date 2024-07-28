@@ -23,7 +23,7 @@ import { AuthUserDto } from 'src/modules/auth/dtos/auth.user.dto';
 @Controller('boards')
 export class BoardsController {
   constructor(
-    private readonly boardService: BoardsService,
+    private readonly boardsService: BoardsService,
     private readonly mapper: BoardMapper,
   ) {}
 
@@ -33,7 +33,7 @@ export class BoardsController {
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'User not found' })
   async createBoard(@Body() boardDto: CreateBoardDto, @AuthUser() user: AuthUserDto) {
-    const entity = await this.boardService.create(boardDto, user.userId);
+    const entity = await this.boardsService.create(boardDto, user.userId);
     return this.mapper.toDto(entity);
   }
 
@@ -47,7 +47,7 @@ export class BoardsController {
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiQuery({ name: 'name', description: 'Board name', required: false })
   async findBoards(@Query() query: FindBoardDto, @AuthUser() user: AuthUserDto) {
-    const entities = await this.boardService.findBy(query, user.userId);
+    const entities = await this.boardsService.findBy(query, user.userId);
     return entities.map(this.mapper.toDto);
   }
 
@@ -59,7 +59,7 @@ export class BoardsController {
   @ApiResponse({ status: 200, description: 'Board record', type: BoardDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
   async findBoard(@Param('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {
-    const entity = await this.boardService.findOne(id, user.userId);
+    const entity = await this.boardsService.findOne(id, user.userId);
     return this.mapper.toDto(entity);
   }
 
@@ -74,7 +74,7 @@ export class BoardsController {
     @Body() body: UpdateBoardDto,
     @AuthUser() user: AuthUserDto,
   ) {
-    const entity = await this.boardService.update(id, body, user.userId);
+    const entity = await this.boardsService.update(id, body, user.userId);
     return this.mapper.toDto(entity);
   }
 
@@ -85,6 +85,6 @@ export class BoardsController {
   @ApiResponse({ status: 200, description: 'Board deleted' })
   @ApiResponse({ status: 400, description: 'Validation error' })
   async deleteBoard(@Param('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {
-    await this.boardService.remove(id, user.userId);
+    await this.boardsService.remove(id, user.userId);
   }
 }

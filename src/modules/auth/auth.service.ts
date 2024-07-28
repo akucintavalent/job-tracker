@@ -15,10 +15,14 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async signIn(email: string, pass: string): Promise<any> {
+  async signIn(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOneBy({ email });
+    if (user === null) {
+      throw new UnauthorizedException();
+    }
 
-    if (user == null || !(await bcrypt.compare(pass, user.password))) {
+    const passwordIsCorrect = await bcrypt.compare(password, user.password);
+    if (!passwordIsCorrect) {
       throw new UnauthorizedException();
     }
 

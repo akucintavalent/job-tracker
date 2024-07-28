@@ -10,6 +10,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserCodeVerificationService } from './user-code-verification.service';
 import { BoardsService } from '../boards/boards.service';
 import { VerificationProcess } from './enums/verification-process.enum';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -58,10 +59,12 @@ export class UsersService {
     return this.usersRepository.findBy(where);
   }
 
-  // TODO: update password properly
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     const user = await this.findOneBy({ id });
     Object.assign(user, dto);
+    if (dto.password) {
+      user.password = await bcrypt.hash(dto.password, 10);
+    }
     return this.usersRepository.save(user);
   }
 

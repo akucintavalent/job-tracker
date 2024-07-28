@@ -14,7 +14,7 @@ import { ArgumentInvalidException } from '../../exceptions/argument-invalid.exce
 export class UserCodeVerificationService {
   constructor(
     @InjectRepository(UserCodeVerification)
-    private readonly repository: Repository<UserCodeVerification>,
+    private readonly userCodeVerificationRepository: Repository<UserCodeVerification>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly emailSender: EmailSenderService,
@@ -25,24 +25,25 @@ export class UserCodeVerificationService {
     code: string,
     process: VerificationProcessType,
   ) {
-    if (!user.id && !user.email)
+    if (!user.id && !user.email) {
       throw new ArgumentInvalidException('One of user.id or user.email field is required.');
+    }
 
     await this.updateAllExpiredCodes();
 
-    const entity = await this.repository.findOne({
+    const entity = await this.userCodeVerificationRepository.findOne({
       where: { process: process, code: code, user: { id: user.id, email: user.email } },
       withDeleted: true,
     });
 
-    if (entity == null) {
+    if (entity === null) {
       this.throw(UserFriendlyErrorMessages.EMAIL_CODE_NOT_FOUND);
     }
     if (entity.deletedAt) {
       this.throw(UserFriendlyErrorMessages.EMAIL_CODE_EXPIRED);
     }
 
-    await this.repository.softDelete({ id: entity.id });
+    await this.userCodeVerificationRepository.softDelete({ id: entity.id });
     return true;
   }
 
@@ -56,15 +57,17 @@ export class UserCodeVerificationService {
       where: { email: email },
     });
 
-    if (!user) throw new ArgumentInvalidException('User not found. Email field is invalid.');
+    if (!user) {
+      throw new ArgumentInvalidException('User not found. Email field is invalid.');
+    }
 
-    const entity = this.repository.create({
+    const userCodeVerification = this.userCodeVerificationRepository.create({
       code: code,
       process: processType,
       user: { id: user.id },
     });
-    await this.repository.save(entity);
-    return entity.code;
+    await this.userCodeVerificationRepository.save(userCodeVerification);
+    return userCodeVerification.code;
   }
 
   async createAndSendVerificationCode(email: string, processType: VerificationProcessType) {
@@ -73,9 +76,9 @@ export class UserCodeVerificationService {
   }
 
   private async updateAllExpiredCodes() {
-    const a5minAgo = new Date(new Date().getTime() - 1000 * 60 * 5).toISOString();
-    await this.repository.update(
-      { createdAt: LessThan(a5minAgo) },
+    const moment5minAgo = new Date(new Date().getTime() - 1000 * 60 * 5).toISOString();
+    await this.userCodeVerificationRepository.update(
+      { createdAt: LessThan(moment5minAgo) },
       { deletedAt: new Date().toISOString() },
     );
   }

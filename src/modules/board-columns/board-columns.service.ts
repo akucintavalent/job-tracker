@@ -16,7 +16,11 @@ export class BoardColumnsService {
   ) {}
 
   async create(dto: CreateBoardColumnDto, userId: string): Promise<BoardColumn> {
-    if (!(await this.boardsRepository.existsBy({ id: dto.boardId, user: { id: userId } }))) {
+    const boardExists = await this.boardsRepository.existsBy({
+      id: dto.boardId,
+      user: { id: userId },
+    });
+    if (!boardExists) {
       throw new BadRequestException("Board doesn't exists");
     }
 
@@ -29,7 +33,7 @@ export class BoardColumnsService {
     const order = dbColumns.length > 0 ? dbColumns[0].order + 1 : 0;
 
     if (dbColumns !== null && dbColumns.find((x) => x.name === dto.name)) {
-      throw new ConflictException(`Column with '${dto.name}' name is alredy exists`);
+      throw new ConflictException(`Column with '${dto.name}' name already exists`);
     }
 
     const entity = this.boardColumnsRepository.create({
@@ -43,7 +47,7 @@ export class BoardColumnsService {
 
   async createDefaultBoardColumns(boardId: string, userId: string) {
     if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } }))) {
-      throw new BadRequestException("Board doesn't exists");
+      throw new BadRequestException("Board doesn't exist");
     }
 
     const defaultColumns = ['Wishlist', 'Applied', 'Interview', 'Offer', 'Rejected'].map((v, i) =>
@@ -61,8 +65,9 @@ export class BoardColumnsService {
   }
 
   async rearrangeColumns(boardId: string, columnsIds: string[], userId: string) {
-    if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } }))) {
-      throw new BadRequestException("Board doesn't exists");
+    const boardExists = await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } });
+    if (!boardExists) {
+      throw new BadRequestException("Board doesn't exist");
     }
 
     const dbColumns = await this.boardColumnsRepository.findBy({
@@ -80,36 +85,36 @@ export class BoardColumnsService {
   }
 
   async update(columnId: string, dto: UpdateBoardColumnDto, userId: string): Promise<BoardColumn> {
-    const entity = await this.findById(columnId, userId);
-    Object.assign(entity, dto);
-    return this.boardColumnsRepository.save(entity);
+    const boardColumn = await this.findById(columnId, userId);
+    Object.assign(boardColumn, dto);
+    return this.boardColumnsRepository.save(boardColumn);
   }
 
   async remove(columnId: string, userId: string): Promise<BoardColumn> {
-    const entity = await this.findById(columnId, userId);
-    return this.boardColumnsRepository.remove(entity);
+    const boardColumn = await this.findById(columnId, userId);
+    return this.boardColumnsRepository.remove(boardColumn);
   }
 
   private async findById(id: string, userId: string) {
-    const entity = await this.boardColumnsRepository.findOneBy({
+    const boardColumn = await this.boardColumnsRepository.findOneBy({
       id: id,
       board: { user: { id: userId } },
     });
-    if (!entity) {
-      throw new BadRequestException("Columns doesn't exists");
+    if (!boardColumn) {
+      throw new BadRequestException("Column doesn't exist");
     }
-    return entity;
+    return boardColumn;
   }
 
   private validateRearrange(columnsIds: string[], dbColumnsIds: string[]) {
     if (!columnsIds.length) {
-      throw new BadRequestException('List of Column Ids is empty');
+      throw new BadRequestException('List of column ids is empty');
     }
     if (this.hasDuplicates(columnsIds)) {
       throw new BadRequestException('List has duplicated Id.');
     }
     if (!this.areEquals(columnsIds, dbColumnsIds)) {
-      throw new BadRequestException('List must contains all Columns from this board.');
+      throw new BadRequestException('List must contains all columns from this board.');
     }
   }
 
