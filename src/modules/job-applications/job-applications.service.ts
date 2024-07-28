@@ -19,83 +19,89 @@ export class JobApplicationsService {
   ) {}
 
   async findBy(columnId: string, userId: string): Promise<JobApplication[]> {
-    const boadColumn = await this.boardColumnsRepository.findOne({
+    const boardColumn = await this.boardColumnsRepository.findOne({
       where: { id: columnId },
       relations: { board: true, jobApplications: true },
     });
 
-    const boardId = boadColumn.board.id;
-    if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } }))) {
+    const boardId = boardColumn.board.id;
+    const boardExists = await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } });
+    if (!boardExists) {
       throw new BadRequestException("Board Column doesn't exists");
     }
 
-    return boadColumn.jobApplications;
+    return boardColumn.jobApplications;
   }
 
   async create(dto: CreateJobApplicationDto, userId: string): Promise<JobApplication> {
-    const boadColumn = await this.boardColumnsRepository.findOne({
+    const boardColumn = await this.boardColumnsRepository.findOne({
       where: { id: dto.columnId },
       relations: { board: true },
     });
 
-    if (!boadColumn) {
+    if (!boardColumn) {
       throw new BadRequestException("Board Column doesn't exists");
     }
 
-    const boardId = boadColumn.board.id;
-    if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } }))) {
+    const boardId = boardColumn.board.id;
+    const boardExists = await this.boardsRepository.existsBy({
+      id: boardId,
+      user: { id: userId },
+    });
+    if (!boardExists) {
       throw new BadRequestException("Board Column doesn't exists");
     }
 
-    const entity = this.jobApplicationsRepository.create({
+    const jobApplication = this.jobApplicationsRepository.create({
       title: dto.title,
       companyName: dto.companyName,
       description: dto.description,
       column: { id: dto.columnId },
     });
 
-    return await this.jobApplicationsRepository.save(entity);
+    return await this.jobApplicationsRepository.save(jobApplication);
   }
 
   async update(id: string, dto: UpdateJobApplicationDto, userId: string): Promise<JobApplication> {
-    // Checks wherther JobApplication exists for the current user
+    // Checks whether jobApplication exists for the current user
     await this.findOne(id, userId);
 
-    const entity = await this.jobApplicationsRepository.findOne({
+    const jobApplication = await this.jobApplicationsRepository.findOne({
       where: { id },
       relations: { column: true },
     });
 
     // Updates the column_id field
-    if (dto.columnId && entity.column.id !== dto.columnId) {
-      if (!(await this.boardColumnsRepository.existsBy({ id: dto.columnId }))) {
+    if (dto.columnId && jobApplication.column.id !== dto.columnId) {
+      const boardColumnExists = await this.boardColumnsRepository.existsBy({ id: dto.columnId });
+      if (!boardColumnExists) {
         throw new BadRequestException(`Board Column with '${dto.columnId}' id doesn't exists`);
       }
-      entity.column.id = dto.columnId;
+      jobApplication.column.id = dto.columnId;
     }
     // Updates the rest fields
-    Object.assign(entity, dto);
+    Object.assign(jobApplication, dto);
 
-    return this.jobApplicationsRepository.save(entity);
+    return this.jobApplicationsRepository.save(jobApplication);
   }
 
   async delete(id: string, userId: string) {
-    const entity = await this.findOne(id, userId);
-    return this.jobApplicationsRepository.delete(entity);
+    const jobApplication = await this.findOne(id, userId);
+    return this.jobApplicationsRepository.delete(jobApplication);
   }
 
   private async findOne(jobId: string, userId: string): Promise<JobApplication> {
-    const entity = await this.jobApplicationsRepository
+    const jobApplication = await this.jobApplicationsRepository
       .createQueryBuilder('job')
       .innerJoin(BoardColumn, 'column', 'column.id = job.column_id')
       .innerJoin(Board, 'board', 'board.id = column.board_id')
       .where('board.user_id = :userId', { userId })
       .getOne();
 
-    if (entity == null) {
+    if (jobApplication == null) {
       throw new BadRequestException(`Job Application with '${jobId}' id doesn't exists`);
     }
 
-    return entity;
+    return jobApplication;
   }
 }
