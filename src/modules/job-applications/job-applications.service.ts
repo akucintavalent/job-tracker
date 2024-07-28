@@ -27,7 +27,7 @@ export class JobApplicationsService {
     const boardId = boardColumn.board.id;
     const boardExists = await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } });
     if (!boardExists) {
-      throw new BadRequestException("Board Column doesn't exists");
+      throw new BadRequestException("Board column doesn't exists");
     }
 
     return boardColumn.jobApplications;
@@ -40,7 +40,7 @@ export class JobApplicationsService {
     });
 
     if (!boardColumn) {
-      throw new BadRequestException("Board Column doesn't exists");
+      throw new BadRequestException("Board column doesn't exists");
     }
 
     const boardId = boardColumn.board.id;
@@ -49,7 +49,7 @@ export class JobApplicationsService {
       user: { id: userId },
     });
     if (!boardExists) {
-      throw new BadRequestException("Board Column doesn't exists");
+      throw new BadRequestException("Board column doesn't exists");
     }
 
     const jobApplication = this.jobApplicationsRepository.create({
@@ -75,7 +75,7 @@ export class JobApplicationsService {
     if (dto.columnId && jobApplication.column.id !== dto.columnId) {
       const boardColumnExists = await this.boardColumnsRepository.existsBy({ id: dto.columnId });
       if (!boardColumnExists) {
-        throw new BadRequestException(`Board Column with '${dto.columnId}' id doesn't exists`);
+        throw new BadRequestException(`Board column with '${dto.columnId}' id doesn't exists`);
       }
       jobApplication.column.id = dto.columnId;
     }
@@ -99,7 +99,7 @@ export class JobApplicationsService {
       .getOne();
 
     if (jobApplication == null) {
-      throw new BadRequestException(`Job Application with '${jobId}' id doesn't exists`);
+      throw new BadRequestException(`Job application with '${jobId}' id doesn't exists`);
     }
 
     return jobApplication;

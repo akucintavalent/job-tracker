@@ -92,7 +92,7 @@ export class ContactsController {
   }
 
   @Delete('/jobApplication/unassign')
-  @ApiOperation({ summary: 'Unassigns Contact from JobAplication' })
+  @ApiOperation({ summary: 'Unassigns Contact from JobApplication' })
   @ApiResponse({
     status: 201,
     description: 'Contact assigned',
@@ -105,7 +105,7 @@ export class ContactsController {
     @Body() body: AssignContactToJobApplication,
     @AuthUser() user: AuthUserDto,
   ) {
-    await this.contactService.unassigContactFromJobApplication(
+    await this.contactService.unassignContactFromJobApplication(
       body.contactId,
       body.jobApplicationId,
       user.userId,
