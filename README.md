@@ -51,9 +51,13 @@ yarn run test:cov
 ## How to
 ### Create a new DB migration
 ```bash
-yarn run typeorm migration:generate src/migrations/{name} -d src/data-source.ts
+yarn run migration:generate {name}
 ```
 ### Revert the last migration
 ```bash
-yarn run typeorm migration:revert -- -d src/data-source.ts
+yarn run migration:revert
 ```
+
+### Create an empty migration
+```bash
+yarn run migration:create {name}
