@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import { UsersModule } from './modules/users/users.module';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
-import { getDataSourceOptions } from '../database.config';
+import { getDataSourceOptions } from './database.config';
 import { BoardsModule } from './modules/boards/boards.module';
 import { BoardColumnsModule } from './modules/board-columns/board-columns.module';
 import { JobApplicationsModule } from './modules/job-applications/job-applications.module';

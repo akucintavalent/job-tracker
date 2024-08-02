@@ -15,8 +15,8 @@ import { CreateBoardColumnDto } from './dtos/create-board-column.dto';
 import { UpdateBoardColumnDto } from './dtos/update-board-column.dto';
 import { BoardColumnDto } from './dtos/board-column.dto';
 import { BoardColumnMapper } from './board-columns.mapper';
-import { AuthUser } from 'src/modules/auth/user.decorator';
-import { AuthUserDto } from 'src/modules/auth/dtos/auth.user.dto';
+import { AuthUser } from '../auth/user.decorator';
+import { AuthUserDto } from '../auth/dtos/auth.user.dto';
 
 @ApiTags('board-columns')
 @Controller('board-columns')

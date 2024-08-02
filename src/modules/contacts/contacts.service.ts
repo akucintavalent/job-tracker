@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Contact } from './entities/contact.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Board } from 'src/modules/boards/entities/board.entity';
+import { Board } from '../boards/entities/board.entity';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { ContactMapper } from './contacts.mapper';
 import { JobApplication } from '../job-applications/entities/job-application.entity';

@@ -10,8 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthUserDto } from 'src/modules/auth/dtos/auth.user.dto';
-import { AuthUser } from 'src/modules/auth/user.decorator';
+import { AuthUserDto } from '../auth/dtos/auth.user.dto';
+import { AuthUser } from '../auth/user.decorator';
 import { ContactsService } from './contacts.service';
 import { FindContactDto } from './dtos/find-contact.dto';
 import { CreateContactDto } from './dtos/create-contact.dto';

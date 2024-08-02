@@ -4,8 +4,8 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtTokensDto } from './dtos/jwt-tokens.dto';
 import { ConfigService } from '@nestjs/config';
-import { UserFriendlyErrorMessages } from 'src/exceptions/user-friendly-error-messages';
-import { CustomHttpException } from 'src/exceptions/custom.exception';
+import { UserFriendlyErrorMessages } from '../../exceptions/user-friendly-error-messages';
+import { CustomHttpException } from '../../exceptions/custom.exception';
 
 @Injectable()
 export class AuthService {

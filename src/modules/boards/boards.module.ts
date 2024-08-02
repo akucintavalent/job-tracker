@@ -5,7 +5,7 @@ import { Board } from './entities/board.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { BoardMapper } from './boards.mapper';
-import { BoardColumnsModule } from 'src/modules/board-columns/board-columns.module';
+import { BoardColumnsModule } from '../board-columns/board-columns.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Board, User]), BoardColumnsModule],

@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateJobApplicationDto } from './dtos/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dtos/update-job-application.dto';
-import { Board } from 'src/modules/boards/entities/board.entity';
+import { Board } from '../boards/entities/board.entity';
 
 @Injectable()
 export class JobApplicationsService {

@@ -16,8 +16,8 @@ import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
 import { BoardMapper } from './boards.mapper';
 import { BoardDto } from './dtos/board.dto';
-import { AuthUser } from 'src/modules/auth/user.decorator';
-import { AuthUserDto } from 'src/modules/auth/dtos/auth.user.dto';
+import { AuthUser } from '../auth/user.decorator';
+import { AuthUserDto } from '../auth/dtos/auth.user.dto';
 
 @ApiTags('boards')
 @Controller('boards')

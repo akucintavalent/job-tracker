@@ -1,11 +1,11 @@
 import { DataSourceOptions } from 'typeorm';
 import { config } from 'dotenv';
-import { User } from './src/modules/users/entities/user.entity';
-import { Board } from './src/modules/boards/entities/board.entity';
-import { BoardColumn } from './src/modules/board-columns/entities/board-column.entity';
-import { JobApplication } from './src/modules/job-applications/entities/job-application.entity';
-import { UserCodeVerification } from './src/modules/users/entities/user.code.verification.entity';
-import { Contact } from './src/modules/contacts/entities/contact.entity';
+import { User } from './modules/users/entities/user.entity';
+import { Board } from './modules/boards/entities/board.entity';
+import { BoardColumn } from './modules/board-columns/entities/board-column.entity';
+import { JobApplication } from './modules/job-applications/entities/job-application.entity';
+import { UserCodeVerification } from './modules/users/entities/user.code.verification.entity';
+import { Contact } from './modules/contacts/entities/contact.entity';
 
 if (process.env.NODE_ENV !== 'test') {
   config();
@@ -21,7 +21,7 @@ export const getDataSourceOptions = (): DataSourceOptions => ({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   entities: [User, Board, BoardColumn, JobApplication, UserCodeVerification, Contact],
-  migrations: ['dist/src/migrations/*.js'],
+  migrations: ['dist/migrations/**/*.js'],
   migrationsRun: false,
   synchronize: false,
   logging: ['query', 'warn', 'error'],
