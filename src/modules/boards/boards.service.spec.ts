@@ -75,7 +75,7 @@ describe('BoardsService', () => {
     expect(usersRepository).toBeDefined();
   });
 
-  it('should save board', async () => {
+  it('should save a board', async () => {
     const dto = { name: validBoard.name } as CreateBoardDto;
     expect(await service.create(dto, validUser.id)).toEqual(validBoard);
   });
@@ -110,7 +110,7 @@ describe('BoardsService', () => {
     });
   });
 
-  it('should update board', async () => {
+  it('should update a board', async () => {
     // Act
     await service.update(validBoard.id, { isArchived: true }, validUser.id);
 
@@ -118,7 +118,7 @@ describe('BoardsService', () => {
     expect(boardsRepository.save).toHaveBeenCalledWith({ ...validBoard, isArchived: true });
   });
 
-  it('should remove board', async () => {
+  it('should remove a board', async () => {
     // Act
     await service.remove(validBoard.id, validUser.id);
 
