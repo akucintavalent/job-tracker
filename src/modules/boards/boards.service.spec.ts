@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { newGuid } from '../../utils/guid';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { FindBoardDto } from './dtos/find-board.dto';
+import { BoardColumn } from '../board-columns/entities/board-column.entity';
 
 describe('BoardsService', () => {
   let service: BoardsService;
@@ -28,6 +29,8 @@ describe('BoardsService', () => {
     user: validUser,
   } as Board;
 
+  const validBoardColumns = [{ id: newGuid(), name: 'Wishlist' } as BoardColumn];
+
   beforeEach(async () => {
     const usersRepositoryMock = {
       findOneBy: jest.fn().mockImplementation(() => Promise.resolve(validUser)),
@@ -44,6 +47,10 @@ describe('BoardsService', () => {
       remove: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
     };
 
+    const boardColumnsServiceMock = {
+      findColumns: jest.fn().mockImplementation(() => Promise.resolve(validBoardColumns)),
+    };
+
     const boardRepositoryToken = getRepositoryToken(Board);
     const userRepositoryToken = getRepositoryToken(User);
     const module: TestingModule = await Test.createTestingModule({
@@ -51,7 +58,7 @@ describe('BoardsService', () => {
         BoardsService,
         { provide: boardRepositoryToken, useValue: boardsRepositoryMock },
         { provide: userRepositoryToken, useValue: usersRepositoryMock },
-        { provide: BoardColumnsService, useValue: {} },
+        { provide: BoardColumnsService, useValue: boardColumnsServiceMock },
       ],
     }).compile();
 
@@ -94,6 +101,13 @@ describe('BoardsService', () => {
 
     // Act & Assert
     expect(() => service.findBy(dto, validUser.id)).rejects.toThrow("User doesn't exists");
+  });
+
+  it('should find a board with columns', async () => {
+    expect(await service.findOne(validBoard.id, validUser.id)).toEqual({
+      ...validBoard,
+      columns: validBoardColumns,
+    });
   });
 
   it('should update board', async () => {
