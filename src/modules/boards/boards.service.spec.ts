@@ -95,4 +95,12 @@ describe('BoardsService', () => {
     // Act & Assert
     expect(() => service.findBy(dto, validUser.id)).rejects.toThrow("User doesn't exists");
   });
+
+  it('should update board', async () => {
+    // Act
+    await service.update(validBoard.id, { isArchived: true }, validUser.id);
+
+    // Assert
+    expect(boardsRepository.save).toHaveBeenCalledWith({ ...validBoard, isArchived: true });
+  });
 });
