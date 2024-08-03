@@ -103,4 +103,12 @@ describe('BoardsService', () => {
     // Assert
     expect(boardsRepository.save).toHaveBeenCalledWith({ ...validBoard, isArchived: true });
   });
+
+  it('should remove board', async () => {
+    // Act
+    await service.remove(validBoard.id, validUser.id);
+
+    // Assert
+    expect(boardsRepository.remove).toHaveBeenCalledWith(validBoard);
+  });
 });
