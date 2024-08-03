@@ -7,6 +7,7 @@ import { BoardColumnsService } from '../board-columns/board-columns.service';
 import { UserRole } from '../users/enums/user-role.enum';
 import { Repository } from 'typeorm';
 import { newGuid } from '../../utils/guid';
+import { CreateBoardDto } from './dtos/create-board.dto';
 
 describe('BoardsService', () => {
   let service: BoardsService;
@@ -29,12 +30,14 @@ describe('BoardsService', () => {
   beforeEach(async () => {
     const usersRepositoryMock = {
       findOneBy: jest.fn().mockImplementation(() => Promise.resolve(validUser)),
+      existsBy: jest.fn().mockImplementation(() => Promise.resolve(validUser)),
       save: jest.fn().mockImplementation(() => Promise.resolve(validUser)),
       remove: jest.fn().mockImplementation(() => Promise.resolve(validUser)),
     };
 
     const boardsRepositoryMock = {
       findOneBy: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
+      create: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
       save: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
       remove: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
     };
@@ -61,5 +64,19 @@ describe('BoardsService', () => {
     expect(boardColumnsService).toBeDefined();
     expect(boardsRepository).toBeDefined();
     expect(usersRepository).toBeDefined();
+  });
+
+  it('should save board', async () => {
+    const dto = { name: validBoard.name } as CreateBoardDto;
+    expect(await service.create(dto, validUser.id)).toEqual(validBoard);
+  });
+
+  it('should throw an exception', async () => {
+    // Arrange
+    const dto = { name: validBoard.name } as CreateBoardDto;
+    jest.spyOn(usersRepository, 'existsBy').mockImplementation(() => null);
+
+    // Act & Assert
+    expect(() => service.create(dto, validUser.id)).rejects.toThrow("User doesn't exists");
   });
 });
