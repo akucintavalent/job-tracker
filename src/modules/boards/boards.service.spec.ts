@@ -8,6 +8,7 @@ import { UserRole } from '../users/enums/user-role.enum';
 import { Repository } from 'typeorm';
 import { newGuid } from '../../utils/guid';
 import { CreateBoardDto } from './dtos/create-board.dto';
+import { FindBoardDto } from './dtos/find-board.dto';
 
 describe('BoardsService', () => {
   let service: BoardsService;
@@ -37,6 +38,7 @@ describe('BoardsService', () => {
 
     const boardsRepositoryMock = {
       findOneBy: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
+      findBy: jest.fn().mockImplementation(() => Promise.resolve([validBoard])),
       create: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
       save: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
       remove: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
@@ -71,12 +73,26 @@ describe('BoardsService', () => {
     expect(await service.create(dto, validUser.id)).toEqual(validBoard);
   });
 
-  it('should throw an exception', async () => {
+  it('should throw an exception on create()', async () => {
     // Arrange
     const dto = { name: validBoard.name } as CreateBoardDto;
     jest.spyOn(usersRepository, 'existsBy').mockImplementation(() => null);
 
     // Act & Assert
     expect(() => service.create(dto, validUser.id)).rejects.toThrow("User doesn't exists");
+  });
+
+  it('should find boards', async () => {
+    const dto = { name: validBoard.name } as FindBoardDto;
+    expect(await service.findBy(dto, validUser.id)).toEqual([validBoard]);
+  });
+
+  it('should throw an exception on findBy()', async () => {
+    // Arrange
+    const dto = { name: validBoard.name } as FindBoardDto;
+    jest.spyOn(usersRepository, 'existsBy').mockImplementation(() => null);
+
+    // Act & Assert
+    expect(() => service.findBy(dto, validUser.id)).rejects.toThrow("User doesn't exists");
   });
 });
