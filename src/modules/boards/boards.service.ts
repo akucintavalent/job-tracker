@@ -46,7 +46,11 @@ export class BoardsService {
     await this.boardsColumnService.createDefaultBoardColumns(board.id, userId);
   }
 
-  findBy(query: FindBoardDto, userId: string): Promise<Board[]> {
+  async findBy(query: FindBoardDto, userId: string): Promise<Board[]> {
+    if (!(await this.usersRepository.existsBy({ id: userId }))) {
+      throw new BadRequestException("User doesn't exists");
+    }
+
     const boardName = query.name?.length > 0 ? Like(`%${query.name}%`) : null;
 
     return this.boardsRepository.findBy({
