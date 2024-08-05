@@ -30,6 +30,7 @@ import { EmailVerificationCodeDto } from './dtos/email-verification-code.dto';
 import { CreateEmailVerificationCode } from './dtos/create-email-verification-code.dto';
 import { VerificationProcess } from './enums/verification-process.enum';
 import { DeleteUserDto } from './dtos/delete-user.dto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -147,5 +148,24 @@ export class UsersController {
   @Post('/verification/verify-email-code')
   async verifyEmailCode(@Body() body: EmailVerificationCodeDto) {
     await this.usersService.updateIsEmailVerified(body);
+  }
+
+  @Post('/:id/reset-password')
+  @ApiOperation({
+    summary: "Resets user's password",
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Password is reset',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Wrong old password',
+  })
+  async resetPassword(
+    @Body() { oldPassword, newPassword }: ResetPasswordDto,
+    @AuthUser() { userId }: AuthUserDto,
+  ) {
+    await this.usersService.resetPassword(userId, oldPassword, newPassword);
   }
 }
