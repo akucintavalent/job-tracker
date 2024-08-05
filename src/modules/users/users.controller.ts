@@ -146,10 +146,6 @@ export class UsersController {
   @Public()
   @Post('/verification/verify-email-code')
   async verifyEmailCode(@Body() body: EmailVerificationCodeDto) {
-    await this.codeVerification.verifyUserCode(
-      { email: body.email },
-      body.code,
-      VerificationProcess.USER_SIGNUP,
-    );
+    await this.usersService.updateIsEmailVerified(body);
   }
 }

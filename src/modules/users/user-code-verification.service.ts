@@ -43,13 +43,6 @@ export class UserCodeVerificationService {
       this.throw(UserFriendlyErrorMessages.EMAIL_CODE_EXPIRED);
     }
 
-    const userEntity = await this.userRepository.findOne({
-      where: [{ email: user.email }, { id: user.id }],
-    });
-
-    userEntity.isEmailVerified = true;
-    await this.userRepository.save(userEntity);
-
     await this.userCodeVerificationRepository.softDelete({ id: entity.id });
     return true;
   }

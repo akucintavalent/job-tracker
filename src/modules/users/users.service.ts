@@ -11,6 +11,7 @@ import { UserCodeVerificationService } from './user-code-verification.service';
 import { BoardsService } from '../boards/boards.service';
 import { VerificationProcess } from './enums/verification-process.enum';
 import * as bcrypt from 'bcrypt';
+import { EmailVerificationCodeDto } from './dtos/email-verification-code.dto';
 
 @Injectable()
 export class UsersService {
@@ -66,6 +67,18 @@ export class UsersService {
       user.password = await bcrypt.hash(dto.password, 10);
     }
     return this.usersRepository.save(user);
+  }
+
+  async updateIsEmailVerified(body: EmailVerificationCodeDto) {
+    await this.userCodeVerificationService.verifyUserCode(
+      { email: body.email },
+      body.code,
+      VerificationProcess.USER_SIGNUP,
+    );
+
+    const userEntity = await this.usersRepository.findOneBy({ email: body.email });
+    userEntity.isEmailVerified = true;
+    await this.usersRepository.save(userEntity);
   }
 
   async remove(id: string, code: string): Promise<User> {
