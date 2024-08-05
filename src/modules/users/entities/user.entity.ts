@@ -32,7 +32,6 @@ export class User extends BaseEntity {
   userCodeVerifications: UserCodeVerification[];
 
   @BeforeInsert()
-  @BeforeUpdate()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
