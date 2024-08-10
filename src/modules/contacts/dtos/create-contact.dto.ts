@@ -31,7 +31,7 @@ export class CreateContactDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ nullable: true })
-  twiterUrl: string;
+  twitterUrl: string;
 
   @IsString()
   @IsOptional()

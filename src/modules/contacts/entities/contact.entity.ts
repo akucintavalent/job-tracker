@@ -28,8 +28,8 @@ export class Contact extends BaseEntity {
   @Column({ name: 'company_location', nullable: true })
   companyLocation: string;
 
-  @Column({ name: 'twiter_url', nullable: true })
-  twiterUrl: string;
+  @Column({ name: 'twitter_url', nullable: true })
+  twitterUrl: string;
 
   @Column({ name: 'facebook_url', nullable: true })
   facebookUrl: string;
