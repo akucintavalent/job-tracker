@@ -71,7 +71,7 @@ export class ContactsController {
   }
 
   @Post('/jobApplication/assign')
-  @ApiOperation({ summary: 'Assigns Contact to JobAplication' })
+  @ApiOperation({ summary: 'Assigns Contact to JobApplication' })
   @ApiResponse({
     status: 201,
     description: 'Contact assigned',
