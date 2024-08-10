@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class ResetPasswordDto {
   @IsString()
@@ -6,4 +6,7 @@ export class ResetPasswordDto {
 
   @IsString()
   newPassword: string;
+
+  @IsEmail()
+  email: string;
 }
