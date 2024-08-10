@@ -63,9 +63,6 @@ export class UsersService {
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     const user = await this.findOneBy({ id });
     Object.assign(user, dto);
-    if (dto.password) {
-      user.password = await bcrypt.hash(dto.password, 10);
-    }
     return this.usersRepository.save(user);
   }
 
@@ -92,8 +89,8 @@ export class UsersService {
     return this.usersRepository.remove(user);
   }
 
-  async resetPassword(id: string, oldPassword: string, newPassword: string): Promise<void> {
-    const user = await this.findOneBy({ id });
+  async resetPassword(email: string, oldPassword: string, newPassword: string): Promise<void> {
+    const user = await this.findOneBy({ email });
 
     const passwordIsCorrect = await bcrypt.compare(oldPassword, user.password);
     if (!passwordIsCorrect) {
