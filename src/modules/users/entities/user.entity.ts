@@ -40,7 +40,7 @@ export class User extends BaseEntity {
 
   @BeforeUpdate()
   async hashPasswordIfNeeded() {
-    if (this.password !== this.currentPassword) {
+    if (this.password !== this.currentPassword && !this.password.startsWith('$2b$10$')) {
       await this.hashPassword();
     }
   }
