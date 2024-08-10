@@ -150,7 +150,8 @@ export class UsersController {
     await this.usersService.updateIsEmailVerified(body);
   }
 
-  @Post('/:id/reset-password')
+  @Public()
+  @Post('/reset-password')
   @ApiOperation({
     summary: "Resets user's password",
   })
@@ -162,10 +163,7 @@ export class UsersController {
     status: 401,
     description: 'Unauthorized - Wrong old password',
   })
-  async resetPassword(
-    @Body() { oldPassword, newPassword }: ResetPasswordDto,
-    @AuthUser() { userId }: AuthUserDto,
-  ) {
-    await this.usersService.resetPassword(userId, oldPassword, newPassword);
+  async resetPassword(@Body() { oldPassword, newPassword, email }: ResetPasswordDto) {
+    await this.usersService.resetPassword(email, oldPassword, newPassword);
   }
 }
