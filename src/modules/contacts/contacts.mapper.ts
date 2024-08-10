@@ -21,7 +21,7 @@ export class ContactMapper {
     dto.jobTitle = entity.jobTitle;
     dto.companyName = entity.companyName;
     dto.companyLocation = entity.companyLocation;
-    dto.twiterUrl = entity.twiterUrl;
+    dto.twitterUrl = entity.twitterUrl;
     dto.facebookUrl = entity.facebookUrl;
     dto.linkedinUrl = entity.linkedinUrl;
     dto.githubUrl = entity.githubUrl;
@@ -38,7 +38,7 @@ export class ContactMapper {
     entity.jobTitle = dto.jobTitle;
     entity.companyName = dto.companyName;
     entity.companyLocation = dto.companyLocation;
-    entity.twiterUrl = dto.twiterUrl;
+    entity.twitterUrl = dto.twitterUrl;
     entity.facebookUrl = dto.facebookUrl;
     entity.linkedinUrl = dto.linkedinUrl;
     entity.githubUrl = dto.githubUrl;

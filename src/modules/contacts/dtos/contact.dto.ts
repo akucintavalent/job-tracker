@@ -28,7 +28,7 @@ export class ContactDto {
   companyLocation: string;
 
   @ApiProperty()
-  twiterUrl: string;
+  twitterUrl: string;
 
   @ApiProperty()
   facebookUrl: string;
