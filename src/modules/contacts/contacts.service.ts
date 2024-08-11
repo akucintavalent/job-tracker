@@ -9,11 +9,17 @@ import { JobApplication } from '../job-applications/entities/job-application.ent
 import { FindContactDto } from './dtos/find-contact.dto';
 import { ContactDto } from './dtos/contact.dto';
 import { UpdateContact } from './dtos/update-contact.dto';
+import { ContactEmail } from './entities/contact-emails.entity';
+import { ContactPhone } from './entities/contact-phones.entity';
 
 @Injectable()
 export class ContactsService {
   constructor(
     @InjectRepository(Contact) private readonly contactsRepository: Repository<Contact>,
+    @InjectRepository(ContactEmail)
+    private readonly contactEmailsRepository: Repository<ContactEmail>,
+    @InjectRepository(ContactPhone)
+    private readonly contactPhonesRepository: Repository<ContactPhone>,
     @InjectRepository(Board) private readonly boardsRepository: Repository<Board>,
     @InjectRepository(JobApplication)
     private readonly jobApplicationsRepository: Repository<JobApplication>,
@@ -31,8 +37,30 @@ export class ContactsService {
 
   async create(userId: string, body: CreateContactDto) {
     await this.validateBoardExists(userId, body.boardId);
-    const contactEntity = this.mapper.toEntity(body);
-    return this.contactsRepository.save(contactEntity);
+    let contactEntity = this.mapper.toEntity(body);
+    contactEntity = await this.contactsRepository.save(contactEntity);
+
+    if (body.emails) {
+      const contactEmails = body.emails.map((e) => {
+        const contactEmail = new ContactEmail();
+        contactEmail.email = e.email;
+        contactEmail.type = e.type;
+        contactEmail.contact = contactEntity;
+        return contactEmail;
+      });
+      await this.contactEmailsRepository.insert(contactEmails);
+    }
+
+    if (body.phones) {
+      const contactPhones = body.phones.map((p) => {
+        const contactPhone = new ContactPhone();
+        contactPhone.phone = p.phone;
+        contactPhone.type = p.type;
+        contactPhone.contact = contactEntity;
+        return contactPhone;
+      });
+      await this.contactPhonesRepository.insert(contactPhones);
+    }
   }
 
   async update(userId: string, body: UpdateContact) {
