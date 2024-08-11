@@ -19,31 +19,23 @@ export class BoardsService {
   ) {}
 
   async create(dto: CreateBoardDto, userId: string): Promise<Board> {
-    if (!(await this.usersRepository.existsBy({ id: userId }))) {
-      throw new BadRequestException("User doesn't exists");
-    }
-
-    const entity = this.boardsRepository.create({
-      name: dto.name,
-      user: { id: userId },
-    });
-
-    return this.boardsRepository.save(entity);
+    return this.createDefaultBoard(userId, dto.name);
   }
 
-  async createDefaultBoard(userId: string) {
+  async createDefaultBoard(userId: string, boardName: string = null): Promise<Board> {
     if (!(await this.usersRepository.existsBy({ id: userId }))) {
       throw new BadRequestException("User doesn't exists");
     }
 
+    const name = !boardName ? `Job Search ${new Date().getFullYear()}` : boardName;
     let board = this.boardsRepository.create({
-      name: `Job Search ${new Date().getFullYear()}`,
+      name: name,
       user: { id: userId },
     });
 
     board = await this.boardsRepository.save(board);
-
-    await this.boardsColumnService.createDefaultBoardColumns(board.id, userId);
+    board.columns = await this.boardsColumnService.createDefaultBoardColumns(board.id, userId);
+    return board;
   }
 
   async findBy(query: FindBoardDto, userId: string): Promise<Board[]> {
