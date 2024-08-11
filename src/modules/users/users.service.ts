@@ -89,13 +89,26 @@ export class UsersService {
     return this.usersRepository.remove(user);
   }
 
-  async resetPassword(email: string, oldPassword: string, newPassword: string): Promise<void> {
+  async updatePassword(email: string, oldPassword: string, newPassword: string): Promise<void> {
     const user = await this.findOneBy({ email });
 
     const passwordIsCorrect = await bcrypt.compare(oldPassword, user.password);
     if (!passwordIsCorrect) {
       throw new UnauthorizedException();
     }
+
+    user.password = newPassword;
+    await this.usersRepository.save(user);
+  }
+
+  async resetPassword(email, code, newPassword) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        email,
+        userCodeVerifications: { code, process: VerificationProcess.USER_RESET_PASSWORD },
+      },
+      relations: { userCodeVerifications: true },
+    });
 
     user.password = newPassword;
     await this.usersRepository.save(user);
