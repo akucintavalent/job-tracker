@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../../entities/base.entity';
 import { Contact } from './contact.entity';
+import { ContactCategory, ContactCategoryType } from '../enums/contact-type.enum';
 
 @Entity('contact-phones')
 export class ContactPhones extends BaseEntity {
@@ -13,4 +14,10 @@ export class ContactPhones extends BaseEntity {
 
   @Column({ length: 16 })
   phone: string;
+
+  @Column({
+    type: 'enum',
+    enum: ContactCategory,
+  })
+  type: ContactCategoryType;
 }
