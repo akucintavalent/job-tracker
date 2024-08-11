@@ -49,6 +49,9 @@ describe('BoardsService', () => {
 
     const boardColumnsServiceMock = {
       findColumns: jest.fn().mockImplementation(() => Promise.resolve(validBoardColumns)),
+      createDefaultBoardColumns: jest
+        .fn()
+        .mockImplementation(() => Promise.resolve(validBoardColumns)),
     };
 
     const boardRepositoryToken = getRepositoryToken(Board);
@@ -75,9 +78,17 @@ describe('BoardsService', () => {
     expect(usersRepository).toBeDefined();
   });
 
-  it('should save a board', async () => {
+  it('should save a board with default columns', async () => {
+    // Arrange
     const dto = { name: validBoard.name } as CreateBoardDto;
-    expect(await service.create(dto, validUser.id)).toEqual(validBoard);
+
+    // Act
+    const result = await service.create(dto, validUser.id);
+
+    // Assert
+    expect(result).toEqual(validBoard);
+    expect(result.columns).toEqual(validBoardColumns);
+    expect(boardColumnsService.createDefaultBoardColumns).toHaveBeenCalled();
   });
 
   it('should throw an exception on create()', async () => {
