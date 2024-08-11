@@ -2,10 +2,10 @@ import { IsEmail, IsString } from 'class-validator';
 
 export class ResetPasswordDto {
   @IsString()
-  oldPassword: string;
+  newPassword: string;
 
   @IsString()
-  newPassword: string;
+  code: string;
 
   @IsEmail()
   email: string;
