@@ -1,24 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { BaseEntity } from '../../../entities/base.entity';
-import { Contact } from './contact.entity';
-import { ContactCategory, ContactCategoryType } from '../enums/contact-type.enum';
+import { Column, Entity } from 'typeorm';
+import { ContactMethod } from './contact-method.entity';
 
 @Entity('contact-emails')
-export class ContactEmails extends BaseEntity {
-  @ManyToOne(() => Contact, (contact) => contact.contactEmails, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'contact_id' })
-  contact: Contact;
-
+export class ContactEmails extends ContactMethod {
   @Column()
   email: string;
-
-  @Column({
-    name: 'typee',
-    type: 'enum',
-    enum: ContactCategory,
-  })
-  typee: ContactCategoryType;
 }

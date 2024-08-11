@@ -1,6 +1,6 @@
-export enum ContactCategory {
+export enum ContactMethodTypeEnum {
   PERSONAL = 'PERSONAL',
   WORK = 'WORK',
 }
 
-export type ContactCategoryType = `${ContactCategory}`;
+export type ContactMethodType = `${ContactMethodTypeEnum}`;
