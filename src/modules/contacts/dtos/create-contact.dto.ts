@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { ContactPhoneDto } from './contact-phone.dto';
+import { ContactEmailDto } from './contact-email.dto';
 
 export class CreateContactDto {
   @IsString()
@@ -52,4 +54,12 @@ export class CreateContactDto {
   @IsOptional()
   @ApiProperty({ nullable: true })
   comment: string;
+
+  @ApiProperty({ nullable: true })
+  @IsOptional()
+  phones: [ContactPhoneDto];
+
+  @ApiProperty({ nullable: true })
+  @IsOptional()
+  emails: [ContactEmailDto];
 }

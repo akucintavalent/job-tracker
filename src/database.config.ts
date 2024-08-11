@@ -6,8 +6,8 @@ import { BoardColumn } from './modules/board-columns/entities/board-column.entit
 import { JobApplication } from './modules/job-applications/entities/job-application.entity';
 import { UserCodeVerification } from './modules/users/entities/user.code.verification.entity';
 import { Contact } from './modules/contacts/entities/contact.entity';
-import { ContactEmails } from './modules/contacts/entities/contact-emails.entity';
-import { ContactPhones } from './modules/contacts/entities/contact-phones.entity';
+import { ContactEmail } from './modules/contacts/entities/contact-emails.entity';
+import { ContactPhone } from './modules/contacts/entities/contact-phones.entity';
 
 if (process.env.NODE_ENV !== 'test') {
   config();
@@ -29,8 +29,8 @@ export const getDataSourceOptions = (): DataSourceOptions => ({
     JobApplication,
     UserCodeVerification,
     Contact,
-    ContactEmails,
-    ContactPhones,
+    ContactEmail,
+    ContactPhone,
   ],
   migrations: ['dist/migrations/**/*.js'],
   migrationsRun: false,
