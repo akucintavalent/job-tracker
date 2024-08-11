@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from '../boards/entities/board.entity';
 import { CreateContactDto } from './dtos/create-contact.dto';
-import { ContactMapper } from './contacts.mapper';
+import { ContactMapper } from './mappers/contacts.mapper';
 import { JobApplication } from '../job-applications/entities/job-application.entity';
 import { FindContactDto } from './dtos/find-contact.dto';
 import { ContactDto } from './dtos/contact.dto';
