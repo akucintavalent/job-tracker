@@ -11,6 +11,8 @@ import { ContactDto } from './dtos/contact.dto';
 import { UpdateContact } from './dtos/update-contact.dto';
 import { ContactEmail } from './entities/contact-emails.entity';
 import { ContactPhone } from './entities/contact-phones.entity';
+import { ContactEmailMapper } from './mappers/contact-email.mapper';
+import { ContactPhoneMapper } from './mappers/contact-phone.mapper';
 
 @Injectable()
 export class ContactsService {
@@ -24,6 +26,8 @@ export class ContactsService {
     @InjectRepository(JobApplication)
     private readonly jobApplicationsRepository: Repository<JobApplication>,
     private readonly mapper: ContactMapper,
+    private readonly contactEmailMapper: ContactEmailMapper,
+    private readonly contactPhoneMapper: ContactPhoneMapper,
   ) {}
 
   async find(userId: string, params: FindContactDto): Promise<ContactDto[]> {
@@ -42,9 +46,7 @@ export class ContactsService {
 
     if (body.emails) {
       const contactEmails = body.emails.map((e) => {
-        const contactEmail = new ContactEmail();
-        contactEmail.email = e.email;
-        contactEmail.type = e.type;
+        const contactEmail = this.contactEmailMapper.toEntity(e);
         contactEmail.contact = contactEntity;
         return contactEmail;
       });
@@ -53,9 +55,7 @@ export class ContactsService {
 
     if (body.phones) {
       const contactPhones = body.phones.map((p) => {
-        const contactPhone = new ContactPhone();
-        contactPhone.phone = p.phone;
-        contactPhone.type = p.type;
+        const contactPhone = this.contactPhoneMapper.toEntity(p);
         contactPhone.contact = contactEntity;
         return contactPhone;
       });

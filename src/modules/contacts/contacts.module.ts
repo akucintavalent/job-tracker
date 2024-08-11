@@ -8,10 +8,12 @@ import { ContactMapper } from './mappers/contacts.mapper';
 import { JobApplication } from '../job-applications/entities/job-application.entity';
 import { ContactEmail } from './entities/contact-emails.entity';
 import { ContactPhone } from './entities/contact-phones.entity';
+import { ContactEmailMapper } from './mappers/contact-email.mapper';
+import { ContactPhoneMapper } from './mappers/contact-phone.mapper';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Contact, ContactEmail, ContactPhone, Board, JobApplication])],
-  providers: [ContactsService, ContactMapper],
+  providers: [ContactsService, ContactMapper, ContactEmailMapper, ContactPhoneMapper],
   controllers: [ContactsController],
 })
 export class ContactsModule {}
