@@ -1,18 +1,9 @@
-import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
-import { ContactMethodType, ContactMethodTypeEnum } from '../enums/contact-type.enum';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { ContactMethodDto } from './contact-method.abstract.dto';
 
-export class ContactEmailDto {
-  @ApiPropertyOptional()
-  @IsString()
-  @IsOptional()
-  id: string;
-
+export class ContactEmailDto extends ContactMethodDto {
   @ApiProperty()
   @IsEmail()
   email: string;
-
-  @ApiProperty()
-  @IsEnum(ContactMethodTypeEnum)
-  type: ContactMethodType;
 }
