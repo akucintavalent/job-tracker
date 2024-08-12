@@ -1,8 +1,8 @@
 import { IsString } from 'class-validator';
-import { ContactEmailDto } from './contact-email.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { ContactPhoneDto } from './contact-method-phone.dto';
 
-export class CreateContactEmailDto extends ContactEmailDto {
+export class CreateContactPhoneDto extends ContactPhoneDto {
   @ApiProperty()
   @IsString()
   contactId: string;

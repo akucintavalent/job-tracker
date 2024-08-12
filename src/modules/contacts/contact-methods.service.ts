@@ -5,12 +5,12 @@ import { ContactEmailMapper } from './mappers/contact-email.mapper';
 import { ContactPhoneMapper } from './mappers/contact-phone.mapper';
 import { Contact } from './entities/contact.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ContactEmailDto } from './dtos/contact-email.dto';
+import { ContactEmailDto } from './dtos/contact-method-email.dto';
 import { ArgumentInvalidException } from 'src/exceptions/argument-invalid.exceptions';
-import { ContactPhoneDto } from './dtos/contact-phone.dto';
+import { ContactPhoneDto } from './dtos/contact-method-phone.dto';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
-import { CreateContactEmailDto } from './dtos/create-contact-email.dto';
-import { CreateContactPhoneDto } from './dtos/create-contact-phone.dto';
+import { CreateContactEmailDto } from './dtos/create-contact-method-email.dto';
+import { CreateContactPhoneDto } from './dtos/create-contact-method-phone.dto';
 
 export class ContactMethodsService {
   constructor(
