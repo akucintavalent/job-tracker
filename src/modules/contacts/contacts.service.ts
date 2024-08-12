@@ -9,25 +9,17 @@ import { JobApplication } from '../job-applications/entities/job-application.ent
 import { FindContactDto } from './dtos/find-contact.dto';
 import { ContactDto } from './dtos/contact.dto';
 import { UpdateContact } from './dtos/update-contact.dto';
-import { ContactEmail } from './entities/contact-emails.entity';
-import { ContactPhone } from './entities/contact-phones.entity';
-import { ContactEmailMapper } from './mappers/contact-email.mapper';
-import { ContactPhoneMapper } from './mappers/contact-phone.mapper';
+import { ContactMethodsService } from './contact-methods.service';
 
 @Injectable()
 export class ContactsService {
   constructor(
     @InjectRepository(Contact) private readonly contactsRepository: Repository<Contact>,
-    @InjectRepository(ContactEmail)
-    private readonly contactEmailsRepository: Repository<ContactEmail>,
-    @InjectRepository(ContactPhone)
-    private readonly contactPhonesRepository: Repository<ContactPhone>,
     @InjectRepository(Board) private readonly boardsRepository: Repository<Board>,
     @InjectRepository(JobApplication)
     private readonly jobApplicationsRepository: Repository<JobApplication>,
     private readonly mapper: ContactMapper,
-    private readonly contactEmailMapper: ContactEmailMapper,
-    private readonly contactPhoneMapper: ContactPhoneMapper,
+    private readonly contactMethodService: ContactMethodsService,
   ) {}
 
   async find(userId: string, params: FindContactDto): Promise<ContactDto[]> {
@@ -45,21 +37,11 @@ export class ContactsService {
     contactEntity = await this.contactsRepository.save(contactEntity);
 
     if (body.emails) {
-      const contactEmails = body.emails.map((e) => {
-        const contactEmail = this.contactEmailMapper.toEntity(e);
-        contactEmail.contact = contactEntity;
-        return contactEmail;
-      });
-      await this.contactEmailsRepository.insert(contactEmails);
+      await this.contactMethodService.addEmailsBulk(body.emails, contactEntity);
     }
 
     if (body.phones) {
-      const contactPhones = body.phones.map((p) => {
-        const contactPhone = this.contactPhoneMapper.toEntity(p);
-        contactPhone.contact = contactEntity;
-        return contactPhone;
-      });
-      await this.contactPhonesRepository.insert(contactPhones);
+      await this.contactMethodService.addPhonesBulk(body.phones, contactEntity);
     }
   }
 
