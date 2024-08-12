@@ -18,10 +18,10 @@ import { CreateContactDto } from './dtos/create-contact.dto';
 import { AssignContactToJobApplication } from './dtos/assign-contact-to-job-application.dto';
 import { ContactDto } from './dtos/contact.dto';
 import { UpdateContact } from './dtos/update-contact.dto';
-import { CreateContactEmailDto } from './dtos/create-contact-method-email.dto';
+import { CreateContactEmailDto } from './dtos/contact-method/create-contact-method-email.dto';
 import { ContactMethodsService } from './contact-methods.service';
 import { ContactEmailMapper } from './mappers/contact-email.mapper';
-import { CreateContactPhoneDto } from './dtos/create-contact-method-phone.dto';
+import { CreateContactPhoneDto } from './dtos/contact-method/create-contact-method-phone.dto';
 import { ContactPhoneMapper } from './mappers/contact-phone.mapper';
 
 @ApiTags('contacts')

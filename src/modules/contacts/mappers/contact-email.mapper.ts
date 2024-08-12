@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ContactEmailDto } from '../dtos/contact-method-email.dto';
+import { ContactEmailDto } from '../dtos/contact-method/contact-method-email.dto';
 import { ContactEmail } from '../entities/contact-emails.entity';
 
 @Injectable()

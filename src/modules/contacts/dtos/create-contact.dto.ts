@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
-import { ContactPhoneDto } from './contact-method-phone.dto';
-import { ContactEmailDto } from './contact-method-email.dto';
+import { ContactPhoneDto } from './contact-method/contact-method-phone.dto';
+import { ContactEmailDto } from './contact-method/contact-method-email.dto';
 import { Type } from 'class-transformer';
 
 export class CreateContactDto {
