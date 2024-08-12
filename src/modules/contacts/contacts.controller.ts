@@ -190,6 +190,40 @@ export class ContactsController {
     return this.contactPhoneMapper.toDto(entity);
   }
 
+  @Delete('/contact-method/email/:id')
+  @ApiOperation({ summary: 'Deletes email contact method for a Contact' })
+  @ApiResponse({
+    status: 201,
+    description: "Contact's email updated",
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  async deleteContactMethodEmail(
+    @Param('id', ParseUUIDPipe) id: string,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    await this.contactMethodService.deleteContactMethodEmail(id, user.userId);
+  }
+
+  @Delete('/contact-method/phone/:id')
+  @ApiOperation({ summary: 'Deletes phone contact method for a Contact' })
+  @ApiResponse({
+    status: 201,
+    description: "Contact's phone updated",
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  async deleteContactMethodPhone(
+    @Param('id', ParseUUIDPipe) id: string,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    await this.contactMethodService.deleteContactMethodPhone(id, user.userId);
+  }
+
   @Delete('/:id')
   @ApiOperation({ summary: 'Deletes Contact' })
   @ApiResponse({

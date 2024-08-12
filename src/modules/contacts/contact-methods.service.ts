@@ -116,4 +116,26 @@ export class ContactMethodsService {
     Object.assign(entity, dto);
     return this.contactPhonesRepository.save(entity);
   }
+
+  async deleteContactMethodEmail(id: string, userId: string) {
+    const contactMethodExists = await this.contactEmailsRepository.existsBy({
+      id,
+      contact: { board: { user: { id: userId } } },
+    });
+
+    if (!contactMethodExists) throw new BadRequestException('ContactMethod is not found');
+
+    return this.contactEmailsRepository.softDelete({ id });
+  }
+
+  async deleteContactMethodPhone(id: string, userId: string) {
+    const contactMethodExists = await this.contactPhonesRepository.existsBy({
+      id,
+      contact: { board: { user: { id: userId } } },
+    });
+
+    if (!contactMethodExists) throw new BadRequestException('ContactMethod is not found');
+
+    return this.contactPhonesRepository.softDelete({ id });
+  }
 }
