@@ -21,6 +21,8 @@ import { UpdateContact } from './dtos/update-contact.dto';
 import { CreateContactEmailDto } from './dtos/create-contact-email.dto';
 import { ContactMethodsService } from './contact-methods.service';
 import { ContactEmailMapper } from './mappers/contact-email.mapper';
+import { CreateContactPhoneDto } from './dtos/create-contact-phone.dto';
+import { ContactPhoneMapper } from './mappers/contact-phone.mapper';
 
 @ApiTags('contacts')
 @Controller('contacts')
@@ -30,6 +32,7 @@ export class ContactsController {
     private readonly contactsService: ContactsService,
     private readonly contactMethodService: ContactMethodsService,
     private readonly contactEmailMapper: ContactEmailMapper,
+    private readonly contactPhoneMapper: ContactPhoneMapper,
   ) {}
 
   @Get()
@@ -135,6 +138,24 @@ export class ContactsController {
   ) {
     const entity = await this.contactMethodService.createContactMethodEmail(body, user.userId);
     return this.contactEmailMapper.toDto(entity);
+  }
+
+  @Post('/contact-method/phone')
+  @ApiOperation({ summary: 'Adds phone contact method for a Contact' })
+  @ApiResponse({
+    status: 201,
+    description: "Contact's phone added",
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  async createContactMethodPhone(
+    @Body() body: CreateContactPhoneDto,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    const entity = await this.contactMethodService.createContactMethodPhone(body, user.userId);
+    return this.contactPhoneMapper.toDto(entity);
   }
 
   @Delete('/:id')

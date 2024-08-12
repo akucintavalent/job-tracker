@@ -10,6 +10,7 @@ import { ArgumentInvalidException } from 'src/exceptions/argument-invalid.except
 import { ContactPhoneDto } from './dtos/contact-phone.dto';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
 import { CreateContactEmailDto } from './dtos/create-contact-email.dto';
+import { CreateContactPhoneDto } from './dtos/create-contact-phone.dto';
 
 export class ContactMethodsService {
   constructor(
@@ -67,5 +68,24 @@ export class ContactMethodsService {
     entity.contact = new Contact();
     entity.contact.id = dto.contactId;
     return this.contactEmailsRepository.save(entity);
+  }
+
+  async createContactMethodPhone(
+    dto: CreateContactPhoneDto,
+    userId: string,
+  ): Promise<ContactPhone> {
+    if (
+      !(await this.contactsRepository.existsBy({
+        id: dto.contactId,
+        board: { user: { id: userId } },
+      }))
+    ) {
+      throw new BadRequestException("Contact doesn't exists");
+    }
+
+    const entity = this.contactPhonesRepository.create(dto);
+    entity.contact = new Contact();
+    entity.contact.id = dto.contactId;
+    return this.contactPhonesRepository.save(entity);
   }
 }

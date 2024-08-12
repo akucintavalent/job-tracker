@@ -6,6 +6,7 @@ import { ContactPhone } from '../entities/contact-phones.entity';
 export class ContactPhoneMapper {
   toDto(entity: ContactPhone): ContactPhoneDto {
     const dto = new ContactPhoneDto();
+    dto.id = entity.id;
     dto.phone = entity.phone;
     dto.type = entity.type;
     return dto;
