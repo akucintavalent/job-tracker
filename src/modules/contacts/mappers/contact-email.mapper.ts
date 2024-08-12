@@ -6,6 +6,7 @@ import { ContactEmail } from '../entities/contact-emails.entity';
 export class ContactEmailMapper {
   toDto(entity: ContactEmail): ContactEmailDto {
     const dto = new ContactEmailDto();
+    dto.id = entity.id;
     dto.email = entity.email;
     dto.type = entity.type;
     return dto;

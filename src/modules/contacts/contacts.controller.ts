@@ -18,12 +18,19 @@ import { CreateContactDto } from './dtos/create-contact.dto';
 import { AssignContactToJobApplication } from './dtos/assign-contact-to-job-application.dto';
 import { ContactDto } from './dtos/contact.dto';
 import { UpdateContact } from './dtos/update-contact.dto';
+import { CreateContactEmailDto } from './dtos/create-contact-email.dto';
+import { ContactMethodsService } from './contact-methods.service';
+import { ContactEmailMapper } from './mappers/contact-email.mapper';
 
 @ApiTags('contacts')
 @Controller('contacts')
 @Controller('contacts')
 export class ContactsController {
-  constructor(private readonly contactsService: ContactsService) {}
+  constructor(
+    private readonly contactsService: ContactsService,
+    private readonly contactMethodService: ContactMethodsService,
+    private readonly contactEmailMapper: ContactEmailMapper,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Fetch all Contacts.' })
@@ -110,6 +117,24 @@ export class ContactsController {
       body.jobApplicationId,
       user.userId,
     );
+  }
+
+  @Post('/contact-method/email')
+  @ApiOperation({ summary: 'Adds email contact method for a Contact' })
+  @ApiResponse({
+    status: 201,
+    description: "Contact's email added",
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  async createContactMethodEmail(
+    @Body() body: CreateContactEmailDto,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    const entity = await this.contactMethodService.createContactMethodEmail(body, user.userId);
+    return this.contactEmailMapper.toDto(entity);
   }
 
   @Delete('/:id')

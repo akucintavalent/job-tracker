@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ContactEmailDto } from './dtos/contact-email.dto';
 import { ArgumentInvalidException } from 'src/exceptions/argument-invalid.exceptions';
 import { ContactPhoneDto } from './dtos/contact-phone.dto';
+import { BadRequestException } from 'src/exceptions/bad-request.exception';
+import { CreateContactEmailDto } from './dtos/create-contact-email.dto';
 
 export class ContactMethodsService {
   constructor(
@@ -22,7 +24,7 @@ export class ContactMethodsService {
 
   // Adds an array of contact's emails
   // Doesn't checks if contact entity exists or not
-  async addEmailsBulk(emails: ContactEmailDto[], contact: Contact) {
+  async createEmailsBulk(emails: ContactEmailDto[], contact: Contact) {
     if (!contact) throw new ArgumentInvalidException('Contact entity is required');
 
     const contactMethods = emails.map((e) => {
@@ -34,9 +36,9 @@ export class ContactMethodsService {
     await this.contactEmailsRepository.insert(contactMethods);
   }
 
-  // Adds an array of contact's emails
+  // Adds an array of contact's phones
   // Doesn't checks if contact entity exists or not
-  async addPhonesBulk(phones: ContactPhoneDto[], contact: Contact) {
+  async createPhonesBulk(phones: ContactPhoneDto[], contact: Contact) {
     if (!contact) throw new ArgumentInvalidException('Contact entity is required');
 
     const contactMethods = phones.map((p) => {
@@ -46,5 +48,24 @@ export class ContactMethodsService {
     });
 
     await this.contactPhonesRepository.insert(contactMethods);
+  }
+
+  async createContactMethodEmail(
+    dto: CreateContactEmailDto,
+    userId: string,
+  ): Promise<ContactEmail> {
+    if (
+      !(await this.contactsRepository.existsBy({
+        id: dto.contactId,
+        board: { user: { id: userId } },
+      }))
+    ) {
+      throw new BadRequestException("Contact doesn't exists");
+    }
+
+    const entity = this.contactEmailsRepository.create(dto);
+    entity.contact = new Contact();
+    entity.contact.id = dto.contactId;
+    return this.contactEmailsRepository.save(entity);
   }
 }
