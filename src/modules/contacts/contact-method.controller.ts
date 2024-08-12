@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthUserDto } from '../auth/dtos/auth.user.dto';
 import { AuthUser } from '../auth/user.decorator';
@@ -18,6 +18,42 @@ export class ContactMethodController {
     private readonly contactEmailMapper: ContactEmailMapper,
     private readonly contactPhoneMapper: ContactPhoneMapper,
   ) {}
+
+  @Get('/contact-method/email/:id')
+  @ApiOperation({ summary: 'Gets all email contact method from a Contact' })
+  @ApiResponse({
+    status: 201,
+    description: "Contact's email added",
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  async getContactMethodEmail(
+    @Param('id', ParseUUIDPipe) contactId: string,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    const entities = await this.contactMethodService.getContactMethodEmails(contactId, user.userId);
+    return entities.map(this.contactEmailMapper.toDto);
+  }
+
+  @Get('/contact-method/phone/:id')
+  @ApiOperation({ summary: 'Gets phone contact method from a Contact' })
+  @ApiResponse({
+    status: 201,
+    description: "Contact's phone added",
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  async getContactMethodPhone(
+    @Param('id', ParseUUIDPipe) id: string,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    const entities = await this.contactMethodService.getContactMethodPhones(id, user.userId);
+    return entities.map(this.contactPhoneMapper.toDto);
+  }
 
   @Post('/contact-method/email')
   @ApiOperation({ summary: 'Adds email contact method for a Contact' })

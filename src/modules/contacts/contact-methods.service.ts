@@ -51,6 +51,32 @@ export class ContactMethodsService {
     await this.contactPhonesRepository.insert(contactMethods);
   }
 
+  async getContactMethodEmails(contactId: string, userId: string): Promise<ContactEmail[]> {
+    if (
+      !(await this.contactsRepository.existsBy({
+        id: contactId,
+        board: { user: { id: userId } },
+      }))
+    ) {
+      throw new BadRequestException("Contact doesn't exists");
+    }
+
+    return this.contactEmailsRepository.findBy({ contact: { id: contactId } });
+  }
+
+  async getContactMethodPhones(contactId: string, userId: string): Promise<ContactPhone[]> {
+    if (
+      !(await this.contactsRepository.existsBy({
+        id: contactId,
+        board: { user: { id: userId } },
+      }))
+    ) {
+      throw new BadRequestException("Contact doesn't exists");
+    }
+
+    return this.contactPhonesRepository.findBy({ contact: { id: contactId } });
+  }
+
   async createContactMethodEmail(
     dto: CreateContactEmailDto,
     userId: string,
