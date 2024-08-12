@@ -23,8 +23,8 @@ import { ContactMethodsService } from './contact-methods.service';
 import { ContactEmailMapper } from './mappers/contact-email.mapper';
 import { CreateContactPhoneDto } from './dtos/contact-method/create-contact-method-phone.dto';
 import { ContactPhoneMapper } from './mappers/contact-phone.mapper';
-import { ContactEmailDto } from './dtos/contact-method/contact-method-email.dto';
-import { ContactPhoneDto } from './dtos/contact-method/contact-method-phone.dto';
+import { ContactMethodEmailDto } from './dtos/contact-method/contact-method-email.dto';
+import { ContactMethodPhoneDto } from './dtos/contact-method/contact-method-phone.dto';
 
 @ApiTags('contacts')
 @Controller('contacts')
@@ -170,7 +170,10 @@ export class ContactsController {
     status: 400,
     description: 'Validation error',
   })
-  async updateContactMethodEmail(@Body() body: ContactEmailDto, @AuthUser() user: AuthUserDto) {
+  async updateContactMethodEmail(
+    @Body() body: ContactMethodEmailDto,
+    @AuthUser() user: AuthUserDto,
+  ) {
     const entity = await this.contactMethodService.updateContactMethodEmail(body, user.userId);
     return this.contactEmailMapper.toDto(entity);
   }
@@ -185,7 +188,10 @@ export class ContactsController {
     status: 400,
     description: 'Validation error',
   })
-  async updateContactMethodPhone(@Body() body: ContactPhoneDto, @AuthUser() user: AuthUserDto) {
+  async updateContactMethodPhone(
+    @Body() body: ContactMethodPhoneDto,
+    @AuthUser() user: AuthUserDto,
+  ) {
     const entity = await this.contactMethodService.updateContactMethodPhone(body, user.userId);
     return this.contactPhoneMapper.toDto(entity);
   }
