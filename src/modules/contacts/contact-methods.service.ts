@@ -88,4 +88,32 @@ export class ContactMethodsService {
     entity.contact.id = dto.contactId;
     return this.contactPhonesRepository.save(entity);
   }
+
+  async updateContactMethodEmail(dto: ContactEmailDto, userId: string): Promise<ContactEmail> {
+    if (!dto.id) throw new BadRequestException('ContactMethod Id field is required');
+
+    const entity = await this.contactEmailsRepository.findOneBy({
+      id: dto.id,
+      contact: { board: { user: { id: userId } } },
+    });
+
+    if (!entity) throw new BadRequestException('ContactMethod is not found');
+
+    Object.assign(entity, dto);
+    return this.contactEmailsRepository.save(entity);
+  }
+
+  async updateContactMethodPhone(dto: ContactPhoneDto, userId: string): Promise<ContactPhone> {
+    if (!dto.id) throw new BadRequestException('ContactMethod Id field is required');
+
+    const entity = await this.contactPhonesRepository.findOneBy({
+      id: dto.id,
+      contact: { board: { user: { id: userId } } },
+    });
+
+    if (!entity) throw new BadRequestException('ContactMethod is not found');
+
+    Object.assign(entity, dto);
+    return this.contactPhonesRepository.save(entity);
+  }
 }
