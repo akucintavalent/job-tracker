@@ -26,7 +26,7 @@ export class ContactsService {
     if (!userId) throw new BadRequestException('userId is required');
     const contacts = await this.contactsRepository.find({
       where: { id: params.contactId, board: { id: params.boardId, user: { id: userId } } },
-      relations: { board: true, jobApplications: true },
+      relations: { board: true, jobApplications: true, contactEmails: true, contactPhones: true },
     });
     return contacts.map(this.mapper.toDto);
   }
