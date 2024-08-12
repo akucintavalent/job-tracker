@@ -11,6 +11,7 @@ import { ContactPhone } from './entities/contact-phones.entity';
 import { ContactEmailMapper } from './mappers/contact-email.mapper';
 import { ContactPhoneMapper } from './mappers/contact-phone.mapper';
 import { ContactMethodsService } from './contact-methods.service';
+import { ContactMethodController } from './contact-method.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Contact, ContactEmail, ContactPhone, Board, JobApplication])],
@@ -21,6 +22,6 @@ import { ContactMethodsService } from './contact-methods.service';
     ContactEmailMapper,
     ContactPhoneMapper,
   ],
-  controllers: [ContactsController],
+  controllers: [ContactsController, ContactMethodController],
 })
 export class ContactsModule {}
