@@ -25,7 +25,7 @@ export class ContactMethodsService {
 
   // Adds an array of contact's emails
   // Doesn't checks if contact entity exists or not
-  async createEmailsBulk(emails: ContactMethodEmailDto[], contact: Contact) {
+  async createContactMethodEmailsBulk(emails: ContactMethodEmailDto[], contact: Contact) {
     if (!contact) throw new ArgumentInvalidException('Contact entity is required');
 
     const contactMethods = emails.map((e) => {
@@ -39,7 +39,7 @@ export class ContactMethodsService {
 
   // Adds an array of contact's phones
   // Doesn't checks if contact entity exists or not
-  async createPhonesBulk(phones: ContactMethodPhoneDto[], contact: Contact) {
+  async createContactMethodPhonesBulk(phones: ContactMethodPhoneDto[], contact: Contact) {
     if (!contact) throw new ArgumentInvalidException('Contact entity is required');
 
     const contactMethods = phones.map((p) => {

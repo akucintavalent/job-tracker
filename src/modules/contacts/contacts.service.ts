@@ -37,11 +37,11 @@ export class ContactsService {
     contactEntity = await this.contactsRepository.save(contactEntity);
 
     if (body.emails) {
-      await this.contactMethodService.createEmailsBulk(body.emails, contactEntity);
+      await this.contactMethodService.createContactMethodEmailsBulk(body.emails, contactEntity);
     }
 
     if (body.phones) {
-      await this.contactMethodService.createPhonesBulk(body.phones, contactEntity);
+      await this.contactMethodService.createContactMethodPhonesBulk(body.phones, contactEntity);
     }
   }
 
