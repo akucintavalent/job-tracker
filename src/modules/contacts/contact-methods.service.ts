@@ -5,12 +5,12 @@ import { ContactEmailMapper } from './mappers/contact-email.mapper';
 import { ContactPhoneMapper } from './mappers/contact-phone.mapper';
 import { Contact } from './entities/contact.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ContactMethodEmailDto } from './dtos/contact-method/contact-method-email.dto';
+import { ContactEmailDto } from './dtos/contact-method/contact-email.dto';
 import { ArgumentInvalidException } from 'src/exceptions/argument-invalid.exceptions';
-import { ContactMethodPhoneDto } from './dtos/contact-method/contact-method-phone.dto';
+import { ContactPhoneDto } from './dtos/contact-method/contact-phone.dto';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
-import { CreateContactEmailDto } from './dtos/contact-method/create-contact-method-email.dto';
-import { CreateContactPhoneDto } from './dtos/contact-method/create-contact-method-phone.dto';
+import { CreateContactEmailDto } from './dtos/contact-method/create-contact-email.dto';
+import { CreateContactPhoneDto } from './dtos/contact-method/create-contact-phone.dto';
 
 export class ContactMethodsService {
   constructor(
@@ -25,7 +25,7 @@ export class ContactMethodsService {
 
   // Adds an array of contact's emails
   // Doesn't checks if contact entity exists or not
-  async createContactMethodEmailsBulk(emails: ContactMethodEmailDto[], contact: Contact) {
+  async createContactMethodEmailsBulk(emails: ContactEmailDto[], contact: Contact) {
     if (!contact) throw new ArgumentInvalidException('Contact entity is required');
 
     const contactMethods = emails.map((e) => {
@@ -39,7 +39,7 @@ export class ContactMethodsService {
 
   // Adds an array of contact's phones
   // Doesn't checks if contact entity exists or not
-  async createContactMethodPhonesBulk(phones: ContactMethodPhoneDto[], contact: Contact) {
+  async createContactMethodPhonesBulk(phones: ContactPhoneDto[], contact: Contact) {
     if (!contact) throw new ArgumentInvalidException('Contact entity is required');
 
     const contactMethods = phones.map((p) => {
@@ -115,10 +115,7 @@ export class ContactMethodsService {
     return this.contactPhonesRepository.save(entity);
   }
 
-  async updateContactMethodEmail(
-    dto: ContactMethodEmailDto,
-    userId: string,
-  ): Promise<ContactEmail> {
+  async updateContactMethodEmail(dto: ContactEmailDto, userId: string): Promise<ContactEmail> {
     if (!dto.id) throw new BadRequestException('ContactMethod Id field is required');
 
     const entity = await this.contactEmailsRepository.findOneBy({
@@ -132,10 +129,7 @@ export class ContactMethodsService {
     return this.contactEmailsRepository.save(entity);
   }
 
-  async updateContactMethodPhone(
-    dto: ContactMethodPhoneDto,
-    userId: string,
-  ): Promise<ContactPhone> {
+  async updateContactMethodPhone(dto: ContactPhoneDto, userId: string): Promise<ContactPhone> {
     if (!dto.id) throw new BadRequestException('ContactMethod Id field is required');
 
     const entity = await this.contactPhonesRepository.findOneBy({

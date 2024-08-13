@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { ContactMethodEmailDto } from '../dtos/contact-method/contact-method-email.dto';
+import { ContactEmailDto } from '../dtos/contact-method/contact-email.dto';
 import { ContactEmail } from '../entities/contact-emails.entity';
 
 @Injectable()
 export class ContactEmailMapper {
-  toDto(entity: ContactEmail): ContactMethodEmailDto {
-    const dto = new ContactMethodEmailDto();
+  toDto(entity: ContactEmail): ContactEmailDto {
+    const dto = new ContactEmailDto();
     dto.id = entity.id;
     dto.email = entity.email;
     dto.type = entity.type;
     return dto;
   }
 
-  toEntity(dto: ContactMethodEmailDto): ContactEmail {
+  toEntity(dto: ContactEmailDto): ContactEmail {
     const entity = new ContactEmail();
     entity.email = dto.email;
     entity.type = dto.type;

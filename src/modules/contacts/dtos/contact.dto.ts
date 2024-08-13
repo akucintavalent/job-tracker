@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BoardDto } from '../../boards/dtos/board.dto';
 import { JobApplicationDto } from '../../job-applications/dtos/job-application.dto';
-import { ContactMethodEmailDto } from './contact-method/contact-method-email.dto';
-import { ContactMethodPhoneDto } from './contact-method/contact-method-phone.dto';
+import { ContactEmailDto } from './contact-method/contact-email.dto';
+import { ContactPhoneDto } from './contact-method/contact-phone.dto';
 
 export class ContactDto {
   @ApiProperty()
@@ -24,10 +24,10 @@ export class ContactDto {
   jobApplications: JobApplicationDto[];
 
   @ApiProperty()
-  emails: ContactMethodEmailDto[];
+  emails: ContactEmailDto[];
 
   @ApiProperty()
-  phones: ContactMethodPhoneDto[];
+  phones: ContactPhoneDto[];
 
   @ApiProperty()
   companyName: string;

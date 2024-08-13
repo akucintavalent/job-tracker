@@ -4,11 +4,11 @@ import { AuthUserDto } from '../auth/dtos/auth.user.dto';
 import { AuthUser } from '../auth/user.decorator';
 import { ContactMethodsService } from './contact-methods.service';
 import { ContactEmailMapper } from './mappers/contact-email.mapper';
-import { CreateContactPhoneDto } from './dtos/contact-method/create-contact-method-phone.dto';
+import { CreateContactPhoneDto } from './dtos/contact-method/create-contact-phone.dto';
 import { ContactPhoneMapper } from './mappers/contact-phone.mapper';
-import { ContactMethodEmailDto } from './dtos/contact-method/contact-method-email.dto';
-import { ContactMethodPhoneDto } from './dtos/contact-method/contact-method-phone.dto';
-import { CreateContactEmailDto } from './dtos/contact-method/create-contact-method-email.dto';
+import { ContactEmailDto } from './dtos/contact-method/contact-email.dto';
+import { ContactPhoneDto } from './dtos/contact-method/contact-phone.dto';
+import { CreateContactEmailDto } from './dtos/contact-method/create-contact-email.dto';
 
 @ApiTags('contacts')
 @Controller('contacts')
@@ -101,10 +101,7 @@ export class ContactMethodController {
     status: 400,
     description: 'Validation error',
   })
-  async updateContactMethodEmail(
-    @Body() body: ContactMethodEmailDto,
-    @AuthUser() user: AuthUserDto,
-  ) {
+  async updateContactMethodEmail(@Body() body: ContactEmailDto, @AuthUser() user: AuthUserDto) {
     const entity = await this.contactMethodService.updateContactMethodEmail(body, user.userId);
     return this.contactEmailMapper.toDto(entity);
   }
@@ -119,10 +116,7 @@ export class ContactMethodController {
     status: 400,
     description: 'Validation error',
   })
-  async updateContactMethodPhone(
-    @Body() body: ContactMethodPhoneDto,
-    @AuthUser() user: AuthUserDto,
-  ) {
+  async updateContactMethodPhone(@Body() body: ContactPhoneDto, @AuthUser() user: AuthUserDto) {
     const entity = await this.contactMethodService.updateContactMethodPhone(body, user.userId);
     return this.contactPhoneMapper.toDto(entity);
   }

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
-import { ContactMethodPhoneDto } from './contact-method/contact-method-phone.dto';
-import { ContactMethodEmailDto } from './contact-method/contact-method-email.dto';
+import { ContactPhoneDto } from './contact-method/contact-phone.dto';
+import { ContactEmailDto } from './contact-method/contact-email.dto';
 import { Type } from 'class-transformer';
 
 export class CreateContactDto {
@@ -60,13 +60,13 @@ export class CreateContactDto {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => ContactMethodPhoneDto)
-  phones: ContactMethodPhoneDto[];
+  @Type(() => ContactPhoneDto)
+  phones: ContactPhoneDto[];
 
   @ApiProperty({ nullable: true })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => ContactMethodEmailDto)
-  emails: ContactMethodEmailDto[];
+  @Type(() => ContactEmailDto)
+  emails: ContactEmailDto[];
 }
