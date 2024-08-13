@@ -22,8 +22,9 @@ export class ContactMethodController {
   @Get('/contact-method/email/:id')
   @ApiOperation({ summary: 'Gets all email contact method from a Contact' })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: "Contact's email added",
+    type: [ContactEmailDto],
   })
   @ApiResponse({
     status: 400,
@@ -40,8 +41,9 @@ export class ContactMethodController {
   @Get('/contact-method/phone/:id')
   @ApiOperation({ summary: 'Gets phone contact method from a Contact' })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: "Contact's phone added",
+    type: [ContactPhoneDto],
   })
   @ApiResponse({
     status: 400,
@@ -60,6 +62,7 @@ export class ContactMethodController {
   @ApiResponse({
     status: 201,
     description: "Contact's email added",
+    type: [ContactEmailDto],
   })
   @ApiResponse({
     status: 400,
@@ -78,6 +81,7 @@ export class ContactMethodController {
   @ApiResponse({
     status: 201,
     description: "Contact's phone added",
+    type: [ContactPhoneDto],
   })
   @ApiResponse({
     status: 400,
@@ -96,6 +100,7 @@ export class ContactMethodController {
   @ApiResponse({
     status: 201,
     description: "Contact's email updated",
+    type: [ContactEmailDto],
   })
   @ApiResponse({
     status: 400,
@@ -111,6 +116,7 @@ export class ContactMethodController {
   @ApiResponse({
     status: 201,
     description: "Contact's phone updated",
+    type: [ContactPhoneDto],
   })
   @ApiResponse({
     status: 400,
