@@ -102,13 +102,13 @@ export class UsersService {
   }
 
   async resetPassword(email, code, newPassword) {
-    const user = await this.usersRepository.findOne({
-      where: {
-        email,
-        userCodeVerifications: { code, process: VerificationProcess.USER_RESET_PASSWORD },
-      },
-      relations: { userCodeVerifications: true },
-    });
+    await this.userCodeVerificationService.verifyUserCode(
+      { email },
+      code,
+      VerificationProcess.USER_RESET_PASSWORD,
+    );
+
+    const user = await this.findOneBy({ email });
 
     if (!user) {
       throw new NotFoundException('User with given email and verification code not found.');
