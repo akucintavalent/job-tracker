@@ -6,10 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { BoardMapper } from './boards.mapper';
 import { BoardColumnsModule } from '../board-columns/board-columns.module';
+import { BoardsAllController } from './boards-all.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Board, User]), BoardColumnsModule],
-  controllers: [BoardsController],
+  controllers: [BoardsController, BoardsAllController],
   providers: [BoardsService, BoardMapper],
   exports: [BoardsService],
 })
