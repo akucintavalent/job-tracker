@@ -30,6 +30,8 @@ import { EmailVerificationCodeDto } from './dtos/email-verification-code.dto';
 import { CreateEmailVerificationCode } from './dtos/create-email-verification-code.dto';
 import { VerificationProcess } from './enums/verification-process.enum';
 import { DeleteUserDto } from './dtos/delete-user.dto';
+import { UpdatePasswordDto } from './dtos/update-password.dto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -99,7 +101,7 @@ export class UsersController {
 
   @Post('/delete/create-verification-code')
   @ApiOperation({
-    summary: "Creates & sends user's code. Must be called before DELETE `/users`",
+    summary: "Creates & sends user's code. Must be called before DELETE /users",
   })
   @ApiResponse({
     status: 201,
@@ -110,7 +112,7 @@ export class UsersController {
     description: 'Validation error',
   })
   @ApiNotFoundResponse({ description: 'User not found' })
-  async createVerificationCode(@AuthUser() user: AuthUserDto) {
+  async createVerificationCodeForDeletion(@AuthUser() user: AuthUserDto) {
     await this.codeVerification.createAndSendVerificationCode(
       user.email,
       VerificationProcess.USER_DELETE,
@@ -120,7 +122,7 @@ export class UsersController {
   @Delete()
   @ApiOperation({
     summary:
-      'Permanently deletes user from the system. Must be called after POST `/users/delete/create-verification-code`',
+      'Permanently deletes user from the system. Must be called after POST /users/delete/create-verification-code',
   })
   @ApiResponse({
     status: 201,
@@ -147,5 +149,64 @@ export class UsersController {
   @Post('/verification/verify-email-code')
   async verifyEmailCode(@Body() body: EmailVerificationCodeDto) {
     await this.usersService.updateIsEmailVerified(body);
+  }
+
+  @Post('/update-password')
+  @ApiOperation({
+    summary: "Updates user's password",
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Password is updated',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Wrong old password',
+  })
+  async updatePassword(
+    @AuthUser() { email }: AuthUserDto,
+    @Body() { oldPassword, newPassword }: UpdatePasswordDto,
+  ) {
+    await this.usersService.updatePassword(email, oldPassword, newPassword);
+  }
+
+  @Public()
+  @Post('/reset-password/create-verification-code')
+  @ApiOperation({
+    summary: "Creates & sends user's code. Must be called before POST /reset-password",
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'User code created and sent',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  async createVerificationCodeForPasswordReset(@Body() { email }: CreateEmailVerificationCode) {
+    await this.codeVerification.createAndSendVerificationCode(
+      email,
+      VerificationProcess.USER_RESET_PASSWORD,
+    );
+  }
+
+  @Public()
+  @Post('/reset-password')
+  @ApiOperation({
+    summary:
+      "Resets user's password. Must be called after POST /reset-password/create-verification-code",
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'User password is changed',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error',
+  })
+  @ApiNotFoundResponse({ description: 'User with given email and verification code not found' })
+  async resetPassword(@Body() { email, code, newPassword }: ResetPasswordDto) {
+    await this.usersService.resetPassword(email, code, newPassword);
   }
 }

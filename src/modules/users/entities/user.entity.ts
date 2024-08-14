@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, Entity, OneToMany } from 'typeorm';
+import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { UserRole, UserRoleType } from '../enums/user-role.enum';
@@ -31,8 +31,23 @@ export class User extends BaseEntity {
   @OneToMany(() => UserCodeVerification, (userCode) => userCode.user)
   userCodeVerifications: UserCodeVerification[];
 
+  private currentPassword: string;
+
+  @AfterLoad()
+  loadCurrentPassword() {
+    this.currentPassword = this.password;
+  }
+
+  @BeforeUpdate()
+  async hashPasswordIfNeeded() {
+    if (this.password !== this.currentPassword && !this.password.startsWith('$2b$10$')) {
+      await this.hashPassword();
+    }
+  }
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
+    this.currentPassword = this.password;
   }
 }

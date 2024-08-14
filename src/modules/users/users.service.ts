@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -63,9 +63,6 @@ export class UsersService {
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     const user = await this.findOneBy({ id });
     Object.assign(user, dto);
-    if (dto.password) {
-      user.password = await bcrypt.hash(dto.password, 10);
-    }
     return this.usersRepository.save(user);
   }
 
@@ -90,5 +87,30 @@ export class UsersService {
 
     const user = await this.findOneBy({ id });
     return this.usersRepository.remove(user);
+  }
+
+  async updatePassword(email: string, oldPassword: string, newPassword: string): Promise<void> {
+    const user = await this.findOneBy({ email });
+
+    const passwordIsCorrect = await bcrypt.compare(oldPassword, user.password);
+    if (!passwordIsCorrect) {
+      throw new UnauthorizedException();
+    }
+
+    user.password = newPassword;
+    await this.usersRepository.save(user);
+  }
+
+  async resetPassword(email, code, newPassword) {
+    await this.userCodeVerificationService.verifyUserCode(
+      { email },
+      code,
+      VerificationProcess.USER_RESET_PASSWORD,
+    );
+
+    const user = await this.findOneBy({ email });
+
+    user.password = newPassword;
+    await this.usersRepository.save(user);
   }
 }
