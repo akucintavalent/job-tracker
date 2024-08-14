@@ -56,13 +56,13 @@ export class ContactMethodsService {
   }
 
   async getContactMethodEmails(contactId: string, userId: string): Promise<ContactEmail[]> {
-    await this.validContactExists(contactId, userId);
+    await this.validateContactExists(contactId, userId);
 
     return this.contactEmailsRepository.findBy({ contact: { id: contactId } });
   }
 
   async getContactMethodPhones(contactId: string, userId: string): Promise<ContactPhone[]> {
-    await this.validContactExists(contactId, userId);
+    await this.validateContactExists(contactId, userId);
 
     return this.contactPhonesRepository.findBy({ contact: { id: contactId } });
   }
@@ -71,7 +71,7 @@ export class ContactMethodsService {
     contactEmailDto: CreateContactEmailDto,
     userId: string,
   ): Promise<ContactEmail> {
-    await this.validContactExists(contactEmailDto.contactId, userId);
+    await this.validateContactExists(contactEmailDto.contactId, userId);
 
     const entity = this.contactEmailsRepository.create(contactEmailDto);
     entity.contact = new Contact();
@@ -83,7 +83,7 @@ export class ContactMethodsService {
     contactPhoneDto: CreateContactPhoneDto,
     userId: string,
   ): Promise<ContactPhone> {
-    await this.validContactExists(contactPhoneDto.contactId, userId);
+    await this.validateContactExists(contactPhoneDto.contactId, userId);
 
     const entity = this.contactPhonesRepository.create(contactPhoneDto);
     entity.contact = new Contact();
@@ -159,7 +159,7 @@ export class ContactMethodsService {
     return this.contactPhonesRepository.softDelete({ id });
   }
 
-  private async validContactExists(contactId: string, userId: string) {
+  private async validateContactExists(contactId: string, userId: string) {
     const isContactExists = !(await this.contactsRepository.existsBy({
       id: contactId,
       board: { user: { id: userId } },
