@@ -57,6 +57,17 @@ export class BoardsService {
     return board;
   }
 
+  async getAllBoardsWithData(userId: string): Promise<Board[]> {
+    const boardsEntities = await this.boardsRepository.findBy({ user: { id: userId } });
+    await Promise.all(
+      boardsEntities.map(async (board) => {
+        board.columns = await this.boardsColumnService.findColumns(board.id, userId);
+        return board;
+      }),
+    );
+    return boardsEntities;
+  }
+
   async update(boardId: string, dto: UpdateBoardDto, userId: string): Promise<Board> {
     const board = await this.findBoard(boardId, userId);
     Object.assign(board, dto);
