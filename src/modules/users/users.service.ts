@@ -110,10 +110,6 @@ export class UsersService {
 
     const user = await this.findOneBy({ email });
 
-    if (!user) {
-      throw new NotFoundException('User with given email and verification code not found.');
-    }
-
     user.password = newPassword;
     await this.usersRepository.save(user);
   }
