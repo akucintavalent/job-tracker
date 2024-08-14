@@ -4,11 +4,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from '../boards/entities/board.entity';
 import { CreateContactDto } from './dtos/create-contact.dto';
-import { ContactMapper } from './contacts.mapper';
+import { ContactMapper } from './mappers/contacts.mapper';
 import { JobApplication } from '../job-applications/entities/job-application.entity';
 import { FindContactDto } from './dtos/find-contact.dto';
 import { ContactDto } from './dtos/contact.dto';
 import { UpdateContact } from './dtos/update-contact.dto';
+import { ContactMethodsService } from './contact-methods.service';
 
 @Injectable()
 export class ContactsService {
@@ -18,21 +19,32 @@ export class ContactsService {
     @InjectRepository(JobApplication)
     private readonly jobApplicationsRepository: Repository<JobApplication>,
     private readonly mapper: ContactMapper,
+    private readonly contactMethodService: ContactMethodsService,
   ) {}
 
   async find(userId: string, params: FindContactDto): Promise<ContactDto[]> {
-    if (!userId) throw new BadRequestException('userId is required');
+    if (!userId) {
+      throw new BadRequestException('userId is required');
+    }
     const contacts = await this.contactsRepository.find({
       where: { id: params.contactId, board: { id: params.boardId, user: { id: userId } } },
-      relations: { board: true, jobApplications: true },
+      relations: { board: true, jobApplications: true, contactEmails: true, contactPhones: true },
     });
     return contacts.map(this.mapper.toDto);
   }
 
   async create(userId: string, body: CreateContactDto) {
     await this.validateBoardExists(userId, body.boardId);
-    const contactEntity = this.mapper.toEntity(body);
-    return this.contactsRepository.save(contactEntity);
+    let contactEntity = this.mapper.toEntity(body);
+    contactEntity = await this.contactsRepository.save(contactEntity);
+
+    if (body.emails) {
+      await this.contactMethodService.createContactMethodEmailsBulk(body.emails, contactEntity);
+    }
+
+    if (body.phones) {
+      await this.contactMethodService.createContactMethodPhonesBulk(body.phones, contactEntity);
+    }
   }
 
   async update(userId: string, body: UpdateContact) {

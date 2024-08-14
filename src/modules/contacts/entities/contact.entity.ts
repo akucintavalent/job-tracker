@@ -1,7 +1,9 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../entities/base.entity';
 import { Board } from '../../boards/entities/board.entity';
 import { JobApplication } from '../../job-applications/entities/job-application.entity';
+import { ContactEmail } from './contact-emails.entity';
+import { ContactPhone } from './contact-phones.entity';
 
 @Entity('contacts')
 export class Contact extends BaseEntity {
@@ -21,6 +23,12 @@ export class Contact extends BaseEntity {
   @ManyToMany(() => JobApplication, (job) => job.contacts, { onDelete: 'CASCADE' })
   @JoinTable()
   jobApplications: JobApplication[];
+
+  @OneToMany(() => ContactEmail, (contactEmails) => contactEmails.contact)
+  contactEmails: ContactEmail[];
+
+  @OneToMany(() => ContactPhone, (contactPhones) => contactPhones.contact)
+  contactPhones: ContactPhone[];
 
   @Column({ name: 'company_name', nullable: true })
   companyName: string;
