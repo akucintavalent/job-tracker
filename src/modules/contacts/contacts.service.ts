@@ -23,7 +23,9 @@ export class ContactsService {
   ) {}
 
   async find(userId: string, params: FindContactDto): Promise<ContactDto[]> {
-    if (!userId) throw new BadRequestException('userId is required');
+    if (!userId) {
+      throw new BadRequestException('userId is required');
+    }
     const contacts = await this.contactsRepository.find({
       where: { id: params.contactId, board: { id: params.boardId, user: { id: userId } } },
       relations: { board: true, jobApplications: true, contactEmails: true, contactPhones: true },

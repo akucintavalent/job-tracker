@@ -12,7 +12,7 @@ import { CreateContactEmailDto } from './dtos/contact-method/create-contact-emai
 
 @ApiTags('contacts')
 @Controller('contacts')
-export class ContactMethodController {
+export class ContactMethodsController {
   constructor(
     private readonly contactMethodService: ContactMethodsService,
     private readonly contactEmailMapper: ContactEmailMapper,
@@ -20,7 +20,7 @@ export class ContactMethodController {
   ) {}
 
   @Get('/contact-method/email/:id')
-  @ApiOperation({ summary: 'Gets all email contact method from a Contact' })
+  @ApiOperation({ summary: 'Gets all email contact methods from a contact' })
   @ApiResponse({
     status: 200,
     description: "Contact's email added",
@@ -39,7 +39,7 @@ export class ContactMethodController {
   }
 
   @Get('/contact-method/phone/:id')
-  @ApiOperation({ summary: 'Gets phone contact method from a Contact' })
+  @ApiOperation({ summary: 'Gets all phone contact methods from a contact' })
   @ApiResponse({
     status: 200,
     description: "Contact's phone added",
@@ -58,7 +58,7 @@ export class ContactMethodController {
   }
 
   @Post('/contact-method/email')
-  @ApiOperation({ summary: 'Adds email contact method for a Contact' })
+  @ApiOperation({ summary: 'Adds email contact methods from a contact' })
   @ApiResponse({
     status: 201,
     description: "Contact's email added",
@@ -69,15 +69,18 @@ export class ContactMethodController {
     description: 'Validation error',
   })
   async createContactMethodEmail(
-    @Body() body: CreateContactEmailDto,
+    @Body() contactEmailDto: CreateContactEmailDto,
     @AuthUser() user: AuthUserDto,
   ) {
-    const entity = await this.contactMethodService.createContactMethodEmail(body, user.userId);
+    const entity = await this.contactMethodService.createContactMethodEmail(
+      contactEmailDto,
+      user.userId,
+    );
     return this.contactEmailMapper.toDto(entity);
   }
 
   @Post('/contact-method/phone')
-  @ApiOperation({ summary: 'Adds phone contact method for a Contact' })
+  @ApiOperation({ summary: 'Adds phone contact methods for a contact' })
   @ApiResponse({
     status: 201,
     description: "Contact's phone added",
@@ -88,15 +91,18 @@ export class ContactMethodController {
     description: 'Validation error',
   })
   async createContactMethodPhone(
-    @Body() body: CreateContactPhoneDto,
+    @Body() contactPhoneDto: CreateContactPhoneDto,
     @AuthUser() user: AuthUserDto,
   ) {
-    const entity = await this.contactMethodService.createContactMethodPhone(body, user.userId);
+    const entity = await this.contactMethodService.createContactMethodPhone(
+      contactPhoneDto,
+      user.userId,
+    );
     return this.contactPhoneMapper.toDto(entity);
   }
 
   @Put('/contact-method/email')
-  @ApiOperation({ summary: 'Updates email contact method for a Contact' })
+  @ApiOperation({ summary: 'Updates email contact methods from a contact' })
   @ApiResponse({
     status: 201,
     description: "Contact's email updated",
@@ -106,13 +112,19 @@ export class ContactMethodController {
     status: 400,
     description: 'Validation error',
   })
-  async updateContactMethodEmail(@Body() body: ContactEmailDto, @AuthUser() user: AuthUserDto) {
-    const entity = await this.contactMethodService.updateContactMethodEmail(body, user.userId);
+  async updateContactMethodEmail(
+    @Body() contactEmailDto: ContactEmailDto,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    const entity = await this.contactMethodService.updateContactMethodEmail(
+      contactEmailDto,
+      user.userId,
+    );
     return this.contactEmailMapper.toDto(entity);
   }
 
   @Put('/contact-method/phone')
-  @ApiOperation({ summary: 'Updates phone contact method for a Contact' })
+  @ApiOperation({ summary: 'Updates phone contact methods for a contact' })
   @ApiResponse({
     status: 201,
     description: "Contact's phone updated",
@@ -122,13 +134,19 @@ export class ContactMethodController {
     status: 400,
     description: 'Validation error',
   })
-  async updateContactMethodPhone(@Body() body: ContactPhoneDto, @AuthUser() user: AuthUserDto) {
-    const entity = await this.contactMethodService.updateContactMethodPhone(body, user.userId);
+  async updateContactMethodPhone(
+    @Body() contactPhoneDto: ContactPhoneDto,
+    @AuthUser() user: AuthUserDto,
+  ) {
+    const entity = await this.contactMethodService.updateContactMethodPhone(
+      contactPhoneDto,
+      user.userId,
+    );
     return this.contactPhoneMapper.toDto(entity);
   }
 
   @Delete('/contact-method/email/:id')
-  @ApiOperation({ summary: 'Deletes email contact method for a Contact' })
+  @ApiOperation({ summary: 'Deletes email contact methods from a contact' })
   @ApiResponse({
     status: 201,
     description: "Contact's email updated",
@@ -145,7 +163,7 @@ export class ContactMethodController {
   }
 
   @Delete('/contact-method/phone/:id')
-  @ApiOperation({ summary: 'Deletes phone contact method for a Contact' })
+  @ApiOperation({ summary: 'Deletes phone contact methods for a contact' })
   @ApiResponse({
     status: 201,
     description: "Contact's phone updated",

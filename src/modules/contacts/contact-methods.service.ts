@@ -24,9 +24,11 @@ export class ContactMethodsService {
   ) {}
 
   // Adds an array of contact's emails
-  // Doesn't checks if contact entity exists or not
+  // Doesn't check if contact entity exists or not
   async createContactMethodEmailsBulk(emails: ContactEmailDto[], contact: Contact) {
-    if (!contact) throw new ArgumentInvalidException('Contact entity is required');
+    if (!contact) {
+      throw new ArgumentInvalidException('Contact entity is required');
+    }
 
     const contactMethods = emails.map((e) => {
       const contactMethod = this.contactEmailMapper.toEntity(e);
@@ -38,9 +40,11 @@ export class ContactMethodsService {
   }
 
   // Adds an array of contact's phones
-  // Doesn't checks if contact entity exists or not
+  // Doesn't check if contact entity exists or not
   async createContactMethodPhonesBulk(phones: ContactPhoneDto[], contact: Contact) {
-    if (!contact) throw new ArgumentInvalidException('Contact entity is required');
+    if (!contact) {
+      throw new ArgumentInvalidException('Contact entity is required');
+    }
 
     const contactMethods = phones.map((p) => {
       const contactMethod = this.contactPhoneMapper.toEntity(p);
@@ -52,94 +56,80 @@ export class ContactMethodsService {
   }
 
   async getContactMethodEmails(contactId: string, userId: string): Promise<ContactEmail[]> {
-    if (
-      !(await this.contactsRepository.existsBy({
-        id: contactId,
-        board: { user: { id: userId } },
-      }))
-    ) {
-      throw new BadRequestException("Contact doesn't exists");
-    }
+    await this.validContactExists(contactId, userId);
 
     return this.contactEmailsRepository.findBy({ contact: { id: contactId } });
   }
 
   async getContactMethodPhones(contactId: string, userId: string): Promise<ContactPhone[]> {
-    if (
-      !(await this.contactsRepository.existsBy({
-        id: contactId,
-        board: { user: { id: userId } },
-      }))
-    ) {
-      throw new BadRequestException("Contact doesn't exists");
-    }
+    await this.validContactExists(contactId, userId);
 
     return this.contactPhonesRepository.findBy({ contact: { id: contactId } });
   }
 
   async createContactMethodEmail(
-    dto: CreateContactEmailDto,
+    contactEmailDto: CreateContactEmailDto,
     userId: string,
   ): Promise<ContactEmail> {
-    if (
-      !(await this.contactsRepository.existsBy({
-        id: dto.contactId,
-        board: { user: { id: userId } },
-      }))
-    ) {
-      throw new BadRequestException("Contact doesn't exists");
-    }
+    await this.validContactExists(contactEmailDto.contactId, userId);
 
-    const entity = this.contactEmailsRepository.create(dto);
+    const entity = this.contactEmailsRepository.create(contactEmailDto);
     entity.contact = new Contact();
-    entity.contact.id = dto.contactId;
+    entity.contact.id = contactEmailDto.contactId;
     return this.contactEmailsRepository.save(entity);
   }
 
   async createContactMethodPhone(
-    dto: CreateContactPhoneDto,
+    contactPhoneDto: CreateContactPhoneDto,
     userId: string,
   ): Promise<ContactPhone> {
-    if (
-      !(await this.contactsRepository.existsBy({
-        id: dto.contactId,
-        board: { user: { id: userId } },
-      }))
-    ) {
-      throw new BadRequestException("Contact doesn't exists");
-    }
+    await this.validContactExists(contactPhoneDto.contactId, userId);
 
-    const entity = this.contactPhonesRepository.create(dto);
+    const entity = this.contactPhonesRepository.create(contactPhoneDto);
     entity.contact = new Contact();
-    entity.contact.id = dto.contactId;
+    entity.contact.id = contactPhoneDto.contactId;
     return this.contactPhonesRepository.save(entity);
   }
 
-  async updateContactMethodEmail(dto: ContactEmailDto, userId: string): Promise<ContactEmail> {
-    if (!dto.id) throw new BadRequestException('ContactMethod Id field is required');
+  async updateContactMethodEmail(
+    contactEmailDto: ContactEmailDto,
+    userId: string,
+  ): Promise<ContactEmail> {
+    if (!contactEmailDto.id) {
+      throw new BadRequestException('ContactMethod Id field is required');
+    }
 
     const entity = await this.contactEmailsRepository.findOneBy({
-      id: dto.id,
+      id: contactEmailDto.id,
       contact: { board: { user: { id: userId } } },
     });
 
-    if (!entity) throw new BadRequestException('ContactMethod is not found');
+    if (!entity) {
+      throw new BadRequestException('ContactMethod is not found');
+    }
 
-    Object.assign(entity, dto);
+    Object.assign(entity, contactEmailDto);
     return this.contactEmailsRepository.save(entity);
   }
 
-  async updateContactMethodPhone(dto: ContactPhoneDto, userId: string): Promise<ContactPhone> {
-    if (!dto.id) throw new BadRequestException('ContactMethod Id field is required');
+  async updateContactMethodPhone(
+    contactPhoneDto: ContactPhoneDto,
+    userId: string,
+  ): Promise<ContactPhone> {
+    if (!contactPhoneDto.id) {
+      throw new BadRequestException('ContactMethod Id field is required');
+    }
 
     const entity = await this.contactPhonesRepository.findOneBy({
-      id: dto.id,
+      id: contactPhoneDto.id,
       contact: { board: { user: { id: userId } } },
     });
 
-    if (!entity) throw new BadRequestException('ContactMethod is not found');
+    if (!entity) {
+      throw new BadRequestException('ContactMethod is not found');
+    }
 
-    Object.assign(entity, dto);
+    Object.assign(entity, contactPhoneDto);
     return this.contactPhonesRepository.save(entity);
   }
 
@@ -149,7 +139,9 @@ export class ContactMethodsService {
       contact: { board: { user: { id: userId } } },
     });
 
-    if (!contactMethodExists) throw new BadRequestException('ContactMethod is not found');
+    if (!contactMethodExists) {
+      throw new BadRequestException('ContactMethod is not found');
+    }
 
     return this.contactEmailsRepository.softDelete({ id });
   }
@@ -160,8 +152,20 @@ export class ContactMethodsService {
       contact: { board: { user: { id: userId } } },
     });
 
-    if (!contactMethodExists) throw new BadRequestException('ContactMethod is not found');
+    if (!contactMethodExists) {
+      throw new BadRequestException('ContactMethod is not found');
+    }
 
     return this.contactPhonesRepository.softDelete({ id });
+  }
+
+  private async validContactExists(contactId: string, userId: string) {
+    const isContactExists = !(await this.contactsRepository.existsBy({
+      id: contactId,
+      board: { user: { id: userId } },
+    }));
+    if (isContactExists) {
+      throw new BadRequestException("Contact doesn't exists");
+    }
   }
 }
