@@ -29,6 +29,7 @@ export class ContactsService {
     const contacts = await this.contactsRepository.find({
       where: { id: params.contactId, board: { id: params.boardId, user: { id: userId } } },
       relations: { board: true, jobApplications: true, contactEmails: true, contactPhones: true },
+      order: { createdAt: 'ASC' },
     });
     return contacts.map(this.mapper.toDto);
   }
