@@ -42,6 +42,7 @@ describe('BoardsService', () => {
     const boardsRepositoryMock = {
       findOneBy: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
       findBy: jest.fn().mockImplementation(() => Promise.resolve([validBoard])),
+      find: jest.fn().mockImplementation(() => Promise.resolve([validBoard])),
       create: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
       save: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
       remove: jest.fn().mockImplementation(() => Promise.resolve(validBoard)),
