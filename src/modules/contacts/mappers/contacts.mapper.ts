@@ -30,6 +30,8 @@ export class ContactMapper {
     dto.linkedinUrl = entity.linkedinUrl;
     dto.githubUrl = entity.githubUrl;
     dto.comment = entity.comment;
+    dto.createdAt = entity.createdAt;
+    dto.updatedAt = entity.updatedAt;
     dto.board = boardMapper.toDto(entity.board);
     dto.jobApplications = entity.jobApplications?.map(jobApplicationMapper.toDto);
     dto.emails = entity.contactEmails?.map(contactMethodEmailMapper.toDto);

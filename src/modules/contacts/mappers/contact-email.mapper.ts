@@ -9,6 +9,8 @@ export class ContactEmailMapper {
     dto.id = entity.id;
     dto.email = entity.email;
     dto.type = entity.type;
+    dto.createdAt = entity.createdAt;
+    dto.updatedAt = entity.updatedAt;
     return dto;
   }
 

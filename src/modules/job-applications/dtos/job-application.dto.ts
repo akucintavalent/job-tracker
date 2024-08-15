@@ -1,9 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { BaseDto } from '../../../dtos/base.dto';
 
-export class JobApplicationDto {
-  @ApiProperty({ type: 'string', format: 'uuid' })
-  id: string;
-
+export class JobApplicationDto extends BaseDto {
   @ApiProperty()
   title: string;
 
