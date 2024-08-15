@@ -1,5 +1,15 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthUserDto } from '../auth/dtos/auth.user.dto';
 import { AuthUser } from '../auth/user.decorator';
 import { ContactMethodsService } from './contact-methods.service';
@@ -19,8 +29,9 @@ export class ContactMethodsController {
     private readonly contactPhoneMapper: ContactPhoneMapper,
   ) {}
 
-  @Get('/contact-method/email/:id')
+  @Get('/contact-method/email')
   @ApiOperation({ summary: 'Gets all email contact methods from a contact' })
+  @ApiParam({ name: 'contactId', required: true })
   @ApiResponse({
     status: 200,
     description: "Contact's email added",
@@ -31,15 +42,16 @@ export class ContactMethodsController {
     description: 'Validation error',
   })
   async getContactMethodEmail(
-    @Param('id', ParseUUIDPipe) contactId: string,
+    @Query('contactId', ParseUUIDPipe) contactId: string,
     @AuthUser() user: AuthUserDto,
   ) {
     const entities = await this.contactMethodService.getContactMethodEmails(contactId, user.userId);
     return entities.map(this.contactEmailMapper.toDto);
   }
 
-  @Get('/contact-method/phone/:id')
+  @Get('/contact-method/phone')
   @ApiOperation({ summary: 'Gets all phone contact methods from a contact' })
+  @ApiParam({ name: 'contactId', required: true })
   @ApiResponse({
     status: 200,
     description: "Contact's phone added",
@@ -50,10 +62,10 @@ export class ContactMethodsController {
     description: 'Validation error',
   })
   async getContactMethodPhone(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Query('contactId', ParseUUIDPipe) contactId: string,
     @AuthUser() user: AuthUserDto,
   ) {
-    const entities = await this.contactMethodService.getContactMethodPhones(id, user.userId);
+    const entities = await this.contactMethodService.getContactMethodPhones(contactId, user.userId);
     return entities.map(this.contactPhoneMapper.toDto);
   }
 
