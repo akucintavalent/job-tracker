@@ -45,9 +45,12 @@ export class BoardsService {
 
     const boardName = query.name?.length > 0 ? Like(`%${query.name}%`) : null;
 
-    return this.boardsRepository.findBy({
-      name: boardName,
-      user: { id: userId },
+    return this.boardsRepository.find({
+      where: {
+        name: boardName,
+        user: { id: userId },
+      },
+      order: { createdAt: 'ASC' },
     });
   }
 
@@ -58,7 +61,10 @@ export class BoardsService {
   }
 
   async getAllBoardsWithData(userId: string): Promise<Board[]> {
-    const boardsEntities = await this.boardsRepository.findBy({ user: { id: userId } });
+    const boardsEntities = await this.boardsRepository.find({
+      where: { user: { id: userId } },
+      order: { createdAt: 'ASC' },
+    });
     await Promise.all(
       boardsEntities.map(async (board) => {
         board.columns = await this.boardsColumnService.findColumns(board.id, userId);
