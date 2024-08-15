@@ -61,6 +61,7 @@ export class BoardColumnsService {
     return this.boardColumnsRepository.find({
       where: { board: { id: boardId, user: { id: userId } } },
       relations: { jobApplications: true },
+      order: { order: 'ASC', jobApplications: { createdAt: 'ASC' } },
     });
   }
 

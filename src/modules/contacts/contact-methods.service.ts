@@ -58,13 +58,19 @@ export class ContactMethodsService {
   async getContactMethodEmails(contactId: string, userId: string): Promise<ContactEmail[]> {
     await this.validateContactExists(contactId, userId);
 
-    return this.contactEmailsRepository.findBy({ contact: { id: contactId } });
+    return this.contactEmailsRepository.find({
+      where: { contact: { id: contactId } },
+      order: { createdAt: 'ASC' },
+    });
   }
 
   async getContactMethodPhones(contactId: string, userId: string): Promise<ContactPhone[]> {
     await this.validateContactExists(contactId, userId);
 
-    return this.contactPhonesRepository.findBy({ contact: { id: contactId } });
+    return this.contactPhonesRepository.find({
+      where: { contact: { id: contactId } },
+      order: { createdAt: 'ASC' },
+    });
   }
 
   async createContactMethodEmail(
