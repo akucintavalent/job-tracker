@@ -9,6 +9,8 @@ export class ContactPhoneMapper {
     dto.id = entity.id;
     dto.phone = entity.phone;
     dto.type = entity.type;
+    dto.createdAt = entity.createdAt;
+    dto.updatedAt = entity.updatedAt;
     return dto;
   }
 

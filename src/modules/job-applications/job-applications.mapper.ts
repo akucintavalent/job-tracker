@@ -11,6 +11,8 @@ export class JobApplicationMapper {
     dto.companyName = entity.companyName;
     dto.description = entity.description;
     dto.columnId = entity.column?.id;
+    dto.createdAt = entity.createdAt;
+    dto.updatedAt = entity.updatedAt;
     return dto;
   }
 }

@@ -1,12 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsString, IsUUID } from 'class-validator';
+import { IsEmail, IsEnum, IsString } from 'class-validator';
 import { UserRole, UserRoleType } from '../enums/user-role.enum';
+import { BaseDto } from '../../../dtos/base.dto';
 
-export class UserDto {
-  @ApiProperty({ type: 'string', format: 'uuid' })
-  @IsUUID()
-  id: string;
-
+export class UserDto extends BaseDto {
   @ApiProperty({ type: 'string', format: 'email' })
   @IsEmail()
   email: string;

@@ -1,10 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BoardColumnDto } from '../../board-columns/dtos/board-column.dto';
+import { BaseDto } from '../../../dtos/base.dto';
 
-export class BoardDto {
-  @ApiProperty({ type: 'string', format: 'uuid' })
-  id: string;
-
+export class BoardDto extends BaseDto {
   @ApiProperty()
   userId: string;
 

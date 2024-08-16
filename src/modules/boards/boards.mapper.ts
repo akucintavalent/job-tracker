@@ -13,6 +13,8 @@ export class BoardMapper {
     dto.name = entity.name;
     dto.isArchived = entity.isArchived;
     dto.userId = entity.user?.id;
+    dto.createdAt = entity.createdAt;
+    dto.updatedAt = entity.updatedAt;
 
     dto.columns = !entity.columns ? null : entity.columns.map(columnMapper.toDto);
     return dto;

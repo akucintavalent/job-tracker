@@ -13,6 +13,8 @@ export class BoardColumnMapper {
     dto.name = entity.name;
     dto.order = entity.order;
     dto.boardId = entity.board?.id;
+    dto.createdAt = entity.createdAt;
+    dto.updatedAt = entity.updatedAt;
     dto.jobApplications = entity.jobApplications?.map((e) => jobMapper.toDto(e));
     return dto;
   }
