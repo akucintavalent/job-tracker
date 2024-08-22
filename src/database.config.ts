@@ -8,6 +8,7 @@ import { UserCodeVerification } from './modules/users/entities/user.code.verific
 import { Contact } from './modules/contacts/entities/contact.entity';
 import { ContactEmail } from './modules/contacts/entities/contact-emails.entity';
 import { ContactPhone } from './modules/contacts/entities/contact-phones.entity';
+import { JobApplicationNote } from './modules/job-applications/entities/job-application-note.entity';
 
 if (process.env.NODE_ENV !== 'test') {
   config();
@@ -27,6 +28,7 @@ export const getDataSourceOptions = (): DataSourceOptions => ({
     Board,
     BoardColumn,
     JobApplication,
+    JobApplicationNote,
     UserCodeVerification,
     Contact,
     ContactEmail,
