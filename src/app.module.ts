@@ -11,6 +11,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { EmailSenderModule } from './modules/email-sender/email-sender.module';
 import { HttpExceptionFilter } from './exceptions/http-exception.filter';
 import { ContactsModule } from './modules/contacts/contacts.module';
+import { JobApplicationNotesModule } from './modules/job-application-notes/job-application-notes.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ContactsModule } from './modules/contacts/contacts.module';
     AuthModule,
     EmailSenderModule,
     ContactsModule,
+    JobApplicationNotesModule,
   ],
   controllers: [],
   providers: [
