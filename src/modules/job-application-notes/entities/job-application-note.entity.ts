@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { JobApplication } from './job-application.entity';
+import { JobApplication } from '../../job-applications/entities/job-application.entity';
 import { BaseEntity } from '../../../entities/base.entity';
 
 @Entity('job_application_notes')
