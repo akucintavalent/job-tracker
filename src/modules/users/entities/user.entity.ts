@@ -25,6 +25,12 @@ export class User extends BaseEntity {
   })
   role: UserRoleType;
 
+  @Column({ name: 'first_name' })
+  firstName: string;
+
+  @Column({ name: 'last_name' })
+  lastName: string;
+
   @OneToMany(() => Board, (board) => board.user)
   board: Board[];
 

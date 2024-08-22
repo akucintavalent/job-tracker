@@ -15,4 +15,12 @@ export class UserDto extends BaseDto {
   @ApiProperty({ enum: UserRole, default: UserRole.USER })
   @IsEnum(UserRole)
   role: UserRoleType;
+
+  @ApiProperty({ type: 'string' })
+  @IsString()
+  firstName: string;
+
+  @ApiProperty({ type: 'string' })
+  @IsString()
+  lastName: string;
 }
