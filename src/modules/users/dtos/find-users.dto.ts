@@ -1,4 +1,4 @@
-import { IsEmail, IsUUID, IsOptional, IsEnum } from 'class-validator';
+import { IsEmail, IsUUID, IsOptional, IsEnum, IsString } from 'class-validator';
 import { UserRole, UserRoleType } from '../enums/user-role.enum';
 
 export class FindUsersDto {
@@ -13,4 +13,12 @@ export class FindUsersDto {
   @IsOptional()
   @IsEnum(UserRole)
   role?: UserRoleType;
+
+  @IsOptional()
+  @IsString()
+  firstName?: string;
+
+  @IsOptional()
+  @IsString()
+  lastName?: string;
 }
