@@ -76,6 +76,19 @@ export class JobApplicationNotesService {
     await this.jobApplicationNotesRepository.upsert(noteEntities, ['id']);
   }
 
+  async delete(id: string, userId: string) {
+    const noteExists = await this.jobApplicationNotesRepository.existsBy({
+      id,
+      jobApplication: { column: { board: { user: { id: userId } } } },
+    });
+
+    if (!noteExists) {
+      throw new BadRequestException("JobApplicationNote doesn't exists");
+    }
+
+    await this.jobApplicationNotesRepository.softDelete({ id });
+  }
+
   private async validateJobApplication(jobApplicationId: string, userId: string) {
     if (!jobApplicationId) {
       throw new ArgumentInvalidException('jobApplicationId is required');

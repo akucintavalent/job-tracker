@@ -1,4 +1,4 @@
-import { Body, Controller, Get, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 import { JobApplicationNotesService } from './job-application-notes.service';
 import { AuthUser } from '../auth/user.decorator';
 import { AuthUserDto } from '../auth/dtos/auth.user.dto';
@@ -53,5 +53,15 @@ export class JobApplicationNotesController {
     @AuthUser() { userId }: AuthUserDto,
   ) {
     await this.jobApplicationNotesService.rearrange(jobApplicationId, noteIds, userId);
+  }
+
+  @Delete()
+  @ApiQuery({ name: 'id', description: 'JobApplicationNote id' })
+  @ApiOperation({ summary: `Deletes JobApplicationNote` })
+  @ApiResponse({ status: 200, description: 'JobApplicationNote deleted' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 400, description: 'JobApplicationNote not found' })
+  async delete(@Query('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {
+    await this.jobApplicationNotesService.delete(id, user.userId);
   }
 }
