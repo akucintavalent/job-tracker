@@ -26,7 +26,6 @@ export class JobApplicationNotesService {
       jobApplication: { id: noteDto.jobApplicationId },
     });
 
-    //this.mapper.toEntity(noteDto)
     let entity = this.jobApplicationNotesRepository.create({
       ...noteDto,
       jobApplication: { id: noteDto.jobApplicationId },
@@ -44,7 +43,22 @@ export class JobApplicationNotesService {
     });
   }
 
-  rearrange() {}
+  async rearrange(jobApplicationId: string, noteIds: string[], userId: string) {
+    await this.validate({ jobApplicationId } as JobApplicationNoteDto, userId);
+
+    const noteEntities = await this.jobApplicationNotesRepository.findBy({
+      jobApplication: { id: jobApplicationId },
+    });
+
+    const noteEntitiesIds = noteEntities.map((x) => x.id);
+    this.validateRearrange(noteIds, noteEntitiesIds);
+
+    for (let i = 0; i < noteEntitiesIds.length; i++) {
+      noteEntities.find((x) => x.id === noteIds[i]).order = i;
+    }
+
+    await this.jobApplicationNotesRepository.upsert(noteEntities, ['id']);
+  }
 
   private async validate(noteDto: JobApplicationNoteDto, userId: string) {
     if (!noteDto.jobApplicationId) {
@@ -59,5 +73,29 @@ export class JobApplicationNotesService {
     if (!isJobApplicationExists) {
       throw new BadRequestException("JobApplication doesn't exists");
     }
+  }
+
+  private validateRearrange(columnsIds: string[], dbColumnsIds: string[]) {
+    if (!columnsIds.length) {
+      throw new BadRequestException('List of column ids is empty');
+    }
+    if (this.hasDuplicates(columnsIds)) {
+      throw new BadRequestException('List has duplicated Id.');
+    }
+    if (!this.areEquals(columnsIds, dbColumnsIds)) {
+      throw new BadRequestException('List must contains all columns from this board.');
+    }
+  }
+
+  // TODO: create separate (general) function
+  private hasDuplicates(array: any[]): boolean {
+    const uniqueSet = new Set(array);
+    return array.length !== uniqueSet.size;
+  }
+
+  private areEquals(array1: any[], array2: any[]): boolean {
+    const set1 = new Set(array1);
+    const set2 = new Set(array2);
+    return set1.size === set2.size && [...set1].every((x) => set2.has(x));
   }
 }
