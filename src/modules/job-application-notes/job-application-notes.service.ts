@@ -4,10 +4,10 @@ import { JobApplication } from '../job-applications/entities/job-application.ent
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from 'src/exceptions/bad-request.exception';
-import { JobApplicationNoteDto } from './dtos/job-application-note.dto';
 import { JobApplicationNoteMapper } from './job-application-notes.mapper';
 import { CreateJobApplicationNoteDto } from './dtos/create-job-application-note.dto';
 import { ArgumentInvalidException } from 'src/exceptions/argument-invalid.exceptions';
+import { UpdateJobApplicationNote } from './dtos/update-job-application-note.dto';
 
 @Injectable()
 export class JobApplicationNotesService {
@@ -20,7 +20,7 @@ export class JobApplicationNotesService {
   ) {}
 
   async create(noteDto: CreateJobApplicationNoteDto, userId: string) {
-    await this.validate(noteDto as JobApplicationNoteDto, userId);
+    await this.validateJobApplication(noteDto.jobApplicationId, userId);
 
     const count = await this.jobApplicationNotesRepository.countBy({
       jobApplication: { id: noteDto.jobApplicationId },
@@ -36,15 +36,31 @@ export class JobApplicationNotesService {
   }
 
   async find(jobApplicationId: string, userId: string) {
-    await this.validate({ jobApplicationId } as JobApplicationNoteDto, userId);
+    await this.validateJobApplication(jobApplicationId, userId);
 
     return this.jobApplicationNotesRepository.findBy({
       jobApplication: { id: jobApplicationId, column: { board: { user: { id: userId } } } },
     });
   }
 
+  async update(id: string, dto: UpdateJobApplicationNote, userId: string) {
+    let entity = await this.jobApplicationNotesRepository.findOneBy({
+      id,
+      jobApplication: { column: { board: { user: { id: userId } } } },
+    });
+
+    if (!entity) {
+      throw new BadRequestException("JobApplicationNote doesn't exists");
+    }
+
+    Object.assign(entity, dto);
+
+    entity = await this.jobApplicationNotesRepository.save(entity);
+    return this.mapper.toDto(entity);
+  }
+
   async rearrange(jobApplicationId: string, noteIds: string[], userId: string) {
-    await this.validate({ jobApplicationId } as JobApplicationNoteDto, userId);
+    await this.validateJobApplication(jobApplicationId, userId);
 
     const noteEntities = await this.jobApplicationNotesRepository.findBy({
       jobApplication: { id: jobApplicationId },
@@ -60,13 +76,13 @@ export class JobApplicationNotesService {
     await this.jobApplicationNotesRepository.upsert(noteEntities, ['id']);
   }
 
-  private async validate(noteDto: JobApplicationNoteDto, userId: string) {
-    if (!noteDto.jobApplicationId) {
+  private async validateJobApplication(jobApplicationId: string, userId: string) {
+    if (!jobApplicationId) {
       throw new ArgumentInvalidException('jobApplicationId is required');
     }
 
     const isJobApplicationExists = await this.jobApplicationsRepository.existsBy({
-      id: noteDto.jobApplicationId,
+      id: jobApplicationId,
       column: { board: { user: { id: userId } } },
     });
 

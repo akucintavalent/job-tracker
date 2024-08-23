@@ -4,6 +4,8 @@ import { AuthUser } from '../auth/user.decorator';
 import { AuthUserDto } from '../auth/dtos/auth.user.dto';
 import { CreateJobApplicationNoteDto } from './dtos/create-job-application-note.dto';
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JobApplicationNoteDto } from './dtos/job-application-note.dto';
+import { UpdateJobApplicationNote } from './dtos/update-job-application-note.dto';
 
 @ApiTags('job-application-notes')
 @Controller('job-application-notes')
@@ -21,6 +23,19 @@ export class JobApplicationNotesController {
   @Post()
   create(@Body() jobApplicationNote: CreateJobApplicationNoteDto, @AuthUser() user: AuthUserDto) {
     return this.jobApplicationNotesService.create(jobApplicationNote, user.userId);
+  }
+
+  @Put()
+  @ApiQuery({ name: 'id', description: 'JobApplicationNote id' })
+  @ApiOperation({ summary: `Updates JobApplicationNote` })
+  @ApiResponse({ status: 200, description: 'Note updated', type: JobApplicationNoteDto })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  async update(
+    @Query('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateJobApplicationNote,
+    @AuthUser() { userId }: AuthUserDto,
+  ) {
+    return this.jobApplicationNotesService.update(id, dto, userId);
   }
 
   @Put('/rearrange')

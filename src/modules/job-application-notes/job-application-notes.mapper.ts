@@ -13,4 +13,14 @@ export class JobApplicationNoteMapper {
     jobApplication.id = dto.id;
     entity.jobApplication = jobApplication;
   }
+
+  toDto(entity: JobApplicationNote) {
+    const dto = new JobApplicationNoteDto();
+    dto.id = entity.id;
+    dto.content = entity.content;
+    dto.order = entity.order;
+    dto.createdAt = entity.createdAt;
+    dto.updatedAt = entity.updatedAt;
+    return dto;
+  }
 }
