@@ -38,9 +38,11 @@ export class JobApplicationNotesService {
   async find(jobApplicationId: string, userId: string) {
     await this.validateJobApplication(jobApplicationId, userId);
 
-    return this.jobApplicationNotesRepository.findBy({
+    const noteEntities = await this.jobApplicationNotesRepository.findBy({
       jobApplication: { id: jobApplicationId, column: { board: { user: { id: userId } } } },
     });
+
+    return noteEntities.map(this.mapper.toDto);
   }
 
   async update(id: string, dto: UpdateJobApplicationNote, userId: string) {
