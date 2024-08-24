@@ -7,9 +7,9 @@ export class JobApplicationNoteDto extends BaseDto {
   @IsUUID()
   jobApplicationId: string;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @IsString()
-  content: string;
+  content: string | null;
 
   @ApiProperty()
   @IsNumber()
