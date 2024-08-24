@@ -4,4 +4,6 @@ export enum UserFriendlyErrorMessages {
   EMAIL_CODE_EXPIRED = 'The verification code has expired. Please request a new one.',
   // Login
   EMAIL_NOT_VERIFIED = 'Email not verified. Please verify your email address before continuing.',
+  // Password reset
+  EMAIL_NOT_FOUND = 'That address is either invalid or not yet verified',
 }
