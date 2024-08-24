@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateJobApplicationNote {
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @IsString()
-  content: string;
+  @IsOptional()
+  content: string | null;
 }
