@@ -32,7 +32,7 @@ export class JobApplicationNotesService {
     });
     entity.order = count;
     entity = await this.jobApplicationNotesRepository.save(entity);
-    return entity;
+    return this.mapper.toDto(entity);
   }
 
   async find(jobApplicationId: string, userId: string) {
