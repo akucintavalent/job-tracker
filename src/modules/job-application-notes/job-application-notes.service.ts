@@ -110,23 +110,11 @@ export class JobApplicationNotesService {
     if (!columnsIds.length) {
       throw new BadRequestException('List of column ids is empty');
     }
-    if (this.hasDuplicates(columnsIds)) {
+    if (columnsIds.containsDuplicates()) {
       throw new BadRequestException('List has duplicated Id.');
     }
-    if (!this.areEquals(columnsIds, dbColumnsIds)) {
+    if (!columnsIds.equals(dbColumnsIds)) {
       throw new BadRequestException('List must contains all columns from this board.');
     }
-  }
-
-  // TODO: create separate (general) function
-  private hasDuplicates(array: any[]): boolean {
-    const uniqueSet = new Set(array);
-    return array.length !== uniqueSet.size;
-  }
-
-  private areEquals(array1: any[], array2: any[]): boolean {
-    const set1 = new Set(array1);
-    const set2 = new Set(array2);
-    return set1.size === set2.size && [...set1].every((x) => set2.has(x));
   }
 }
