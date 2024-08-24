@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { JobApplicationNotesService } from './job-application-notes.service';
 import { AuthUser } from '../auth/user.decorator';
 import { AuthUserDto } from '../auth/dtos/auth.user.dto';
@@ -53,8 +43,8 @@ export class JobApplicationNotesController {
     return this.jobApplicationNotesService.update(id, dto, userId);
   }
 
-  @Put('/rearrange')
-  @ApiQuery({ name: 'jobApplicationId', description: 'JobApplication id' })
+  @Put('/:id/rearrange')
+  @ApiParam({ name: 'jobApplicationId', description: 'JobApplication id' })
   @ApiBody({
     description: 'List all Note IDs for this JobApplication in the desired order',
     type: [String],
@@ -63,7 +53,7 @@ export class JobApplicationNotesController {
   @ApiResponse({ status: 200, description: 'Notes rearranged' })
   @ApiResponse({ status: 400, description: 'Validation error' })
   async rearrange(
-    @Query('jobApplicationId', ParseUUIDPipe) jobApplicationId: string,
+    @Param('id', ParseUUIDPipe) jobApplicationId: string,
     @Body() noteIds: string[],
     @AuthUser() { userId }: AuthUserDto,
   ) {
