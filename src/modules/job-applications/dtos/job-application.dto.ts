@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseDto } from '../../../dtos/base.dto';
+import { JobApplicationNoteDto } from 'src/modules/job-application-notes/dtos/job-application-note.dto';
 
 export class JobApplicationDto extends BaseDto {
   @ApiProperty()
@@ -13,4 +14,7 @@ export class JobApplicationDto extends BaseDto {
 
   @ApiProperty({ type: 'string', format: 'uuid' })
   columnId: string;
+
+  @ApiProperty({ nullable: true })
+  notes: JobApplicationNoteDto[] | null;
 }
