@@ -58,7 +58,7 @@ export class UserCodeVerificationService {
     });
 
     if (!user) {
-      throw new ArgumentInvalidException('User not found. Email field is invalid.');
+      this.throw(UserFriendlyErrorMessages.EMAIL_NOT_FOUND);
     }
 
     const userCodeVerification = this.userCodeVerificationRepository.create({
