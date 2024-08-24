@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateJobApplicationNoteDto {
   @ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
   jobApplicationId: string;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @IsString()
-  content: string;
+  @IsOptional()
+  content: string | null;
 }
