@@ -19,18 +19,22 @@ export class JobApplicationsService {
   ) {}
 
   async findBy(columnId: string, userId: string): Promise<JobApplication[]> {
-    const boardColumn = await this.boardColumnsRepository.findOne({
-      where: { id: columnId },
-      relations: { board: true, jobApplications: true },
+    const boardColumnExist = await this.boardColumnsRepository.existsBy({
+      id: columnId,
+      board: { user: { id: userId } },
     });
 
-    const boardId = boardColumn.board.id;
-    const boardExists = await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } });
-    if (!boardExists) {
+    if (!boardColumnExist) {
       throw new BadRequestException("Board column doesn't exists");
     }
 
-    return boardColumn.jobApplications;
+    const jobApplicationEntities = await this.jobApplicationsRepository.find({
+      where: { column: { id: columnId } },
+      relations: { notes: true },
+      order: { notes: { order: 'ASC' } },
+    });
+
+    return jobApplicationEntities;
   }
 
   async create(dto: CreateJobApplicationDto, userId: string): Promise<JobApplication> {
