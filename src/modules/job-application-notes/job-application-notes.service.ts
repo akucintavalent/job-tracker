@@ -79,16 +79,22 @@ export class JobApplicationNotesService {
   }
 
   async delete(id: string, userId: string) {
-    const noteExists = await this.jobApplicationNotesRepository.existsBy({
-      id,
-      jobApplication: { column: { board: { user: { id: userId } } } },
+    const noteEntity = await this.jobApplicationNotesRepository.findOne({
+      where: {
+        id,
+        jobApplication: { column: { board: { user: { id: userId } } } },
+      },
+      relations: { jobApplication: true },
+      order: { order: 'ASC' },
     });
 
-    if (!noteExists) {
+    if (!noteEntity) {
       throw new BadRequestException("JobApplicationNote doesn't exist");
     }
 
-    await this.jobApplicationNotesRepository.softDelete({ id });
+    await this.jobApplicationNotesRepository.softDelete(noteEntity.id);
+
+    await this.rearrangeAfterDelete(noteEntity.jobApplication.id);
   }
 
   private async validateJobApplication(jobApplicationId: string, userId: string) {
@@ -116,5 +122,18 @@ export class JobApplicationNotesService {
     if (!columnsIds.equals(dbColumnsIds)) {
       throw new BadRequestException('List must contains all columns from this board.');
     }
+  }
+
+  private async rearrangeAfterDelete(jobApplicationId: string) {
+    const noteEntities = await this.jobApplicationNotesRepository.find({
+      where: { jobApplication: { id: jobApplicationId } },
+      order: { order: 'ASC' },
+    });
+
+    for (let i = 0; i < noteEntities.length; i++) {
+      noteEntities[i].order = i;
+    }
+
+    await this.jobApplicationNotesRepository.upsert(noteEntities, ['id']);
   }
 }
