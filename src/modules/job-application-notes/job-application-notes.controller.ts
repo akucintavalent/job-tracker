@@ -26,8 +26,11 @@ export class JobApplicationNotesController {
   @ApiResponse({ status: 200, description: 'Note created', type: JobApplicationNoteDto })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'JobApplication not found' })
-  create(@Body() jobApplicationNote: CreateJobApplicationNoteDto, @AuthUser() user: AuthUserDto) {
-    return this.jobApplicationNotesService.create(jobApplicationNote, user.userId);
+  create(
+    @Body() jobApplicationNote: CreateJobApplicationNoteDto,
+    @AuthUser() { userId }: AuthUserDto,
+  ) {
+    return this.jobApplicationNotesService.create(jobApplicationNote, userId);
   }
 
   @Put('/:id')
@@ -66,7 +69,7 @@ export class JobApplicationNotesController {
   @ApiResponse({ status: 200, description: 'JobApplicationNote deleted' })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 400, description: 'JobApplicationNote not found' })
-  async delete(@Param('id', ParseUUIDPipe) id: string, @AuthUser() user: AuthUserDto) {
-    await this.jobApplicationNotesService.delete(id, user.userId);
+  async delete(@Param('id', ParseUUIDPipe) id: string, @AuthUser() { userId }: AuthUserDto) {
+    await this.jobApplicationNotesService.delete(id, userId);
   }
 }

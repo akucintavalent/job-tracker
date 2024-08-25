@@ -19,12 +19,12 @@ export class JobApplicationsService {
   ) {}
 
   async findBy(columnId: string, userId: string): Promise<JobApplication[]> {
-    const boardColumnExists = await this.boardColumnsRepository.existsBy({
+    const boardColumnExist = await this.boardColumnsRepository.existsBy({
       id: columnId,
       board: { user: { id: userId } },
     });
 
-    if (!boardColumnExists) {
+    if (!boardColumnExist) {
       throw new BadRequestException("Board column doesn't exists");
     }
 

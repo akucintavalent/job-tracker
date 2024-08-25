@@ -85,7 +85,7 @@ export class JobApplicationNotesService {
     });
 
     if (!noteExists) {
-      throw new BadRequestException("JobApplicationNote doesn't exists");
+      throw new BadRequestException("JobApplicationNote doesn't exist");
     }
 
     await this.jobApplicationNotesRepository.softDelete({ id });
@@ -96,13 +96,13 @@ export class JobApplicationNotesService {
       throw new ArgumentInvalidException('jobApplicationId is required');
     }
 
-    const isJobApplicationExists = await this.jobApplicationsRepository.existsBy({
+    const jobApplicationExists = await this.jobApplicationsRepository.existsBy({
       id: jobApplicationId,
       column: { board: { user: { id: userId } } },
     });
 
-    if (!isJobApplicationExists) {
-      throw new BadRequestException("JobApplication doesn't exists");
+    if (!jobApplicationExists) {
+      throw new BadRequestException("JobApplication doesn't exist");
     }
   }
 
