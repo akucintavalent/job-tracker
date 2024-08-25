@@ -38,8 +38,11 @@ export class JobApplicationNotesService {
   async find(jobApplicationId: string, userId: string) {
     await this.validateJobApplication(jobApplicationId, userId);
 
-    const noteEntities = await this.jobApplicationNotesRepository.findBy({
-      jobApplication: { id: jobApplicationId, column: { board: { user: { id: userId } } } },
+    const noteEntities = await this.jobApplicationNotesRepository.find({
+      where: {
+        jobApplication: { id: jobApplicationId, column: { board: { user: { id: userId } } } },
+      },
+      order: { order: 'ASC' },
     });
 
     return noteEntities.map(this.mapper.toDto);

@@ -31,6 +31,7 @@ export class JobApplicationsService {
     const jobApplicationEntities = await this.jobApplicationsRepository.find({
       where: { column: { id: columnId } },
       relations: { notes: true },
+      order: { notes: { order: 'ASC' } },
     });
 
     return jobApplicationEntities;
