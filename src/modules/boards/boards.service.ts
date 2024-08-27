@@ -7,7 +7,7 @@ import { User } from '../users/entities/user.entity';
 import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
 import { BoardColumnsService } from '../board-columns/board-columns.service';
-import { ExceptionMessages } from 'src/exceptions/exception-messages';
+import { ExceptionMessages } from '../../exceptions/exception-messages';
 
 @Injectable()
 export class BoardsService {

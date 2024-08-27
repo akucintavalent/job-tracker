@@ -6,8 +6,8 @@ import { Repository } from 'typeorm';
 import { CreateJobApplicationDto } from './dtos/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dtos/update-job-application.dto';
 import { Board } from '../boards/entities/board.entity';
-import { ExceptionMessages } from 'src/exceptions/exception-messages';
-import { ArgumentInvalidException } from 'src/exceptions/argument-invalid.exceptions';
+import { ExceptionMessages } from '../../exceptions/exception-messages';
+import { ArgumentInvalidException } from '../../exceptions/argument-invalid.exceptions';
 
 @Injectable()
 export class JobApplicationsService {

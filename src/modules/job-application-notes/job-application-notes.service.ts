@@ -8,7 +8,7 @@ import { JobApplicationNoteMapper } from './job-application-notes.mapper';
 import { CreateJobApplicationNoteDto } from './dtos/create-job-application-note.dto';
 import { ArgumentInvalidException } from 'src/exceptions/argument-invalid.exceptions';
 import { UpdateJobApplicationNote } from './dtos/update-job-application-note.dto';
-import { ExceptionMessages } from 'src/exceptions/exception-messages';
+import { ExceptionMessages } from '../../exceptions/exception-messages';
 
 @Injectable()
 export class JobApplicationNotesService {

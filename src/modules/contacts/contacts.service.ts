@@ -10,7 +10,7 @@ import { FindContactDto } from './dtos/find-contact.dto';
 import { ContactDto } from './dtos/contact.dto';
 import { UpdateContact } from './dtos/update-contact.dto';
 import { ContactMethodsService } from './contact-methods.service';
-import { ExceptionMessages } from 'src/exceptions/exception-messages';
+import { ExceptionMessages } from '../../exceptions/exception-messages';
 
 @Injectable()
 export class ContactsService {

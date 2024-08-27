@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from '../boards/entities/board.entity';
 import { UpdateBoardColumnDto } from './dtos/update-board-column.dto';
 import { CreateBoardColumnDto } from './dtos/create-board-column.dto';
-import { ExceptionMessages } from 'src/exceptions/exception-messages';
+import { ExceptionMessages } from '../../exceptions/exception-messages';
 
 @Injectable()
 export class BoardColumnsService {
