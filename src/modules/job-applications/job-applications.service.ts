@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { CreateJobApplicationDto } from './dtos/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dtos/update-job-application.dto';
 import { Board } from '../boards/entities/board.entity';
+import { ExceptionMessages } from 'src/exceptions/exception-messages';
 
 @Injectable()
 export class JobApplicationsService {
@@ -25,7 +26,7 @@ export class JobApplicationsService {
     });
 
     if (!boardColumnExist) {
-      throw new BadRequestException("Board column doesn't exists");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(BoardColumn.name));
     }
 
     const jobApplicationEntities = await this.jobApplicationsRepository.find({
@@ -44,7 +45,7 @@ export class JobApplicationsService {
     });
 
     if (!boardColumn) {
-      throw new BadRequestException("Board column doesn't exists");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(BoardColumn.name));
     }
 
     const boardId = boardColumn.board.id;
@@ -53,7 +54,7 @@ export class JobApplicationsService {
       user: { id: userId },
     });
     if (!boardExists) {
-      throw new BadRequestException("Board column doesn't exists");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(Board.name));
     }
 
     const jobApplication = this.jobApplicationsRepository.create({

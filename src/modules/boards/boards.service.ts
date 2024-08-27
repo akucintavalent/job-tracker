@@ -7,6 +7,7 @@ import { User } from '../users/entities/user.entity';
 import { FindBoardDto } from './dtos/find-board.dto';
 import { UpdateBoardDto } from './dtos/update-board.dto';
 import { BoardColumnsService } from '../board-columns/board-columns.service';
+import { ExceptionMessages } from 'src/exceptions/exception-messages';
 
 @Injectable()
 export class BoardsService {
@@ -24,7 +25,7 @@ export class BoardsService {
 
   async createDefaultBoard(userId: string, boardName: string = null): Promise<Board> {
     if (!(await this.usersRepository.existsBy({ id: userId }))) {
-      throw new BadRequestException("User doesn't exists");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(User.name));
     }
 
     const name = !boardName ? `Job Search ${new Date().getFullYear()}` : boardName;
@@ -40,7 +41,7 @@ export class BoardsService {
 
   async findBy(query: FindBoardDto, userId: string): Promise<Board[]> {
     if (!(await this.usersRepository.existsBy({ id: userId }))) {
-      throw new BadRequestException("User doesn't exists");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(User.name));
     }
 
     const boardName = query.name?.length > 0 ? Like(`%${query.name}%`) : null;

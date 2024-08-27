@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from '../boards/entities/board.entity';
 import { UpdateBoardColumnDto } from './dtos/update-board-column.dto';
 import { CreateBoardColumnDto } from './dtos/create-board-column.dto';
+import { ExceptionMessages } from 'src/exceptions/exception-messages';
 
 @Injectable()
 export class BoardColumnsService {
@@ -21,7 +22,7 @@ export class BoardColumnsService {
       user: { id: userId },
     });
     if (!boardExists) {
-      throw new BadRequestException("Board doesn't exists");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(Board.name));
     }
 
     // take:1 operator throws an eror "column distinctAlias.BoardColumn_id does not exist"
@@ -47,7 +48,7 @@ export class BoardColumnsService {
 
   async createDefaultBoardColumns(boardId: string, userId: string): Promise<BoardColumn[]> {
     if (!(await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } }))) {
-      throw new BadRequestException("Board doesn't exist");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(Board.name));
     }
 
     const defaultColumns = ['Wishlist', 'Applied', 'Interview', 'Offer', 'Rejected'].map((v, i) =>
@@ -68,7 +69,7 @@ export class BoardColumnsService {
   async rearrangeColumns(boardId: string, columnsIds: string[], userId: string) {
     const boardExists = await this.boardsRepository.existsBy({ id: boardId, user: { id: userId } });
     if (!boardExists) {
-      throw new BadRequestException("Board doesn't exist");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(Board.name));
     }
 
     const dbColumns = await this.boardColumnsRepository.findBy({
@@ -102,7 +103,7 @@ export class BoardColumnsService {
       board: { user: { id: userId } },
     });
     if (!boardColumn) {
-      throw new BadRequestException("Column doesn't exist");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(BoardColumn.name));
     }
     return boardColumn;
   }

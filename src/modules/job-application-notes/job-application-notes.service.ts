@@ -8,6 +8,7 @@ import { JobApplicationNoteMapper } from './job-application-notes.mapper';
 import { CreateJobApplicationNoteDto } from './dtos/create-job-application-note.dto';
 import { ArgumentInvalidException } from 'src/exceptions/argument-invalid.exceptions';
 import { UpdateJobApplicationNote } from './dtos/update-job-application-note.dto';
+import { ExceptionMessages } from 'src/exceptions/exception-messages';
 
 @Injectable()
 export class JobApplicationNotesService {
@@ -55,7 +56,7 @@ export class JobApplicationNotesService {
     });
 
     if (!entity) {
-      throw new BadRequestException("JobApplicationNote doesn't exists");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(JobApplicationNote.name));
     }
 
     Object.assign(entity, dto);
@@ -92,7 +93,7 @@ export class JobApplicationNotesService {
     });
 
     if (!noteEntity) {
-      throw new BadRequestException("JobApplicationNote doesn't exist");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(JobApplicationNote.name));
     }
 
     await this.jobApplicationNotesRepository.softDelete(noteEntity.id);
@@ -102,7 +103,7 @@ export class JobApplicationNotesService {
 
   private async validateJobApplication(jobApplicationId: string, userId: string) {
     if (!jobApplicationId) {
-      throw new ArgumentInvalidException('jobApplicationId is required');
+      throw new ArgumentInvalidException(ExceptionMessages.fieldIsRequired('jobApplicationId'));
     }
 
     const jobApplicationExists = await this.jobApplicationsRepository.existsBy({
@@ -111,7 +112,7 @@ export class JobApplicationNotesService {
     });
 
     if (!jobApplicationExists) {
-      throw new BadRequestException("JobApplication doesn't exist");
+      throw new BadRequestException(ExceptionMessages.doesNotExist(JobApplication.name));
     }
   }
 
