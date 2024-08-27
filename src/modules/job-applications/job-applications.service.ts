@@ -7,6 +7,7 @@ import { CreateJobApplicationDto } from './dtos/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dtos/update-job-application.dto';
 import { Board } from '../boards/entities/board.entity';
 import { ExceptionMessages } from 'src/exceptions/exception-messages';
+import { ArgumentInvalidException } from 'src/exceptions/argument-invalid.exceptions';
 
 @Injectable()
 export class JobApplicationsService {
@@ -15,8 +16,6 @@ export class JobApplicationsService {
     private readonly jobApplicationsRepository: Repository<JobApplication>,
     @InjectRepository(BoardColumn)
     private readonly boardColumnsRepository: Repository<BoardColumn>,
-    @InjectRepository(Board)
-    private readonly boardsRepository: Repository<Board>,
   ) {}
 
   async findBy(columnId: string, userId: string): Promise<JobApplication[]> {
@@ -39,23 +38,7 @@ export class JobApplicationsService {
   }
 
   async create(dto: CreateJobApplicationDto, userId: string): Promise<JobApplication> {
-    const boardColumn = await this.boardColumnsRepository.findOne({
-      where: { id: dto.columnId },
-      relations: { board: true },
-    });
-
-    if (!boardColumn) {
-      throw new BadRequestException(ExceptionMessages.doesNotExist(BoardColumn.name));
-    }
-
-    const boardId = boardColumn.board.id;
-    const boardExists = await this.boardsRepository.existsBy({
-      id: boardId,
-      user: { id: userId },
-    });
-    if (!boardExists) {
-      throw new BadRequestException(ExceptionMessages.doesNotExist(Board.name));
-    }
+    await this.validateBoardColumn(dto.columnId, userId);
 
     const jobApplication = this.jobApplicationsRepository.create({
       title: dto.title,
@@ -108,5 +91,20 @@ export class JobApplicationsService {
     }
 
     return jobApplication;
+  }
+
+  private async validateBoardColumn(boardColumnId: string, userId: string) {
+    if (!boardColumnId) {
+      throw new ArgumentInvalidException(ExceptionMessages.fieldIsRequired('boardColumnId'));
+    }
+
+    const boardColumnExists = await this.boardColumnsRepository.existsBy({
+      id: boardColumnId,
+      board: { user: { id: userId } },
+    });
+
+    if (!boardColumnExists) {
+      throw new BadRequestException(ExceptionMessages.doesNotExist(BoardColumn.name));
+    }
   }
 }
