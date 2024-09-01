@@ -93,7 +93,7 @@ export class JobApplicationsService {
     return jobApplication;
   }
 
-  private async validateBoardColumn(boardColumnId: string, userId: string) {
+  private async validateBoardColumn(boardColumnId: string | null, userId: string) {
     if (!boardColumnId) {
       throw new ArgumentInvalidException(ExceptionMessages.fieldIsRequired('boardColumnId'));
     }
