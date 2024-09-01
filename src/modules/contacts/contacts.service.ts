@@ -10,6 +10,7 @@ import { FindContactDto } from './dtos/find-contact.dto';
 import { ContactDto } from './dtos/contact.dto';
 import { UpdateContact } from './dtos/update-contact.dto';
 import { ContactMethodsService } from './contact-methods.service';
+import { ExceptionMessages } from '../../exceptions/exception-messages';
 
 @Injectable()
 export class ContactsService {
@@ -24,7 +25,7 @@ export class ContactsService {
 
   async find(userId: string, params: FindContactDto): Promise<ContactDto[]> {
     if (!userId) {
-      throw new BadRequestException('userId is required');
+      throw new BadRequestException(ExceptionMessages.fieldIsRequired('userId'));
     }
     const contacts = await this.contactsRepository.find({
       where: { id: params.contactId, board: { id: params.boardId, user: { id: userId } } },
@@ -136,7 +137,7 @@ export class ContactsService {
     });
 
     if (!contactEntity) {
-      throw new BadRequestException('Contact is not found');
+      throw new BadRequestException(ExceptionMessages.doesNotExist(Contact.name));
     }
 
     const jobApplicationEntity = await this.jobApplicationsRepository.findOne({
@@ -146,7 +147,7 @@ export class ContactsService {
     });
 
     if (!jobApplicationEntity) {
-      throw new BadRequestException('Job application is not found');
+      throw new BadRequestException(ExceptionMessages.doesNotExist(JobApplication.name));
     }
 
     if (jobApplicationEntity.column.board.id !== contactEntity.board.id) {

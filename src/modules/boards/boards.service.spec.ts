@@ -10,6 +10,7 @@ import { newGuid } from '../../utils/guid';
 import { CreateBoardDto } from './dtos/create-board.dto';
 import { FindBoardDto } from './dtos/find-board.dto';
 import { BoardColumn } from '../board-columns/entities/board-column.entity';
+import { ExceptionMessages } from '../../exceptions/exception-messages';
 
 describe('BoardsService', () => {
   let service: BoardsService;
@@ -98,7 +99,9 @@ describe('BoardsService', () => {
     jest.spyOn(usersRepository, 'existsBy').mockImplementation(() => null);
 
     // Act & Assert
-    expect(() => service.create(dto, validUser.id)).rejects.toThrow("User doesn't exists");
+    expect(() => service.create(dto, validUser.id)).rejects.toThrow(
+      ExceptionMessages.doesNotExist(User.name),
+    );
   });
 
   it('should find boards', async () => {
@@ -112,7 +115,9 @@ describe('BoardsService', () => {
     jest.spyOn(usersRepository, 'existsBy').mockImplementation(() => null);
 
     // Act & Assert
-    expect(() => service.findBy(dto, validUser.id)).rejects.toThrow("User doesn't exists");
+    expect(() => service.findBy(dto, validUser.id)).rejects.toThrow(
+      ExceptionMessages.doesNotExist(User.name),
+    );
   });
 
   it('should find a board with columns', async () => {
