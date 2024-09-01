@@ -7,5 +7,6 @@ WORKDIR /usr/src/app
 COPY . .
 RUN yarn install && yarn build
 RUN apt-get update && apt-get install -f -y postgresql-client
+RUN chmod +x ./start.sh
 EXPOSE 3000
 CMD ["./start.sh"]
