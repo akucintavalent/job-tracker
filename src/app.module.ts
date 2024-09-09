@@ -12,6 +12,7 @@ import { EmailSenderModule } from './modules/email-sender/email-sender.module';
 import { HttpExceptionFilter } from './exceptions/http-exception.filter';
 import { ContactsModule } from './modules/contacts/contacts.module';
 import { JobApplicationNotesModule } from './modules/job-application-notes/job-application-notes.module';
+import { CompaniesModule } from './modules/companies/companies.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { JobApplicationNotesModule } from './modules/job-application-notes/job-a
     EmailSenderModule,
     ContactsModule,
     JobApplicationNotesModule,
+    CompaniesModule,
   ],
   controllers: [],
   providers: [
