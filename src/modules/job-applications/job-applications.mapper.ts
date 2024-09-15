@@ -10,7 +10,6 @@ export class JobApplicationMapper {
     const dto = new JobApplicationDto();
     dto.id = entity.id;
     dto.title = entity.title;
-    dto.companyName = entity.companyName;
     dto.description = entity.description;
     dto.columnId = entity.column?.id;
     dto.createdAt = entity.createdAt;

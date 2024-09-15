@@ -42,7 +42,6 @@ export class JobApplicationsService {
 
     const jobApplication = this.jobApplicationsRepository.create({
       title: dto.title,
-      companyName: dto.companyName,
       description: dto.description,
       column: { id: dto.columnId },
     });
