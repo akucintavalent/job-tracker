@@ -3,6 +3,7 @@ import { BoardColumn } from '../../board-columns/entities/board-column.entity';
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { Contact } from '../../contacts/entities/contact.entity';
 import { JobApplicationNote } from '../../job-application-notes/entities/job-application-note.entity';
+import { Company } from '../../companies/entities/company.entity';
 
 @Entity('job_applications')
 export class JobApplication extends BaseEntity {
@@ -36,4 +37,8 @@ export class JobApplication extends BaseEntity {
 
   @OneToMany(() => JobApplicationNote, (note) => note.jobApplication)
   notes: JobApplicationNote[];
+
+  @OneToOne(() => Company)
+  @JoinColumn({ name: 'company_id' })
+  company: Company;
 }
