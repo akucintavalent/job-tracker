@@ -35,8 +35,11 @@ export class CompaniesService {
   async findOne(companyId: string, { userId }: AuthUserDto) {
     const company = await this.companiesRepository.findOneBy({
       id: companyId,
-      jobApplication: { column: { board: { user: { id: userId } } } },
     });
+
+    if (company.jobApplication) {
+      await this.jobApplicationBelongsToUser(company.jobApplication.id, userId);
+    }
 
     if (!company) {
       throw new NotFoundException(ExceptionMessages.doesNotExist(Company.name));
