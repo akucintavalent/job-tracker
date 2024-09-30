@@ -16,13 +16,13 @@ export class JobApplicationsController {
     private readonly mapper: JobApplicationMapper,
   ) {}
 
-  @Get('/:id')
+  @Get('/column/:columnId')
   @ApiParam({ name: 'id', description: 'Column id' })
   @ApiOperation({ summary: `Fetch all job application from column` })
   @ApiResponse({ status: 200, description: 'Job application records', type: [JobApplicationDto] })
   @ApiResponse({ status: 400, description: 'Validation error' })
   async findJobsByColumn(
-    @Param('id', ParseUUIDPipe) columnId: string,
+    @Param('columnId', ParseUUIDPipe) columnId: string,
     @AuthUser() user: AuthUserDto,
   ) {
     const entities = await this.jobApplicationsService.findBy(columnId, user.userId);
