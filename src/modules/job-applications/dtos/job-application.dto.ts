@@ -17,4 +17,19 @@ export class JobApplicationDto extends BaseDto {
 
   @ApiProperty({ nullable: true })
   notes: JobApplicationNoteDto[] | null;
+
+  @ApiProperty()
+  postUrl: string;
+
+  @ApiProperty()
+  salary: string;
+
+  @ApiProperty()
+  location: string;
+
+  @ApiProperty()
+  color: string;
+
+  @ApiProperty()
+  deadline: string;
 }

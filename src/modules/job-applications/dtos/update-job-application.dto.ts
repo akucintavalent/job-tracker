@@ -21,4 +21,29 @@ export class UpdateJobApplicationDto {
   @IsUUID()
   @IsOptional()
   columnId?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  postUrl?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  salary?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  location?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  color?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  deadline?: string;
 }

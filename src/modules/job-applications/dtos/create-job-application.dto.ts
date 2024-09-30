@@ -6,16 +6,37 @@ export class CreateJobApplicationDto {
   @IsString()
   title: string;
 
-  @ApiProperty()
-  @IsString()
-  companyName: string;
-
   @ApiProperty({ nullable: true })
   @IsString()
   @IsOptional()
-  description: string | null;
+  description?: string | null;
 
   @ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
   columnId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  postUrl?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  salary?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  location?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  color?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  deadline?: string;
 }
