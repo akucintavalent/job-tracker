@@ -11,6 +11,11 @@ export class JobApplicationMapper {
     dto.id = entity.id;
     dto.title = entity.title;
     dto.description = entity.description;
+    dto.postUrl = entity.postUrl;
+    dto.salary = entity.salary;
+    dto.location = entity.location;
+    dto.color = entity.color;
+    dto.deadline = entity.deadline;
     dto.columnId = entity.column?.id;
     dto.createdAt = entity.createdAt;
     dto.updatedAt = entity.updatedAt;
