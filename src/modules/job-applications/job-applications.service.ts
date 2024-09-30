@@ -47,8 +47,7 @@ export class JobApplicationsService {
     await this.validateBoardColumn(dto.columnId, userId);
 
     const jobApplication = this.jobApplicationsRepository.create({
-      title: dto.title,
-      description: dto.description,
+      ...dto,
       column: { id: dto.columnId },
     });
 
