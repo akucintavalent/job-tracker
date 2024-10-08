@@ -35,10 +35,10 @@ export class JobApplication extends BaseEntity {
   @ManyToMany(() => Contact, (contact) => contact.jobApplications, { onDelete: 'CASCADE' })
   contacts: Contact[];
 
-  @OneToMany(() => JobApplicationNote, (note) => note.jobApplication)
+  @OneToMany(() => JobApplicationNote, (note) => note.jobApplication, { onDelete: 'CASCADE' })
   notes: JobApplicationNote[];
 
-  @OneToOne(() => Company)
+  @OneToOne(() => Company, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'company_id' })
   company: Company;
 }
