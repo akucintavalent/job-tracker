@@ -1,5 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsArray, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
+import { CreateContactDto } from '../../contacts/dtos/create-contact.dto';
+import { Type } from 'class-transformer';
+import { CreateCompanyDto } from '../../companies/dtos/create-company.dto';
+import { CreateJobApplicationNoteDto } from '../../job-application-notes/dtos/create-job-application-note.dto';
 
 export class CreateJobApplicationDto {
   @ApiProperty()
@@ -39,4 +43,24 @@ export class CreateJobApplicationDto {
   @IsString()
   @IsOptional()
   deadline?: string;
+
+  @ApiProperty({ nullable: true })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateContactDto)
+  contacts?: CreateContactDto[];
+
+  @ApiProperty({ nullable: true })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateJobApplicationNoteDto)
+  notes?: CreateJobApplicationNoteDto[];
+
+  @ApiProperty({ nullable: true })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateCompanyDto)
+  company?: CreateCompanyDto;
 }

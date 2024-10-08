@@ -24,49 +24,49 @@ export class CreateContactDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ nullable: true })
-  companyName: string;
+  companyName?: string;
 
   @IsString()
   @IsOptional()
   @ApiProperty({ nullable: true })
-  companyLocation: string;
+  companyLocation?: string;
 
   @IsString()
   @IsOptional()
   @ApiProperty({ nullable: true })
-  twitterUrl: string;
+  twitterUrl?: string;
 
   @IsString()
   @IsOptional()
   @ApiProperty({ nullable: true })
-  facebookUrl: string;
+  facebookUrl?: string;
 
   @IsString()
   @IsOptional()
   @ApiProperty({ nullable: true })
-  linkedinUrl: string;
+  linkedinUrl?: string;
 
   @IsString()
   @IsOptional()
   @ApiProperty({ nullable: true })
-  githubUrl: string;
+  githubUrl?: string;
 
   @IsString()
   @IsOptional()
   @ApiProperty({ nullable: true })
-  comment: string;
+  comment?: string;
 
   @ApiProperty({ nullable: true })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ContactPhoneDto)
-  phones: ContactPhoneDto[];
+  phones?: ContactPhoneDto[];
 
   @ApiProperty({ nullable: true })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ContactEmailDto)
-  emails: ContactEmailDto[];
+  emails?: ContactEmailDto[];
 }

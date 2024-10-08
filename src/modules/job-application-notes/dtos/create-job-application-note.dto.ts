@@ -3,8 +3,9 @@ import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateJobApplicationNoteDto {
   @ApiProperty({ type: 'string', format: 'uuid' })
+  @IsOptional()
   @IsUUID()
-  jobApplicationId: string;
+  jobApplicationId?: string;
 
   @ApiProperty({ nullable: true })
   @IsString()

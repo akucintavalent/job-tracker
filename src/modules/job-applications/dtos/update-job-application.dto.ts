@@ -7,11 +7,6 @@ export class UpdateJobApplicationDto {
   @IsOptional()
   title?: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  companyName?: string;
-
   @ApiProperty({ nullable: true })
   @IsString()
   @IsOptional()

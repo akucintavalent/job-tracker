@@ -12,6 +12,6 @@ export class BoardColumnDto extends BaseDto {
   @ApiProperty({ type: 'string', format: 'uuid' })
   boardId: string;
 
-  @ApiProperty({ type: [JobApplicationDto] })
+  @ApiProperty({ type: () => [JobApplicationDto] })
   jobApplications: JobApplicationDto[];
 }
