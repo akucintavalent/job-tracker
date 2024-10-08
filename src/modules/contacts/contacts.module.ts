@@ -23,5 +23,6 @@ import { ContactMethodsController } from './contact-method.controller';
     ContactPhoneMapper,
   ],
   controllers: [ContactsController, ContactMethodsController],
+  exports: [ContactsService],
 })
 export class ContactsModule {}

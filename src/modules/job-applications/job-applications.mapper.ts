@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { JobApplication } from './entities/job-application.entity';
 import { JobApplicationDto } from './dtos/job-application.dto';
 import { JobApplicationNoteMapper } from '../job-application-notes/job-application-notes.mapper';
+import { ContactMapper } from '../contacts/mappers/contacts.mapper';
 
 @Injectable()
 export class JobApplicationMapper {
   toDto(entity: JobApplication) {
     const noteMapper = new JobApplicationNoteMapper();
+    const contactMapper = new ContactMapper();
     const dto = new JobApplicationDto();
     dto.id = entity.id;
     dto.title = entity.title;
@@ -20,6 +22,8 @@ export class JobApplicationMapper {
     dto.createdAt = entity.createdAt;
     dto.updatedAt = entity.updatedAt;
     dto.notes = entity.notes?.map(noteMapper.toDto);
+    dto.contacts = entity.contacts?.map(contactMapper.toDto);
+    dto.company = entity.company;
     return dto;
   }
 }

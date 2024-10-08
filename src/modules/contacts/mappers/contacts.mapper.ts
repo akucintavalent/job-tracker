@@ -32,7 +32,7 @@ export class ContactMapper {
     dto.comment = entity.comment;
     dto.createdAt = entity.createdAt;
     dto.updatedAt = entity.updatedAt;
-    dto.board = boardMapper.toDto(entity.board);
+    dto.board = entity.board ? boardMapper.toDto(entity.board) : undefined;
     dto.jobApplications = entity.jobApplications?.map(jobApplicationMapper.toDto);
     dto.emails = entity.contactEmails?.map(contactMethodEmailMapper.toDto);
     dto.phones = entity.contactPhones?.map(contactMethodPhoneMapper.toDto);

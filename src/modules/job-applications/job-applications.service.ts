@@ -10,6 +10,10 @@ import { ExceptionMessages } from '../../exceptions/exception-messages';
 import { ArgumentInvalidException } from '../../exceptions/argument-invalid.exceptions';
 import { Contact } from '../contacts/entities/contact.entity';
 import { Company } from '../companies/entities/company.entity';
+import { JobApplicationNote } from '../job-application-notes/entities/job-application-note.entity';
+import { ContactsService } from '../contacts/contacts.service';
+import * as _ from 'lodash';
+import { JobApplicationNotesService } from '../job-application-notes/job-application-notes.service';
 
 @Injectable()
 export class JobApplicationsService {
@@ -20,8 +24,12 @@ export class JobApplicationsService {
     private readonly boardColumnsRepository: Repository<BoardColumn>,
     @InjectRepository(Contact)
     private readonly contactsRepository: Repository<Contact>,
+    private readonly contactsService: ContactsService,
     @InjectRepository(Company)
     private readonly companiesRepository: Repository<Company>,
+    @InjectRepository(JobApplicationNote)
+    private readonly jobApplicationNotesRepository: Repository<JobApplicationNote>,
+    private readonly jobApplicationNotesService: JobApplicationNotesService,
   ) {}
 
   async findBy(columnId: string, userId: string): Promise<JobApplication[]> {
@@ -36,7 +44,7 @@ export class JobApplicationsService {
 
     const jobApplicationEntities = await this.jobApplicationsRepository.find({
       where: { column: { id: columnId } },
-      relations: { notes: true },
+      relations: { notes: true, contacts: true, company: true },
       order: { notes: { order: 'ASC' } },
     });
 
@@ -47,11 +55,35 @@ export class JobApplicationsService {
     await this.validateBoardColumn(dto.columnId, userId);
 
     const jobApplication = this.jobApplicationsRepository.create({
-      ...dto,
+      ..._.omit(dto, ['contacts', 'notes', 'company']),
       column: { id: dto.columnId },
     });
 
-    return await this.jobApplicationsRepository.save(jobApplication);
+    const jobApplicationEntity = await this.jobApplicationsRepository.save(jobApplication);
+
+    if (dto.contacts) {
+      jobApplicationEntity.contacts = await Promise.all(
+        dto.contacts.map((contactDto) => this.contactsService.create(userId, contactDto)),
+      );
+    }
+
+    if (dto.notes) {
+      console.log('NOTES');
+      jobApplicationEntity.notes = await Promise.all(
+        dto.notes.map(async (noteDto) => {
+          noteDto.jobApplicationId = jobApplication.id;
+          const noteMapped = await this.jobApplicationNotesService.create(noteDto, userId);
+          return this.jobApplicationNotesRepository.findOneBy({ id: noteMapped.id });
+        }),
+      );
+    }
+
+    if (dto.company) {
+      console.log('COMPANY');
+      jobApplicationEntity.company = await this.companiesRepository.save(dto.company);
+    }
+
+    return this.jobApplicationsRepository.save(jobApplicationEntity);
   }
 
   async update(id: string, dto: UpdateJobApplicationDto, userId: string): Promise<JobApplication> {

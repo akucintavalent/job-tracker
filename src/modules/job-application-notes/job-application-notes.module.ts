@@ -10,5 +10,6 @@ import { JobApplicationNoteMapper } from './job-application-notes.mapper';
   imports: [TypeOrmModule.forFeature([JobApplication, JobApplicationNote])],
   providers: [JobApplicationNotesService, JobApplicationNoteMapper],
   controllers: [JobApplicationNotesController],
+  exports: [JobApplicationNotesService],
 })
 export class JobApplicationNotesModule {}
