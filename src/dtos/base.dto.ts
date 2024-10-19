@@ -9,4 +9,7 @@ export abstract class BaseDto {
 
   @ApiProperty()
   updatedAt: string;
+
+  @ApiProperty({ nullable: true })
+  deletedAt: string;
 }
