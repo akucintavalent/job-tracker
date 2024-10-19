@@ -42,12 +42,12 @@ export class CompaniesService {
       relations: { jobApplication: true },
     });
 
-    if (company.jobApplication) {
-      await this.jobApplicationBelongsToUser(company.jobApplication.id, userId);
-    }
-
     if (!company) {
       throw new NotFoundException(ExceptionMessages.doesNotExist(Company.name));
+    }
+
+    if (company.jobApplication) {
+      await this.jobApplicationBelongsToUser(company.jobApplication.id, userId);
     }
 
     return company;
