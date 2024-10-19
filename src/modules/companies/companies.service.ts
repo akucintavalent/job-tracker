@@ -29,12 +29,17 @@ export class CompaniesService {
       }),
     });
 
-    return this.companiesRepository.save(companyEntity);
+    const { id: companyId } = await this.companiesRepository.save(companyEntity);
+
+    return this.findOne(companyId, user);
   }
 
   async findOne(companyId: string, { userId }: AuthUserDto) {
-    const company = await this.companiesRepository.findOneBy({
-      id: companyId,
+    const company = await this.companiesRepository.findOne({
+      where: {
+        id: companyId,
+      },
+      relations: { jobApplication: true },
     });
 
     if (company.jobApplication) {
@@ -54,6 +59,8 @@ export class CompaniesService {
     Object.assign(company, updateCompanyDto);
 
     await this.companiesRepository.save(company);
+
+    return this.findOne(companyId, user);
   }
 
   async remove(companyId: string, user: AuthUserDto) {

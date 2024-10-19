@@ -6,17 +6,22 @@ import { UpdateCompanyDto } from './dtos/update-company.dto';
 import { AuthUser } from '../auth/user.decorator';
 import { AuthUserDto } from '../auth/dtos/auth.user.dto';
 import { CompanyDto } from './dtos/company.dto';
+import { CompanyMapper } from './companies.mapper';
 
 @ApiTags('companies')
 @Controller('companies')
 export class CompaniesController {
-  constructor(private readonly companiesService: CompaniesService) {}
+  constructor(
+    private readonly companiesService: CompaniesService,
+    private readonly mapper: CompanyMapper,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create company' })
   @ApiResponse({
     status: 201,
     description: 'Company created',
+    type: CompanyDto,
   })
   @ApiResponse({
     status: 400,
@@ -26,8 +31,9 @@ export class CompaniesController {
     status: 404,
     description: 'JobApplication not found',
   })
-  createCompany(@Body() createCompanyDto: CreateCompanyDto, @AuthUser() user: AuthUserDto) {
-    return this.companiesService.create(createCompanyDto, user);
+  async createCompany(@Body() createCompanyDto: CreateCompanyDto, @AuthUser() user: AuthUserDto) {
+    const company = await this.companiesService.create(createCompanyDto, user);
+    return this.mapper.toDto(company);
   }
 
   @Get('/:id')
@@ -35,7 +41,7 @@ export class CompaniesController {
   @ApiResponse({
     status: 200,
     description: 'Company record',
-    type: [CompanyDto],
+    type: CompanyDto,
   })
   @ApiResponse({
     status: 400,
@@ -45,8 +51,9 @@ export class CompaniesController {
     status: 404,
     description: 'Company not found',
   })
-  getCompany(@Param('id', ParseUUIDPipe) companyId: string, @AuthUser() user: AuthUserDto) {
-    return this.companiesService.findOne(companyId, user);
+  async getCompany(@Param('id', ParseUUIDPipe) companyId: string, @AuthUser() user: AuthUserDto) {
+    const company = await this.companiesService.findOne(companyId, user);
+    return this.mapper.toDto(company);
   }
 
   @Put('/:id')
@@ -54,6 +61,7 @@ export class CompaniesController {
   @ApiResponse({
     status: 201,
     description: 'Company updated',
+    type: CompanyDto,
   })
   @ApiResponse({
     status: 400,
@@ -63,12 +71,13 @@ export class CompaniesController {
     status: 404,
     description: 'Company or JobApplication not found',
   })
-  updateCompany(
+  async updateCompany(
     @Param('id', ParseUUIDPipe) companyId: string,
     @Body() updateCompanyDto: UpdateCompanyDto,
     @AuthUser() user: AuthUserDto,
   ) {
-    return this.companiesService.update(companyId, updateCompanyDto, user);
+    const company = await this.companiesService.update(companyId, updateCompanyDto, user);
+    return this.mapper.toDto(company);
   }
 
   @Delete('/:id')

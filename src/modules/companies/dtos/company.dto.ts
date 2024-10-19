@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { BaseDto } from '../../../dtos/base.dto';
 
-export class CompanyDto {
+export class CompanyDto extends BaseDto {
   @ApiProperty()
   name: string;
 
