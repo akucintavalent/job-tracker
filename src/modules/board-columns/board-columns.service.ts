@@ -61,7 +61,7 @@ export class BoardColumnsService {
   findColumns(boardId: string, userId: string): Promise<BoardColumn[]> {
     return this.boardColumnsRepository.find({
       where: { board: { id: boardId, user: { id: userId } } },
-      relations: { jobApplications: true },
+      relations: { jobApplications: { company: true } },
       order: { order: 'ASC', jobApplications: { createdAt: 'ASC' } },
     });
   }
